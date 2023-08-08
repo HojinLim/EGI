@@ -10,7 +10,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 interface Post {
   id: number;
   title: string;
-  content: string;
+  body: string;
 }
 
 const Post = () => {
@@ -59,7 +59,7 @@ const Post = () => {
         {posts.map((post) => (
           <div key={post.id}>
             <h2>{post.title}</h2>
-            <p>{post.content}</p>
+            <p>{post.body}</p>
           </div>
         ))}
       </div>
