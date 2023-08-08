@@ -22,7 +22,6 @@ const Detail = () => {
   useEffect(() => {
     async function fetchPost() {
       const { data: posts, error } = await supabase.from('posts').select('*').eq('pid', id).single();
-      console.log('계속도나?');
       if (error) {
         console.error('Error fetching post:', error);
       } else {
@@ -33,7 +32,9 @@ const Detail = () => {
     fetchPost();
   }, [id]);
 
-  const handleEdit = () => {};
+  const handleEdit = () => {
+    navigate(`/editpost/${post?.pid}`);
+  };
 
   const handleDelete = async () => {
     const { error } = await supabase.from('posts').delete().eq('pid', post?.pid);
@@ -53,10 +54,10 @@ const Detail = () => {
   return (
     <>
       <div>
-        <h1>Post Detail</h1>
-        <p>ID: {post.pid}</p>
         <h2>{post.title}</h2>
+        <br />
         <div dangerouslySetInnerHTML={{ __html: post.body }} />
+        <br />
         <button onClick={handleEdit}>수정하기</button>
         <button onClick={handleDelete}>삭제하기</button>
       </div>

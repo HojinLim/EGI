@@ -10,7 +10,7 @@ const supabaseKey = process.env.REACT_APP_SUPABASE_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 interface Post {
-  id: number;
+  pid: number;
   title: string;
   body: string;
 }
