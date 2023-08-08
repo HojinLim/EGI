@@ -3,7 +3,8 @@
 -----. 
 <br/>
 <br/>
-![image](https://github.com/HojinLim/1_team/assets/69897998/323d4852-1284-449d-af34-4e5f7802ba75)
+![image](https://github.com/HojinLim/team_one/assets/69897998/dd598582-9545-4687-aaee-42f8624807ff)
+
 
 <br/>
 <br/>
