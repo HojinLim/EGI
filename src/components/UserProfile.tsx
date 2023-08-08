@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 interface UserProfileProps {
   user: {
     profileImg: string;
@@ -8,6 +9,7 @@ interface UserProfileProps {
   };
   toggleEditMode: () => void;
 }
+
 
 const UserProfile: React.FC<UserProfileProps> = ({ user, toggleEditMode }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);

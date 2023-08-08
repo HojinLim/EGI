@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import shortid from 'shortid';
+import { Link } from 'react-router-dom';
 
 interface Person {
   uid: string;
@@ -7,34 +9,45 @@ interface Person {
   age: number;
 }
 
-interface PaginationProps {
-  currentPage: number;
-  pagePerObjects: number;
-  data: Person[];
-  onPageChange: (pageNumber: number) => void; // Callback function to handle page changes
-}
+// 페이지 네이션 틀 
+const Pagination = () => {
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, pagePerObjects: pagePerObjects, data, onPageChange }) => {
+
+  const data: Person[] = [
+    { uid: shortid.generate(), name: 'Alice', age: 25 },
+    { uid: shortid.generate(), name: 'Bob', age: 30 },
+    { uid: shortid.generate(), name: 'Charlie', age: 22 },
+    { uid: shortid.generate(), name: 'Charlie', age: 23 },
+    { uid: shortid.generate(), name: 'Charlie', age: 25 }
+  ];
+
+  const pagePerObjects = 4;
+
   const totalCount = data.length; // 데이터의 총 길이
   const totalPages = Math.ceil(totalCount / pagePerObjects);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePreviousPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   const startIdx = (currentPage - 1) * pagePerObjects;
   const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
   const paginatedData = data.slice(startIdx, endIdx);
 
-  const handlePreviousPage = () => {
-    onPageChange(currentPage - 1);
-  };
-
-  const handleNextPage = () => {
-    onPageChange(currentPage + 1);
-  };
-
-  const handlePageClick = (pageNumber: number) => {
-    onPageChange(pageNumber);
-  };
-
   return (
     <div>
+      <Link to="/">home</Link>
+
       <p>전체 데이터 수: {totalCount}</p>
       <p>전체 페이지 수: {totalPages}</p>
       <p>현재 페이지: {currentPage}</p>
@@ -74,7 +87,6 @@ export default Pagination;
 interface ButtonProps {
   selected: boolean;
 }
-
 
 // Styled-components를 사용하여 버튼 스타일 정의
 const StyledButton = styled.button<ButtonProps>`
