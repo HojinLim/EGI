@@ -1,10 +1,19 @@
 import React from 'react';
-
-const Home: React.FC = () => {
+import { atom, useAtom } from 'jotai';
+const Home = () => {
+  const countAtom = atom(0);
+  const [count, setCount] = useAtom(countAtom);
   return (
     <div>
-      <h1>Home</h1>
-      <p>Welcome to the Home page!</p>
+      <span>{count}</span>
+      <button
+        onClick={() => {
+          setCount((prev) => prev + 1);
+          console.log(count);
+        }}
+      >
+        one up
+      </button>
     </div>
   );
 };
