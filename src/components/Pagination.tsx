@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface Person {
-  id: string;
+  uid: string;
   name: string;
   age: number;
 }
@@ -41,7 +41,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, pagePerObjects: pa
       <p>페이지 당 데이터 수: {pagePerObjects}</p>
       <ul>
         {paginatedData.map((person) => (
-          <li key={person.id}>
+          <li key={person.uid}>
             {person.name}, {person.age}
           </li>
         ))}

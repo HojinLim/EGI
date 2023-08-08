@@ -6,20 +6,26 @@ import { atom, useAtom } from 'jotai';
 const countAtom = atom(0);
 
 const Home = () => {
-  const [count, setCount] = useAtom(countAtom)
+  const [count, setCount] = useAtom(countAtom);
   return (
     <div>
       {/* Add a navigation link to navigate to the Mypage */}
-      <Link to="/">Home</Link> <p/>
-
+      <Link to="/">Home</Link> <p />
       <Link to="/mypage">Mypage</Link>
-
       <h1>Home</h1>
       <p>Welcome to the Home page!</p>
+
+      {/* Jotai 테스트  */}
       <div>
-      <span>{count}</span>
-      <button onClick={() => {setCount((prev) => prev + 1)}}>one up</button>
-    </div>
+        <span>{count}</span>
+        <button
+          onClick={() => {
+            setCount((prev) => prev + 1);
+          }}
+        >
+          one up
+        </button>
+      </div>
     </div>
   );
 };
