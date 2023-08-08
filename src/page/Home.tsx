@@ -7,7 +7,8 @@ const Home: React.FC = () => {
   return (
     <div>
       {/* Add a navigation link to navigate to the Mypage */}
-      <Link to="/">Home</Link>
+      <Link to="/">Home</Link> <p/>
+
       <Link to="/mypage">Mypage</Link>
 
       <h1>Home</h1>

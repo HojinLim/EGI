@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 interface Person {
   id: string;
@@ -14,7 +15,7 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, pagePerObjects: pagePerObjects, data, onPageChange }) => {
-  const totalCount = data.length;  // 데이터의 총 길이
+  const totalCount = data.length; // 데이터의 총 길이
   const totalPages = Math.ceil(totalCount / pagePerObjects);
   const startIdx = (currentPage - 1) * pagePerObjects;
   const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
@@ -46,20 +47,46 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, pagePerObjects: pa
         ))}
       </ul>
       <div>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          Previous
-        </button>
+        <StyledButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
+          ⬅
+        </StyledButton>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-          <button key={pageNumber} onClick={() => handlePageClick(pageNumber)}>
+          <StyledButton
+            key={pageNumber}
+            onClick={() => handlePageClick(pageNumber)}
+            selected={pageNumber === currentPage}
+            disabled={currentPage === pageNumber}
+          >
             {pageNumber}
-          </button>
+          </StyledButton>
         ))}
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Next
-        </button>
+        <StyledButton onClick={handleNextPage} disabled={currentPage === totalPages} selected={false}>
+          ➡
+        </StyledButton>
       </div>
     </div>
   );
 };
 
 export default Pagination;
+
+// Styled-components를 사용하여 버튼 스타일 정의
+interface ButtonProps {
+  selected: boolean;
+}
+
+
+// Styled-components를 사용하여 버튼 스타일 정의
+const StyledButton = styled.button<ButtonProps>`
+  margin: 4px;
+  padding: 8px 16px;
+  border: none;
+  background-color: ${(props) => (props.selected ? 'yellow' : '#f0f0f0')};
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;

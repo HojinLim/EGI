@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Pagination from '../components/Pagination';
 import shortid from 'shortid';
+import { Link } from 'react-router-dom';
 
 const Mypage: React.FC = () => {
   // 샘플 데이터들
@@ -27,7 +28,9 @@ const Mypage: React.FC = () => {
 
   return (
     <div>
-      <h1>App</h1>
+      <Link to="/">Home</Link> <p/>
+
+      <h1>마이 페이지</h1>
       <Pagination
         currentPage={currentPage}
         pagePerObjects={pagePerObjects}
