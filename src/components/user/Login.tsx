@@ -1,25 +1,104 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import SignUp from './SignUp';
+import { atom, useAtom } from 'jotai';
+import { supabase } from '../../service/superbase';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+
+interface UserType {
+  uid: number;
+  email: string;
+  password: string;
+}
+
 type LoginType = {
-  setModalOpen: (isOpen: boolean) => void;
+  setLoginModal: (isOpen: boolean) => void;
 };
 
-const Login = ({ setModalOpen }: LoginType) => {
-  const closeModal = () => {
-    setModalOpen(false);
+export const userAtom = atom<UserType | null>(null);
+export const signUpModalAtom = atom<boolean>(false);
+
+const Login = ({ setLoginModal }: LoginType) => {
+  const queryClient = useQueryClient();
+  const [, setUser] = useAtom(userAtom);
+  const [signUpModal, setSignUpModal] = useAtom(signUpModalAtom);
+  const [userData, setUserData] = useState<UserType>({
+    uid: 0,
+    email: '',
+    password: ''
+  });
+
+  const showSignUpModal = () => {
+    setSignUpModal(true);
+  };
+
+  const closeLoginModal = () => {
+    setLoginModal(false);
+  };
+
+  const loginMutation = useMutation(
+    async () => {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: userData.email,
+        password: userData.password
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [userData] });
+        setUser(userData);
+      }
+    }
+  );
+
+  const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      loginMutation.mutate();
+      setLoginModal(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const emailInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({ ...userData, email: e.target.value });
+  };
+
+  const passwordInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({ ...userData, password: e.target.value });
   };
 
   return (
     <Container>
-      <CloseBtn onClick={closeModal}>x</CloseBtn>
-      <Wapper>
+      <CloseBtn onClick={closeLoginModal}>x</CloseBtn>
+      <Wrapper>
         <InputContainer>
-          <EmailBox></EmailBox>
-          <PasswordBox></PasswordBox>
+          <form onSubmit={loginHandler}>
+            <EmailBox
+              type="text"
+              value={userData.email}
+              onChange={emailInputChangeHandler}
+              placeholder="Email"
+            ></EmailBox>
+            <PasswordBox
+              type="password"
+              value={userData.password}
+              onChange={passwordInputChangeHandler}
+              placeholder="Password"
+            ></PasswordBox>
+            <LoginBtn>Login</LoginBtn>
+          </form>
         </InputContainer>
-        <LoginBtn>Login</LoginBtn>
-      </Wapper>
+        <button onClick={showSignUpModal}>회원가입하기</button>
+        {signUpModal && <SignUp setSignUpmodal={setSignUpModal} setLoginModal={setLoginModal} />}
+      </Wrapper>
     </Container>
   );
 };
@@ -46,7 +125,7 @@ const Container = styled.div`
   border-radius: 8px;
 `;
 
-const Wapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,8 +143,6 @@ const InputContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  /* margin: 10px; */
 `;
 
 const EmailBox = styled.input`

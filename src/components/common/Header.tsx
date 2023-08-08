@@ -3,16 +3,16 @@ import React, { useState } from 'react';
 import Login from '../user/Login';
 
 const Header = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
 
   const showModal = () => {
-    setModalOpen(true);
+    setLoginModal(true);
   };
 
   return (
     <div>
       <button onClick={showModal}>Login</button>
-      {modalOpen && <Login setModalOpen={setModalOpen} />}
+      {loginModal && <Login setLoginModal={setLoginModal} />}
     </div>
   );
 };
