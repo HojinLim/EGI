@@ -2,22 +2,22 @@ import React from 'react';
 import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../../service/superbase';
+import { signUpService, UserType } from '../../service/superbase';
 
-interface userType {
-  uid: string;
-  email: string;
-  password: string;
-  nickname: string;
-  profileImg: string;
-}
+// interface UserType {
+//   uid: string;
+//   email: string;
+//   password: string;
+//   nickname: string;
+//   profileImg: string;
+// }
 
 type SignUpType = {
   setLoginModal: (isOpen: boolean) => void;
   setSignUpmodal: (isOpen: boolean) => void;
 };
 
-export const userDataAtom = atom<userType>({
+export const userDataAtom = atom<UserType>({
   uid: '',
   email: '',
   password: '',
@@ -29,47 +29,19 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const queryClient = useQueryClient();
   const [userData, setUserData] = useAtom(userDataAtom);
 
-  const signUpMutation = useMutation(
-    async (newUserData: userType) => {
-      const { data, error } = await supabase.auth.signUp({
-        email: newUserData.email,
-        password: newUserData.password
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
-      return data;
-    },
-    {
-      onSuccess: async (data) => {
-        const userInsertData = {
-          uid: data.user?.id,
-          nickname: userData.nickname,
-          profileImg: userData.profileImg
-        };
-        console.log('data', data);
-        console.log('userData', userData);
-        console.log('userInsertData', userInsertData);
-        const { error: insertError } = await supabase.from('user').insert(userInsertData);
-
-        if (insertError) {
-          console.error(insertError);
-          return;
-        }
-
-        alert('회원가입이 완료되었습니다!');
-        setSignUpmodal(false);
-        setLoginModal(true);
-
-        queryClient.invalidateQueries({ queryKey: [userData] });
-      }
+  const signUpMutation = useMutation(signUpService, {
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: [userData] });
     }
-  );
+  });
 
   const signUpHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       signUpMutation.mutate(userData);
+      alert('회원가입이 완료되었습니다!');
+      setSignUpmodal(false);
+      setLoginModal(true);
     } catch (error) {
       console.error(error);
     }
@@ -78,45 +50,6 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const closeSignUpModal = () => {
     setSignUpmodal(false);
   };
-  // const [userData, setUserData] = useAtom(userDataAtom);
-
-  // const closeSignUpModal = () => {
-  //   setSignUpmodal(false);
-  // };
-
-  // const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   try {
-  //     const { data, error } = await supabase.auth.signUp({
-  //       email: userData.email,
-  //       password: userData.password
-  //     });
-
-  //     if (error) {
-  //       console.error(error);
-  //       return;
-  //     }
-
-  //     const userInsertData = {
-  //       uid: data.user?.id,
-  //       nickname: userData.nickname,
-  //       profileImg: userData.profileImg
-  //     };
-
-  //     const { error: insertError } = await supabase.from('user').insert(userInsertData);
-
-  //     if (insertError) {
-  //       console.error(insertError);
-  //       return;
-  //     }
-
-  //     alert('회원가입이 완료되었습니다!');
-  //     setSignUpmodal(false);
-  //     setLoginModal(true);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   return (
     <Container>

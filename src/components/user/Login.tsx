@@ -3,28 +3,22 @@ import styled from 'styled-components';
 
 import SignUp from './SignUp';
 import { atom, useAtom } from 'jotai';
-import { supabase } from '../../service/superbase';
+import { loginService, UserType } from '../../service/superbase';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-
-interface UserType {
-  uid: number;
-  email: string;
-  password: string;
-}
 
 type LoginType = {
   setLoginModal: (isOpen: boolean) => void;
 };
 
-export const userAtom = atom<UserType | null>(null);
+export const userAtom = atom<Omit<UserType, 'nickname' | 'profileImg'> | null>(null);
 export const signUpModalAtom = atom<boolean>(false);
 
 const Login = ({ setLoginModal }: LoginType) => {
   const queryClient = useQueryClient();
   const [, setUser] = useAtom(userAtom);
   const [signUpModal, setSignUpModal] = useAtom(signUpModalAtom);
-  const [userData, setUserData] = useState<UserType>({
-    uid: 0,
+  const [userData, setUserData] = useState<Omit<UserType, 'nickname' | 'profileImg'>>({
+    uid: '',
     email: '',
     password: ''
   });
@@ -37,30 +31,18 @@ const Login = ({ setLoginModal }: LoginType) => {
     setLoginModal(false);
   };
 
-  const loginMutation = useMutation(
-    async () => {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: userData.email,
-        password: userData.password
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
-      return data;
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [userData] });
-        setUser(userData);
-      }
+  const loginMutation = useMutation(loginService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [userData] });
     }
-  );
+  });
 
   const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      loginMutation.mutate();
+      loginMutation.mutate(userData);
+      setUser(userData);
       setLoginModal(false);
     } catch (error) {
       console.error(error);
