@@ -1,6 +1,7 @@
 import React from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
+import Comments from './comments/Comments';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL as string;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY as string;
@@ -48,12 +49,15 @@ const Post = () => {
     }
   };
 
+  if (!posts) {
+    return <div>Loading</div>;
+  }
   return (
     <div>
       <div>
         <input type="text" placeholder="Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
         <input type="text" placeholder="body" value={newbody} onChange={(e) => setNewBody(e.target.value)} />
-        <button onClick={handleAddPost}>Add Post</button>
+        <button onClick={handleAddPost}>addPost</button>
       </div>
       <div>
         {posts.map((post) => (
@@ -63,6 +67,7 @@ const Post = () => {
           </div>
         ))}
       </div>
+      <Comments></Comments>
     </div>
   );
 };
