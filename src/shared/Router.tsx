@@ -5,6 +5,8 @@ import Home from '../pages/Home';
 import Mypage from '../pages/Mypage';
 import Detail from '../pages/Detail';
 import PostPage from '../pages/PostPage';
+import EditPage from '../pages/EditPage';
+
 
 const Router: React.FC = () => {
   return (
@@ -13,10 +15,10 @@ const Router: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/mypage" element={<Mypage />} />
-          {/* postMode를 넘겨줄 때 중괄호 { }를 사용하지 않습니다. */}
-          <Route path="/pagination" element={<Pagination postMode="내가 쓴 글" />} />
+          <Route path="/pagination" element={<Pagination postMode="내가 쓴 글" posts={[]} />} />
           <Route path="/post" element={<PostPage />} />
           <Route path="/post/:id" element={<Detail />} />
+          <Route path="/editpost/:id" element={<EditPage />} />
         </Routes>
       </BrowserRouter>
     </>

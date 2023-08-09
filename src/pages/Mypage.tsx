@@ -1,70 +1,84 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import shortid from 'shortid';
-import UserProfile from '../components/UserProfile';
 import UserPosts from '../components/UserPosts';
+import Header from '../components/common/Header';
+import { useAtom } from 'jotai';
+import { userAtom } from '../components/user/Login';
 
 const Mypage = () => {
-  const user = {
-    uid: shortid.generate(),
-    profileImg: '/Amphibia.png',
-    name: 'Hojin',
-    nickname: 'zzHojinzz'
+  const [user] = useAtom(userAtom);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(user?.email || '');
+  const [editedNickname, setEditedNickname] = useState(user?.email || ''); // Use 'nickname' or an appropriate field here
+
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedImage(event.target.files[0]);
+    }
   };
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState(user.name);
-  const [editedNickname, setEditedNickname] = useState(user.nickname);
-
-  const toggleEditMode = () => setIsEditing(!isEditing);
-
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setEditedName(event.target.value);
-
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => setEditedNickname(event.target.value);
 
-  const saveChanges = () => {
-    // 유효성 검사
-    if (!editedName || !editedNickname) {
-      alert('빈값이 있습니다 !');
-      return;
+  const saveChanges = async () => {
+    try {
+      setIsEditing(false);
+      // Update the user data using the appropriate method (e.g., API call)
+      // user.email = editedName;
+      // user.nickname = editedNickname;
+    } catch (error) {
+      console.error('Error updating user information:', error);
     }
-
-    setIsEditing(false);
-    // TODO: 유저 DB 정보 갱신, patch
   };
 
   return (
     <div>
       <Link to="/">Home</Link>
-      <Link to="/pagination">Pagination</Link>
+      <Header />
 
-      <p />
+      {user ? (
+        <div>
+          <h1>마이 페이지</h1>
+          {/* 프로필 이미지 변경 관련 */}
+          <div>
+            <label htmlFor="imageInput">
+              <img
+                src={selectedImage ? URL.createObjectURL(selectedImage) : '-'}
+                alt={`프로필 이미지 - ${user.uid}`}
+                style={{ width: 200, height: 200, borderRadius: 70, cursor: 'pointer', border: '3px solid black' }}
+              />
+            </label>
+            <input id="imageInput" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
+            <button className="material-symbols-outlined" onClick={() => setIsEditing(true)}>edit</button>
+            <p>uid: {user.uid}</p>
+            <p>닉네임: {editedNickname}</p>
+          </div>
 
-      <h1>마이 페이지</h1>
-      <UserProfile user={user} toggleEditMode={toggleEditMode} />
-      {isEditing && (
-        <>
-          <span>이름:</span>
-          <input type="text" value={editedName} onChange={handleNameChange} />
-          <p />
-          <span>닉네임:</span>
-          <input type="text" value={editedNickname} onChange={handleNicknameChange} />
-          <p />
-          <button onClick={saveChanges}>Save</button>
-          <p />
-        </>
+          {isEditing && (
+            <>
+              <span>이름:</span>
+              <input type="text" value={editedName} onChange={handleNameChange} />
+              <p />
+              <span>닉네임:</span>
+              <input type="text" value={editedNickname} onChange={handleNicknameChange} />
+              <p />
+              <button onClick={saveChanges}>Save</button>
+              <p />
+            </>
+          )}
+
+          <div>
+            <UserPosts />
+          </div>
+        </div>
+      ) : (
+        <div>
+          <h1>마이 페이지</h1>
+          <p>Loading user data...</p>
+        </div>
       )}
-
-      <br />
-      
-
-      {/* 옵션 선택 */}
-      <div>
-       
-        {/* TODO : 내가 쓴 글 , 찜 목록 관련 데이터 전달? */}
-        <UserPosts />
-        
-      </div>
     </div>
   );
 };

@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import shortid from 'shortid';
-import UserPosts from './UserPosts';
+
+import { Post } from '../types/supabase';
+
 
 
 // 페이지 네이션 틀
 interface PaginationProps {
   postMode: string;
-  
-  posts: []; // 이 부분을 추가
+  posts: Post[]; // 이 부분을 추가
 }
 
 // Pagination 컴포넌트 내부에서 posts 속성을 활용합니다.
-const Pagination = ({ postMode, datas }: PaginationProps) => {
+const Pagination = ({ postMode, posts }: PaginationProps) => {
   //  임의로 받았다고 가정
 
-  console.log(datas);
+  console.log(postMode);
   interface Data {
     pid: number;
     created_at: string;
@@ -27,7 +27,7 @@ const Pagination = ({ postMode, datas }: PaginationProps) => {
   
   const pagePerObjects = 3; // 페이지 당 데이터 수
 
-  const totalCount = datas.length; // 데이터의 총 길이
+  const totalCount = posts.length; // 데이터의 총 길이
   const totalPages = Math.ceil(totalCount / pagePerObjects);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,7 +46,7 @@ const Pagination = ({ postMode, datas }: PaginationProps) => {
 
   const startIdx = (currentPage - 1) * pagePerObjects;
   const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
-  const paginatedData = datas.slice(startIdx, endIdx);
+  const paginatedData = posts.slice(startIdx, endIdx);
 
   const handleClick = (data: Data) => {
     // 클릭 시 수행할 작업을 여기에 추가
@@ -65,7 +65,7 @@ const Pagination = ({ postMode, datas }: PaginationProps) => {
       </div>
       <div>
         <CardList>
-          {paginatedData.map((data) => (
+          {/* {paginatedData.map((data) => (
             <StyledCard key={data.pid} onClick={() => handleClick(data)}>
               <p>작성자: {data.nickname}</p>
               <p>제목: {data.title}</p>
@@ -73,7 +73,7 @@ const Pagination = ({ postMode, datas }: PaginationProps) => {
               <p>가격: {data.price}</p>
               <p>작성일자: {data.date}</p>
             </StyledCard>
-          ))}
+          ))} */}
         </CardList>
 
         <div>

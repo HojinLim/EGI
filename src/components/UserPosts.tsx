@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Pagination from './Pagination'; // Pagination 컴포넌트를 import
-import { createClient } from '@supabase/supabase-js';
 
-interface Data {
-  pid: number;
-  created_at: string;
-  title: string;
-  price: number;
-  image_url: string;
-}
+import { createClient } from '@supabase/supabase-js';
+import { Post } from '../types/supabase';
+
+// interface Data {
+//   pid: number;
+//   created_at: string;
+//   title: string;
+//   price: number;
+//   image_url: string;
+// }
 
 const UserPosts = () => {
   const [postMode, setPostMode] = useState<string>('');
@@ -20,21 +21,29 @@ const UserPosts = () => {
   };
 
   // superbase로 데이터 가져오기
-  const [datas, setDatas] = useState<Data[]>([]);
+  // const [datas, setDatas] = useState<Data[]>([]);
   const supabaseUrl = process.env.REACT_APP_SUPABASE_URL as string;
   const supabaseKey = process.env.REACT_APP_SUPABASE_KEY as string;
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  const [posts, setPosts] = useState<Post[]>([]);
+  console.log(posts)
+  const temp= "hi"
+
   useEffect(() => {
     async function fetchPosts() {
-      const { data, error } = await supabase.from('posts').select('*');
-
+      const { data, error } = await supabase.from('posts').select('*').eq('uid', temp)
+      console.log('data=>' + data);
       if (error) {
         console.error('Error fetching posts:', error);
       } else {
-        setDatas(data);
-        console.log(data);
+        const postsWithCompleteURLs = data.map((post) => ({
+          ...post,
+          image_url: `https://bbakvkybkyfoiijevbec.supabase.co/storage/v1/object/public/1st/${post.image_url}`
+        }));
+
+        setPosts(postsWithCompleteURLs);
       }
     }
 
@@ -49,9 +58,7 @@ const UserPosts = () => {
       <button onClick={() => handlePost('찜 목록')}>찜 목록</button>
       <h2>{postMode}</h2>
 
-      <div style={{ width: '1000px', height: '600px', border: '2px solid black' }}>
-        <Pagination postMode={postMode} posts={datas} /> {/* Pagination 컴포넌트를 사용 */}
-      </div>
+      <div style={{ width: '1000px', height: '600px', border: '2px solid black' }}></div>
     </div>
   );
 };
