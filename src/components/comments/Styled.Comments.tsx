@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const CommentsContainer = styled.div`
   display: flex;
@@ -30,14 +30,17 @@ export const CommentItem = styled.li`
   gap: 10px;
   height: 80px;
   padding: 5px 0;
+  max-width: 1200px;
 `;
 
 export const CommentProfileImgBox = styled.div`
   margin: 10px 20px 0 20px;
+  width: 5%;
 `;
 
 export const CommentTextBox = styled.div`
   padding: 10px 0;
+  width: 80%;
 `;
 
 export const CommentAuthor = styled.div`
@@ -45,4 +48,23 @@ export const CommentAuthor = styled.div`
   margin-bottom: 15px;
 `;
 
-export const CommentBody = styled.div``;
+export const CommentBody = styled.div`
+  margin-top: 5px;
+  width: 80%;
+  height: 80%;
+  input {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+export const CommentForm = styled.form<{ isCommenting?: boolean }>`
+  display: none;
+  max-width: 1200px;
+  ${(props) =>
+    props.isCommenting &&
+    css`
+      display: block;
+      border: 1px solid black;
+    `};
+`;

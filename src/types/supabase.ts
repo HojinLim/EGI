@@ -5,3 +5,11 @@ export interface UserType {
   nickname: string;
   profileImg: string;
 }
+export interface Comment {
+  cid?: number;
+  uid: number;
+  pid: number;
+  nickname: string;
+  body: string;
+  created_at: string;
+}
