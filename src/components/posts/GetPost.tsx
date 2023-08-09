@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL as string;
-const supabaseKey = process.env.REACT_APP_SUPABASE_KEY as string;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-interface Post {
-  pid: number;
-  title: string;
-  body: string;
-  image_url: string;
-}
+import { Post } from '../../types/supabase';
+import { supabase } from '../../services/supabase/supabase';
 
 const GetPost = () => {
   const [posts, setPosts] = useState<Post[]>([]);

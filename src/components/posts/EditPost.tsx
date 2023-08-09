@@ -1,21 +1,11 @@
 // EditPost.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
 import Editor from '../editor/Editor';
 import { v4 as uuidv4 } from 'uuid';
 
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL as string;
-const supabaseKey = process.env.REACT_APP_SUPABASE_KEY as string;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-interface Post {
-  pid: number;
-  title: string;
-  body: string;
-  image_url: string;
-}
+import { Post } from '../../types/supabase';
+import { supabase } from '../../services/supabase/supabase';
 
 const EditPost = () => {
   const { id } = useParams();
