@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React from 'react';
 import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
+// import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
+import { signUpService } from '../../services/supabase/auth';
 import type { UserType } from '../../types/supabase';
 
 type SignUpType = {
@@ -21,29 +23,29 @@ export const userDataAtom = atom<UserType>({
 const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const queryClient = useQueryClient();
   const [userData, setUserData] = useAtom(userDataAtom);
-  const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(null);
+  // const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(null);
 
   const signUpMutation = useMutation(signUpService, {
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [userData] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     }
   });
 
   const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (!selectedProfileImg) {
-        throw new Error('Please select a profile image');
-      }
+      // if (!selectedProfileImg) {
+      //   throw new Error('Please select a profile image');
+      // }
 
-      const profileImgUrl = await uploadProfileImage(selectedProfileImg);
+      // const profileImgUrl = await uploadProfileImage(selectedProfileImg);
 
-      const userDataWithImage = {
-        ...userData,
-        profileImg: profileImgUrl
-      };
+      // const userDataWithImage = {
+      //   ...userData,
+      //   profileImg: profileImgUrl
+      // };
 
-      await signUpMutation.mutateAsync(userDataWithImage);
+      await signUpMutation.mutateAsync(userData);
 
       alert('회원가입이 완료되었습니다!');
       setSignUpmodal(false);
@@ -83,13 +85,13 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
             onChange={(e) => setUserData({ ...userData, nickname: e.target.value })}
             placeholder="nickname"
           ></input>
-          프로필 사진 :
+          {/* 프로필 사진 :
           <input
             type="file"
             value={userData.profileImg}
             onChange={(e) => setSelectedProfileImg(e.target.files && e.target.files[0])}
             placeholder="profileImg"
-          ></input>
+          ></input> */}
           <button>회원 가입 완료</button>
         </form>
       </Wapper>

@@ -16,8 +16,10 @@ const Header = () => {
     isLoading,
     isError,
     data: userData
-  } = useQuery<Omit<UserType[], 'email' | 'password'>>(['users'], () => getUserInfo(userEmail));
-
+  } = useQuery<Omit<UserType, 'password'> | null>({
+    queryKey: ['users', userEmail],
+    queryFn: () => getUserInfo(userEmail)
+  });
   console.log('userData!', userData);
 
   console.log('유저 이메일>' + userEmail);
@@ -31,14 +33,14 @@ const Header = () => {
     }
   };
 
-  const tokenKey = localStorage.getItem('sb-bbakvkybkyfoiijevbec-auth-token');
-  const parsedToken = tokenKey ? JSON.parse(tokenKey) : null;
-  let userId: string | undefined;
+  // const tokenKey = localStorage.getItem('sb-bbakvkybkyfoiijevbec-auth-token');
+  // const parsedToken = tokenKey ? JSON.parse(tokenKey) : null;
+  // let userId: string | undefined;
 
-  if (parsedToken && parsedToken.user) {
-    userId = parsedToken.user.id;
-  }
-  console.log('userId', userId);
+  // if (parsedToken && parsedToken.user) {
+  //   userId = parsedToken.user.id;
+  // }
+  // console.log('userId', userId);
   if (isLoading) {
     return <div>데이터 로딩 중입니다.</div>;
   }
@@ -50,18 +52,16 @@ const Header = () => {
   return (
     <>
       <div>
-        {userId ? <button onClick={signOutHandler}>Logout</button> : <button onClick={showModal}>Login</button>}
+        {userData ? <button onClick={signOutHandler}>Logout</button> : <button onClick={showModal}>Login</button>}
         {loginModal && <Login setLoginModal={setLoginModal} />}
       </div>
       <div>
-        {userData.map((item) => {
-          return (
-            <div key={item.uid}>
-              <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${item.profileImg}`} />
-              {item.nickname}
-            </div>
-          );
-        })}
+        {userData ? (
+          <div key={userData.uid}>
+            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileImg}`} alt="User Profile" />
+            {userData.nickname}
+          </div>
+        ) : null}
       </div>
     </>
   );
