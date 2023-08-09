@@ -61,7 +61,7 @@ const Detail = () => {
         <button onClick={handleEdit}>수정하기</button>
         <button onClick={handleDelete}>삭제하기</button>
       </div>
-      <Comments></Comments>
+      <Comments />
     </>
   );
 };
