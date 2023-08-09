@@ -13,3 +13,10 @@ export interface Comment {
   body: string;
   created_at: string;
 }
+
+export interface Post {
+  pid: number;
+  title: string;
+  body: string;
+  image_url: string;
+}
