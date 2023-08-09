@@ -18,7 +18,7 @@ export const signUpService = async (userData: UserType) => {
       profileImg: userData.profileImg
     };
 
-    const { error: insertError } = await supabase.from('user').insert(userInsertData);
+    const { error: insertError } = await supabase.from('users').insert(userInsertData);
     if (insertError) {
       throw new Error(insertError.message);
     }
@@ -58,7 +58,7 @@ export const loginService = async (userData: Omit<UserType, 'nickname' | 'profil
 
 // 유저 정보 조회
 export const getUserInfo = async (): Promise<Omit<UserType[], 'email' | 'password'>> => {
-  const { data, error } = await supabase.from('user').select('*');
+  const { data, error } = await supabase.from('users').select('*');
 
   if (error) {
     throw new Error(error.message);
