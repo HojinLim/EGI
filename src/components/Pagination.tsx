@@ -1,100 +1,33 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import shortid from 'shortid';
+import UserPosts from './UserPosts';
+
 
 // 페이지 네이션 틀
 interface PaginationProps {
-  postMode: string; // postMode의 타입을 명시적으로 지정
+  postMode: string;
+  
+  posts: []; // 이 부분을 추가
 }
 
-const Pagination = ({ postMode }: PaginationProps) => {
+// Pagination 컴포넌트 내부에서 posts 속성을 활용합니다.
+const Pagination = ({ postMode, datas }: PaginationProps) => {
   //  임의로 받았다고 가정
 
+  console.log(datas);
   interface Data {
-    pid: string;
-    nickname: string;
+    pid: number;
+    created_at: string;
     title: string;
-    category: string;
     price: number;
-    date: string;
+    image_url: string;
   }
-  let samplePosts: Data[] = [];
-
-  const zzimPosts: Data[] = [
-    {
-      pid: shortid.generate(),
-      nickname: 'User123',
-      title: 'Item 1',
-      category: 'Electronics',
-      price: 100,
-      date: '2023-08-08'
-    },
-    {
-      pid: shortid.generate(),
-      nickname: 'User456',
-      title: 'Item 2',
-      category: 'Clothing',
-      price: 50,
-      date: '2023-08-09'
-    },
-    {
-      pid: shortid.generate(),
-      nickname: 'User789',
-      title: 'Item 3',
-      category: 'Furniture',
-      price: 200,
-      date: '2023-08-10'
-    },
-    {
-      pid: shortid.generate(),
-      nickname: 'User789',
-      title: 'Item 4',
-      category: 'Furniture',
-      price: 200,
-      date: '2023-08-10'
-    },
-    {
-      pid: shortid.generate(),
-      nickname: 'User789',
-      title: 'Item 5',
-      category: 'Furniture',
-      price: 200,
-      date: '2023-08-10'
-    }
-  ];
-
-  const myPosts: Data[] = [
-    {
-      pid: shortid.generate(),
-      nickname: 'User789',
-      title: 'Item 5',
-      category: 'Furniture',
-      price: 200,
-      date: '2023-08-10'
-    },
-    {
-      pid: shortid.generate(),
-      nickname: 'User789',
-      title: 'Item 3',
-      category: 'Furniture',
-      price: 200,
-      date: '2023-08-10'
-    },
-    {
-      pid: shortid.generate(),
-      nickname: 'User789',
-      title: 'Item 4',
-      category: 'Furniture',
-      price: 200,
-      date: '2023-08-10'
-    }
-  ];
-
-  samplePosts = postMode === '내가 쓴 글' ? myPosts : zzimPosts;
-
+  
+  
   const pagePerObjects = 3; // 페이지 당 데이터 수
 
-  const totalCount = samplePosts.length; // 데이터의 총 길이
+  const totalCount = datas.length; // 데이터의 총 길이
   const totalPages = Math.ceil(totalCount / pagePerObjects);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -113,11 +46,11 @@ const Pagination = ({ postMode }: PaginationProps) => {
 
   const startIdx = (currentPage - 1) * pagePerObjects;
   const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
-  const paginatedData = samplePosts.slice(startIdx, endIdx);
+  const paginatedData = datas.slice(startIdx, endIdx);
 
   const handleClick = (data: Data) => {
     // 클릭 시 수행할 작업을 여기에 추가
-    
+
     console.log('카드가 클릭되었습니다:', data.title);
   };
 

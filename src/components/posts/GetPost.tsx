@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL as string;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY as string;
 
@@ -25,15 +26,17 @@ const GetPost = () => {
         console.error('Error fetching posts:', error);
       } else {
         setPosts(data);
+
       }
     }
-
+  
     fetchPosts();
   }, []);
 
   return (
     <PostContainer>
       {posts.map((post) => (
+        
         <NavLink to={`/post/${post.pid}`} key={post.pid} style={{ textDecoration: 'none', color: 'inherit' }}>
           <PostItem>
             <h2>{post.title}</h2>
