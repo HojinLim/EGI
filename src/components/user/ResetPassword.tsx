@@ -1,7 +1,7 @@
 // ResetPasswordModal.tsx
 import React, { useState } from 'react'; // Import useState
 import styled from 'styled-components';
-import { resetPassword } from '../../services/supabase/auth'; // Import the resetPasswordForEmail function
+import { resetPassword } from '../../services/supabase/auth';
 
 type ResetPasswordModalProps = {
   closeResetPasswordModal: () => void;

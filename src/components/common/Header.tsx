@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import Login from '../user/Login';
+import Login, { userEmailAtom } from '../user/Login';
 import { getUserInfo, sigOutService } from '../../services/supabase/auth';
 import type { UserType } from '../../types/supabase';
+import { useAtom } from 'jotai';
 
 const Header = () => {
   const [loginModal, setLoginModal] = useState(false);
-
+  const [userEmail] = useAtom(userEmailAtom);
   const showModal = () => {
     setLoginModal(true);
   };
@@ -15,8 +16,11 @@ const Header = () => {
     isLoading,
     isError,
     data: userData
-  } = useQuery<Omit<UserType[], 'email' | 'password'>>(['users'], getUserInfo);
+  } = useQuery<Omit<UserType[], 'email' | 'password'>>(['users'], () => getUserInfo(userEmail));
 
+  console.log('userData', userData);
+
+  console.log('유저 이메일>' + userEmail);
   const signOutHandler = async () => {
     try {
       await sigOutService();
@@ -50,16 +54,14 @@ const Header = () => {
         {loginModal && <Login setLoginModal={setLoginModal} />}
       </div>
       <div>
-        {userData
-          .filter((item) => item.uid === userId)
-          .map((item) => {
-            return (
-              <div key={item.uid}>
-                {item.profileImg}
-                {item.nickname}
-              </div>
-            );
-          })}
+        {userData.map((item) => {
+          return (
+            <div key={item.uid}>
+              <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${item.profileImg}`} />
+              {item.nickname}
+            </div>
+          );
+        })}
       </div>
     </>
   );

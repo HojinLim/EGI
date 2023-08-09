@@ -14,6 +14,7 @@ type LoginType = {
 
 export const userAtom = atom<Omit<UserType, 'nickname' | 'profileImg'> | null>(null);
 export const signUpModalAtom = atom<boolean>(false);
+export const userEmailAtom = atom('');
 
 const Login = ({ setLoginModal }: LoginType) => {
   const queryClient = useQueryClient();
@@ -26,6 +27,9 @@ const Login = ({ setLoginModal }: LoginType) => {
     email: '',
     password: ''
   });
+
+  const [userEmail, setUserEmail] = useAtom(userEmailAtom);
+
   // 회원가입 모달 열기
   const showSignUpModal = () => {
     setSignUpModal(true);
@@ -39,7 +43,11 @@ const Login = ({ setLoginModal }: LoginType) => {
     onSuccess: () => {
       setUser(userData);
       setLoginModal(false);
+      console.log('유저 데이터 이메일>' + userData.email);
+      setUserEmail(userData.email);
       queryClient.invalidateQueries({ queryKey: [userData] });
+
+      console.log('유저 이메일>' + userEmail);
     }
   });
 
