@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Comments from '../components/comments/Comments';
 
+import * as S from '../components/posts/Styled.Posts';
 import { Post } from '../types/supabase';
 import { supabase } from '../services/supabase/supabase';
 
@@ -17,7 +18,14 @@ const Detail = () => {
       if (error) {
         console.error('Error fetching post:', error);
       } else {
-        setPost(posts);
+        const parsedImageUrls = JSON.parse(posts.image_urls); // Parse the JSON string to an array
+
+        const detailedPost: Post = {
+          ...posts,
+          image_urls: parsedImageUrls
+        };
+
+        setPost(detailedPost);
       }
     }
 
@@ -47,6 +55,16 @@ const Detail = () => {
     <>
       <div>
         <h2>{post.title}</h2>
+        <div>
+          {post.image_urls.map((imageUrl, index) => (
+            <S.Image
+              key={index}
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`}
+              alt={`Image ${index}`}
+              style={{ width: '250px', height: '250px' }}
+            />
+          ))}
+        </div>
         <br />
         <div dangerouslySetInnerHTML={{ __html: post.body }} />
         <br />

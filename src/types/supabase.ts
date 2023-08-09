@@ -19,4 +19,5 @@ export interface Post {
   title: string;
   body: string;
   image_url: string;
+  image_urls: string[];
 }

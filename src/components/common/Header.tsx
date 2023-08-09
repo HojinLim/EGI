@@ -18,9 +18,6 @@ const Header = () => {
     data: userData
   } = useQuery<Omit<UserType[], 'email' | 'password'>>(['users'], () => getUserInfo(userEmail));
 
-  console.log('userData!', userData);
-
-  console.log('유저 이메일>' + userEmail);
   const signOutHandler = async () => {
     try {
       await sigOutService();
@@ -38,7 +35,7 @@ const Header = () => {
   if (parsedToken && parsedToken.user) {
     userId = parsedToken.user.id;
   }
-  console.log('userId', userId);
+
   if (isLoading) {
     return <div>데이터 로딩 중입니다.</div>;
   }

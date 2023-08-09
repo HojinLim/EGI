@@ -1,4 +1,3 @@
-// EditPost.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
@@ -13,7 +12,7 @@ const EditPost = () => {
   const [post, setPost] = useState<Post | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
   useEffect(() => {
     async function fetchPost() {
@@ -28,7 +27,7 @@ const EditPost = () => {
     }
 
     fetchPost();
-  }, []);
+  }, [id]);
 
   const handleEditPost = async () => {
     if (!editTitle.trim() || !editBody.trim()) {
@@ -36,9 +35,9 @@ const EditPost = () => {
       return;
     }
 
-    let updatedImageUrl = post?.image_url;
+    const imageUrls: string[] = [];
 
-    if (selectedImage) {
+    for (const selectedImage of selectedImages) {
       const { data, error } = await supabase.storage.from('1st').upload(`images/${selectedImage.name}`, selectedImage);
 
       if (error) {
@@ -47,13 +46,13 @@ const EditPost = () => {
         return;
       }
 
-      updatedImageUrl = data.path;
+      imageUrls.push(data.path);
     }
 
     if (post && editTitle && editBody) {
       const { error } = await supabase
         .from('posts')
-        .update({ title: editTitle, body: editBody, image_url: updatedImageUrl })
+        .update({ title: editTitle, body: editBody, image_urls: imageUrls })
         .eq('pid', post.pid);
 
       if (error) {
@@ -66,19 +65,28 @@ const EditPost = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files;
+
+    if (selectedFiles && selectedFiles.length > 0) {
+      const updatedSelectedImages: File[] = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const selectedFile = selectedFiles[i];
+        const originalFileName = selectedFile.name;
+        const fileExtension = originalFileName.split('.').pop();
+        const randomFileName = uuidv4() + '.' + (fileExtension || 'jpg');
+
+        updatedSelectedImages.push(new File([selectedFile], randomFileName));
+      }
+
+      setSelectedImages(updatedSelectedImages);
+    }
+  };
+
   if (!post) {
     return <div>Loading...</div>;
   }
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files && e.target.files[0];
-    if (selectedFile) {
-      const originalFileName = selectedFile.name;
-      const fileExtension = originalFileName.split('.').pop();
-      const randomFileName = uuidv4() + '.' + fileExtension;
-      setSelectedImage(new File([selectedFile], randomFileName));
-    }
-  };
 
   return (
     <div>
@@ -88,7 +96,7 @@ const EditPost = () => {
       <br />
       <br />
       <br />
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <input type="file" accept="image/*" multiple onChange={handleImageChange} />
       <button onClick={handleEditPost}>수정하기</button>
     </div>
   );
