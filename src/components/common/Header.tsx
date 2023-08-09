@@ -18,7 +18,7 @@ const Header = () => {
     data: userData
   } = useQuery<Omit<UserType[], 'email' | 'password'>>(['users'], () => getUserInfo(userEmail));
 
-  console.log('userData', userData);
+  console.log('userData!', userData);
 
   console.log('유저 이메일>' + userEmail);
   const signOutHandler = async () => {
