@@ -1,43 +1,25 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import Pagination from './Pagination'; // Pagination 컴포넌트를 import
 
 const UserPosts = () => {
-  // const samplePosts = [
-  //   {
-  //     pid: 1,
-  //     nickname: 'User123',
-  //     title: 'Item 1',
-  //     category: 'Electronics',
-  //     price: 100,
-  //     date: '2023-08-08'
-  //   },
-  //   {
-  //     pid: 2,
-  //     nickname: 'User456',
-  //     title: 'Item 2',
-  //     category: 'Clothing',
-  //     price: 50,
-  //     date: '2023-08-09'
-  //   },
-  //   {
-  //     pid: 3,
-  //     nickname: 'User789',
-  //     title: 'Item 3',
-  //     category: 'Furniture',
-  //     price: 200,
-  //     date: '2023-08-10'
-  //   }
-  // ];
+  const [postMode, setPostMode] = useState<string>('');
 
- 
+  const handlePost = (mode: string) => {
+    setPostMode(mode);
+  };
 
   return (
     <div>
       <h2>User Posts</h2>
-  
+      <button onClick={() => handlePost('내가 쓴 글')}>내가 쓴 글</button>
+      <button onClick={() => handlePost('찜 목록')}>찜 목록</button>
+      <h2>{postMode}</h2>
 
+      <div style={{ width: '1000px', height: '600px', border: '2px solid black' }}>
+        <Pagination postMode={postMode}/> {/* Pagination 컴포넌트를 사용 */}
+      </div>
     </div>
   );
 };
