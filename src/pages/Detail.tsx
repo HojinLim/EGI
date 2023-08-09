@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
+import Comments from '../components/comments/Comments';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL as string;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY as string;
@@ -61,6 +62,7 @@ const Detail = () => {
         <button onClick={handleEdit}>수정하기</button>
         <button onClick={handleDelete}>삭제하기</button>
       </div>
+      <Comments />
     </>
   );
 };
