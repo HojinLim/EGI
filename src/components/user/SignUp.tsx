@@ -2,7 +2,8 @@ import React from 'react';
 import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signUpService, UserType } from '../../service/superbase';
+import { UserType } from '../../types/supabase';
+import { signUpService } from '../../services/auth';
 
 // interface UserType {
 //   uid: string;

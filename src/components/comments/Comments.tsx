@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { fetchComments } from '../../services/comments';
 import * as S from './Styled.Comments';
-import { fetchComments } from '../../services/supabase';
 
 interface Comment {
   cid: number;
