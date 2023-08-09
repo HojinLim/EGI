@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import SignUp from './SignUp';
 import { atom, useAtom } from 'jotai';
-
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { UserType } from '../../types/supabase';
-import { loginService } from '../../services/auth';
+import { loginService } from '../../services/supabase/auth';
+import type { UserType } from '../../types/supabase';
 // import { supabase } from '../../services/supabase';
 // import ResetPasswordModal from './ResetPassword';
 

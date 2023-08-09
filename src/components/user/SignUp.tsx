@@ -2,16 +2,8 @@ import React from 'react';
 import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UserType } from '../../types/supabase';
-import { signUpService } from '../../services/auth';
-
-// interface UserType {
-//   uid: string;
-//   email: string;
-//   password: string;
-//   nickname: string;
-//   profileImg: string;
-// }
+import { signUpService } from '../../services/supabase/auth';
+import type { UserType } from '../../types/supabase';
 
 type SignUpType = {
   setLoginModal: (isOpen: boolean) => void;

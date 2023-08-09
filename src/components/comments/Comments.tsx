@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchComments } from '../../services/comments';
+import { fetchComments } from '../../services/supabase/comments';
 import * as S from './Styled.Comments';
 
 interface Comment {

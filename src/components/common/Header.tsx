@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Login from '../user/Login';
-import { getUserInfo, sigOutService } from '../../services/auth';
-import { UserType } from '../../types/supabase';
+import { getUserInfo, sigOutService } from '../../services/supabase/auth';
+import type { UserType } from '../../types/supabase';
 
 const Header = () => {
   const [loginModal, setLoginModal] = useState(false);
