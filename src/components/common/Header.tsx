@@ -15,7 +15,7 @@ const Header = () => {
     isLoading,
     isError,
     data: userData
-  } = useQuery<Omit<UserType[], 'email' | 'password'>>(['user'], getUserInfo);
+  } = useQuery<Omit<UserType[], 'email' | 'password'>>(['users'], getUserInfo);
 
   const signOutHandler = async () => {
     try {
@@ -27,14 +27,14 @@ const Header = () => {
     }
   };
 
-  const tokenKey = localStorage.getItem('sb-vssoftbuptuczdroxazw-auth-token');
+  const tokenKey = localStorage.getItem('sb-bbakvkybkyfoiijevbec-auth-token');
   const parsedToken = tokenKey ? JSON.parse(tokenKey) : null;
   let userId: string | undefined;
 
   if (parsedToken && parsedToken.user) {
     userId = parsedToken.user.id;
   }
-
+  console.log('userId', userId);
   if (isLoading) {
     return <div>데이터 로딩 중입니다.</div>;
   }
