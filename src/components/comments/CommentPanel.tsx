@@ -2,7 +2,7 @@ import React from 'react';
 import * as S from './Styled.Comments';
 
 interface CommentPanelProps {
-  commenting: boolean;
+  commenting?: boolean;
   handleUpdateClickBtn?: () => void;
   handleUpdateCommentCancel?: () => void;
   handleUpdateCommentBtnClick?: () => void;
