@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Comments from '../components/comments/Comments';
 
 import * as S from '../components/posts/Styled.Posts';
@@ -52,27 +54,31 @@ const Detail = () => {
   }
 
   return (
-    <>
-      <div>
-        <h2>{post.title}</h2>
-        <div>
-          {post.image_urls.map((imageUrl, index) => (
-            <S.Image
-              key={index}
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`}
-              alt={`Image ${index}`}
-              style={{ width: '250px', height: '250px' }}
-            />
-          ))}
-        </div>
-        <br />
-        <div dangerouslySetInnerHTML={{ __html: post.body }} />
-        <br />
-        <button onClick={handleEdit}>수정하기</button>
-        <button onClick={handleDelete}>삭제하기</button>
-      </div>
+    <S.Container>
+      <S.MainContainer>
+        <S.CarouselContainer>
+          <Carousel>
+            {post.image_urls.map((imageUrl, index) => (
+              <div key={index}>
+                <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`} alt={`Image ${index}`} />
+              </div>
+            ))}
+          </Carousel>
+        </S.CarouselContainer>
+        <S.ContentsContainer>
+          <h2>{post.title}</h2>
+          <div dangerouslySetInnerHTML={{ __html: post.body }} />
+          <p>{post.price}</p>
+          <p>{post.location}</p>
+          <p>{post.category}</p>
+          <S.EditDeleteButtons>
+            <button onClick={handleEdit}>수정하기</button>
+            <button onClick={handleDelete}>삭제하기</button>
+          </S.EditDeleteButtons>
+        </S.ContentsContainer>
+      </S.MainContainer>
       <Comments />
-    </>
+    </S.Container>
   );
 };
 

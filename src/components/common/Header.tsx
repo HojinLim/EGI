@@ -48,7 +48,7 @@ const Header = () => {
       <div>
         {userData ? (
           <div key={userData.uid}>
-            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileImg}`} />
+            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileimg}`} />
             {userData.nickname}
           </div>
         ) : null}
