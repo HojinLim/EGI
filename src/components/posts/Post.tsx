@@ -28,7 +28,6 @@ const Post = () => {
       }
 
       const imageUrl = data.path;
-      console.log('selectData', data);
       const { error: insertError } = await supabase
         .from('posts')
         .insert([{ title: newTitle, body: newBody, image_url: imageUrl }]);
