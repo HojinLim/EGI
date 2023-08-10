@@ -1,8 +1,10 @@
-import React from 'react';
+// import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signUpService } from '../../services/supabase/auth';
+// import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
+import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
 import type { UserType } from '../../types/supabase';
 
 type SignUpType = {
@@ -21,17 +23,32 @@ export const userDataAtom = atom<UserType>({
 const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const queryClient = useQueryClient();
   const [userData, setUserData] = useAtom(userDataAtom);
+  const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(null);
 
   const signUpMutation = useMutation(signUpService, {
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [userData] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     }
   });
 
-  const signUpHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      signUpMutation.mutate(userData);
+      let profileImgUrl = '';
+
+      if (selectedProfileImg) {
+        const profileImgFile = new File([selectedProfileImg], selectedProfileImg.name);
+        const uploadData = await uploadProfileImage(profileImgFile);
+        profileImgUrl = uploadData.path;
+      }
+
+      const userDataWithImage = {
+        ...userData,
+        profileImg: profileImgUrl
+      };
+
+      signUpMutation.mutate(userDataWithImage);
+
       alert('회원가입이 완료되었습니다!');
       setSignUpmodal(false);
       setLoginModal(true);
@@ -74,8 +91,7 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
           <input
             type="file"
             value={userData.profileImg}
-            onChange={(e) => setUserData({ ...userData, profileImg: e.target.value })}
-            placeholder="profileImg"
+            onChange={(e) => setSelectedProfileImg(e.target.files && e.target.files[0])}
           ></input>
           <button>회원 가입 완료</button>
         </form>

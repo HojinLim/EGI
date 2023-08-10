@@ -18,5 +18,5 @@ export interface Post {
   pid: number;
   title: string;
   body: string;
-  image_url: string;
+  image_urls: string[];
 }
