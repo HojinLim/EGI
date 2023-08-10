@@ -7,8 +7,11 @@ import { categories, conditionCategories, exchangeCategories, parcelCategories }
 import { handleImageChange } from './HandleImage';
 import { supabase } from '../../services/supabase/supabase';
 import CategorySelect from '../category/CategorySelect';
+import { Link } from 'react-router-dom';
 
 const Post = () => {
+  // const [user] = useAtom(userAtom); // userAtom의 값을 가져옴
+ 
   const navigate = useNavigate();
   const [newTitle, setNewTitle] = useState('');
   const [newBody, setNewBody] = useState('');
@@ -30,7 +33,7 @@ const Post = () => {
 
     for (const selectedImage of selectedImages) {
       const { data, error } = await supabase.storage.from('1st').upload(`images/${selectedImage.name}`, selectedImage);
-
+      
       if (error) {
         console.error('Error uploading image to Supabase storage:', error);
         alert('이미지 업로드 중 에러가 발생했습니다!');
@@ -82,6 +85,7 @@ const Post = () => {
   return (
     <div>
       <div>
+        <Link to={'/'}>HOME</Link>
         <input type="text" placeholder="Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
         <br />
         <input type="number" placeholder="Price" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} />
