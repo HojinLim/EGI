@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import SignUp from './SignUp';
 import { atom, useAtom } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import SignUp from './SignUp';
 import { loginService } from '../../services/supabase/auth';
+import * as S from './Styled.Login';
+
 import type { UserType } from '../../types/supabase';
 // import { supabase } from '../../services/supabase';
 // import ResetPasswordModal from './ResetPassword';
@@ -27,10 +28,15 @@ const Login = ({ setLoginModal }: LoginType) => {
     password: '',
     profileimg: null
   });
-
   const [userEmail, setUserEmail] = useAtom(userEmailAtom);
   console.log(userEmail);
 
+  const initialUserData = {
+    uid: '',
+    email: '',
+    password: '',
+    profileimg: null
+  };
   // 회원가입 모달 열기
   const showSignUpModal = () => {
     setSignUpModal(true);
@@ -38,6 +44,7 @@ const Login = ({ setLoginModal }: LoginType) => {
   // 로그인 모달 닫기
   const closeLoginModal = () => {
     setLoginModal(false);
+    setUserData(initialUserData);
   };
 
   const loginMutation = useMutation(loginService, {
@@ -51,9 +58,18 @@ const Login = ({ setLoginModal }: LoginType) => {
 
   const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (!userData.email || !userData.password) {
+      alert('이메일과 비밀번호를 입력해주세요.');
+      return;
+    }
     try {
-      loginMutation.mutate(userData);
+      const response = await loginMutation.mutateAsync(userData);
+      if (!response) {
+        alert('이메일 또는 비밀번호가 올바르지 않습니다.');
+        setLoginModal(true);
+      } else {
+        setLoginModal(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -68,93 +84,30 @@ const Login = ({ setLoginModal }: LoginType) => {
   };
 
   return (
-    <Container>
-      <CloseBtn onClick={closeLoginModal}>x</CloseBtn>
-      <Wrapper>
-        <InputContainer>
-          <form onSubmit={loginHandler}>
-            <EmailBox
-              type="text"
-              value={userData.email}
-              onChange={emailInputChangeHandler}
-              placeholder="Email"
-            ></EmailBox>
-            <PasswordBox
+    <S.Container>
+      <S.CloseBtn onClick={closeLoginModal}>x</S.CloseBtn>
+      <S.Wrapper>
+        <S.InputContainer>
+          <S.FormBox onSubmit={loginHandler}>
+            <S.EmailBox type="text" value={userData.email} onChange={emailInputChangeHandler} placeholder="Email" />
+            <S.PasswordBox
               type="password"
               value={userData.password}
               onChange={passwordInputChangeHandler}
               placeholder="Password"
-            ></PasswordBox>
-            <LoginBtn>Login</LoginBtn>
-          </form>
-        </InputContainer>
+            />
+            <S.LoginBtn>Login</S.LoginBtn>
+          </S.FormBox>
+        </S.InputContainer>
         {/* <button onClick={resetPasswordHandler}> 비밀번호 찾기</button>
         {resetPasswordModal && (
           <ResetPasswordModal closeResetPasswordModal={() => setResetPasswordModal(false)} email={email} />
         )} */}
-        <button onClick={showSignUpModal}>회원가입하기</button>
+        <S.SignUpBtn onClick={showSignUpModal}>회원가입</S.SignUpBtn>
         {signUpModal && <SignUp setSignUpmodal={setSignUpModal} setLoginModal={setLoginModal} />}
-      </Wrapper>
-    </Container>
+      </S.Wrapper>
+    </S.Container>
   );
 };
 
 export default Login;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  width: 300px;
-  height: 400px;
-
-  z-index: 999;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  background-color: gray;
-  border: 1px solid black;
-  border-radius: 8px;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const CloseBtn = styled.button`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const EmailBox = styled.input`
-  width: 170px;
-  height: 30px;
-
-  margin: 10px;
-`;
-
-const PasswordBox = styled.input`
-  width: 170px;
-  height: 30px;
-  margin: 10px;
-`;
-
-const LoginBtn = styled.button`
-  width: 130px;
-  height: 30px;
-`;
