@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Editor from '../editor/Editor';
 
-import { categories } from '../category/Category';
+import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
 import { handleImageChange } from './HandleImage';
 import { supabase } from '../../services/supabase/supabase';
+import CategorySelect from '../category/CategorySelect';
 
 const Post = () => {
   const navigate = useNavigate();
@@ -15,6 +16,9 @@ const Post = () => {
   const [newLocation, setNewLocation] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [category, setCategory] = useState('');
+  const [conditionCategory, setConditionCategory] = useState('');
+  const [exchangeCategory, setExchangeCategory] = useState('');
+  const [parcelCategory, setParcelCategory] = useState('');
 
   const handleAddPost = async () => {
     if (!newTitle.trim() || !newBody.trim() || !newPrice.trim() || !newLocation.trim()) {
@@ -43,7 +47,10 @@ const Post = () => {
         image_urls: imageUrls,
         price: newPrice,
         location: newLocation,
-        category: category
+        category: category,
+        condition: conditionCategory,
+        exchange: exchangeCategory,
+        parcel: parcelCategory
       }
     ]);
 
@@ -87,14 +94,26 @@ const Post = () => {
         />
         <br />
 
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="">카테고리 선택</option>
-          {categories.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.label}
-            </option>
-          ))}
-        </select>
+        <CategorySelect
+          value={category}
+          options={categories}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategory(e.target.value)}
+        />
+        <CategorySelect
+          value={conditionCategory}
+          options={conditionCategories}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConditionCategory(e.target.value)}
+        />
+        <CategorySelect
+          value={exchangeCategory}
+          options={exchangeCategories}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExchangeCategory(e.target.value)}
+        />
+        <CategorySelect
+          value={parcelCategory}
+          options={parcelCategories}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setParcelCategory(e.target.value)}
+        />
 
         <br />
         <Editor value={newBody} onChange={(content) => setNewBody(content)} />

@@ -22,4 +22,8 @@ export interface Post {
   body: string;
   category: string;
   image_urls: string[];
+  created_at: string;
+  condition: string;
+  exchange: string;
+  parcel: string;
 }
