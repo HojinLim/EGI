@@ -13,12 +13,12 @@ const Detail = () => {
   const [post, setPost] = useState<Post | null>(null);
 
   useEffect(() => {
-    async function fetchPost() {
+    const fetchPost = async () => {
       const { data: posts, error } = await supabase.from('posts').select('*').eq('pid', id).single();
       if (error) {
         console.error('Error fetching post:', error);
       } else {
-        const parsedImageUrls = JSON.parse(posts.image_urls); // Parse the JSON string to an array
+        const parsedImageUrls = JSON.parse(posts.image_urls);
 
         const detailedPost: Post = {
           ...posts,
@@ -27,7 +27,7 @@ const Detail = () => {
 
         setPost(detailedPost);
       }
-    }
+    };
 
     fetchPost();
   }, [id]);

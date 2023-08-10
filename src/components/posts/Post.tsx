@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Editor from '../editor/Editor';
-import { v4 as uuidv4 } from 'uuid';
 
+import { handleImageChange } from './HandleImage';
 import { supabase } from '../../services/supabase/supabase';
 
 const Post = () => {
@@ -48,21 +48,11 @@ const Post = () => {
     navigate(`/`);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
 
-    if (selectedFiles && selectedFiles.length > 0) {
-      const updatedSelectedImages: File[] = [];
-
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const selectedFile = selectedFiles[i];
-        const originalFileName = selectedFile.name;
-        const fileExtension = originalFileName.split('.').pop();
-        const randomFileName = uuidv4() + '.' + (fileExtension || 'jpg');
-
-        updatedSelectedImages.push(new File([selectedFile], randomFileName));
-      }
-
+    if (selectedFiles) {
+      const updatedSelectedImages = handleImageChange(selectedFiles);
       setSelectedImages(updatedSelectedImages);
     }
   };
@@ -77,7 +67,7 @@ const Post = () => {
         <br />
         <br />
         <br />
-        <input type="file" accept="image/*" multiple onChange={handleImageChange} />
+        <input type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
         <button onClick={handleAddPost}>글 작성하기</button>
       </div>
     </div>

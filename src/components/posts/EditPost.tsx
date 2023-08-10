@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
-import { v4 as uuidv4 } from 'uuid';
 
+import { handleImageChange } from './HandleImage';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 
@@ -15,7 +15,7 @@ const EditPost = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
   useEffect(() => {
-    async function fetchPost() {
+    const fetchPost = async () => {
       const { data: posts, error } = await supabase.from('posts').select('*').eq('pid', id).single();
       if (error) {
         console.error('Error fetching post:', error);
@@ -24,7 +24,7 @@ const EditPost = () => {
         setEditTitle(posts.title);
         setEditBody(posts.body);
       }
-    }
+    };
 
     fetchPost();
   }, [id]);
@@ -65,21 +65,11 @@ const EditPost = () => {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
 
-    if (selectedFiles && selectedFiles.length > 0) {
-      const updatedSelectedImages: File[] = [];
-
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const selectedFile = selectedFiles[i];
-        const originalFileName = selectedFile.name;
-        const fileExtension = originalFileName.split('.').pop();
-        const randomFileName = uuidv4() + '.' + (fileExtension || 'jpg');
-
-        updatedSelectedImages.push(new File([selectedFile], randomFileName));
-      }
-
+    if (selectedFiles) {
+      const updatedSelectedImages = handleImageChange(selectedFiles);
       setSelectedImages(updatedSelectedImages);
     }
   };
@@ -96,7 +86,7 @@ const EditPost = () => {
       <br />
       <br />
       <br />
-      <input type="file" accept="image/*" multiple onChange={handleImageChange} />
+      <input type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
       <button onClick={handleEditPost}>수정하기</button>
     </div>
   );
