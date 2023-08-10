@@ -1,9 +1,8 @@
-// EditPost.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
-import { v4 as uuidv4 } from 'uuid';
 
+import { handleImageChange } from './HandleImage';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 
@@ -13,10 +12,10 @@ const EditPost = () => {
   const [post, setPost] = useState<Post | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
   useEffect(() => {
-    async function fetchPost() {
+    const fetchPost = async () => {
       const { data: posts, error } = await supabase.from('posts').select('*').eq('pid', id).single();
       if (error) {
         console.error('Error fetching post:', error);
@@ -25,10 +24,10 @@ const EditPost = () => {
         setEditTitle(posts.title);
         setEditBody(posts.body);
       }
-    }
+    };
 
     fetchPost();
-  }, []);
+  }, [id]);
 
   const handleEditPost = async () => {
     if (!editTitle.trim() || !editBody.trim()) {
@@ -36,9 +35,9 @@ const EditPost = () => {
       return;
     }
 
-    let updatedImageUrl = post?.image_url;
+    const imageUrls: string[] = [];
 
-    if (selectedImage) {
+    for (const selectedImage of selectedImages) {
       const { data, error } = await supabase.storage.from('1st').upload(`images/${selectedImage.name}`, selectedImage);
 
       if (error) {
@@ -47,13 +46,13 @@ const EditPost = () => {
         return;
       }
 
-      updatedImageUrl = data.path;
+      imageUrls.push(data.path);
     }
 
     if (post && editTitle && editBody) {
       const { error } = await supabase
         .from('posts')
-        .update({ title: editTitle, body: editBody, image_url: updatedImageUrl })
+        .update({ title: editTitle, body: editBody, image_urls: imageUrls })
         .eq('pid', post.pid);
 
       if (error) {
@@ -66,19 +65,18 @@ const EditPost = () => {
     }
   };
 
+  const handleImageChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files;
+
+    if (selectedFiles) {
+      const updatedSelectedImages = handleImageChange(selectedFiles);
+      setSelectedImages(updatedSelectedImages);
+    }
+  };
+
   if (!post) {
     return <div>Loading...</div>;
   }
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files && e.target.files[0];
-    if (selectedFile) {
-      const originalFileName = selectedFile.name;
-      const fileExtension = originalFileName.split('.').pop();
-      const randomFileName = uuidv4() + '.' + fileExtension;
-      setSelectedImage(new File([selectedFile], randomFileName));
-    }
-  };
 
   return (
     <div>
@@ -88,7 +86,7 @@ const EditPost = () => {
       <br />
       <br />
       <br />
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <input type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
       <button onClick={handleEditPost}>수정하기</button>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import * as S from './Styled.Posts';
 
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
@@ -9,7 +9,7 @@ const GetPost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    async function fetchPosts() {
+    const fetchPosts = async () => {
       const { data, error } = await supabase.from('posts').select('*');
 
       if (error) {
@@ -17,47 +17,32 @@ const GetPost = () => {
       } else {
         const postsWithCompleteURLs = data.map((post) => ({
           ...post,
-          image_url: `https://bbakvkybkyfoiijevbec.supabase.co/storage/v1/object/public/1st/${post.image_url}`
+          image_urls: post.image_urls ? post.image_urls.replace(/\[|\]|"/g, '').split(',') : []
         }));
 
         setPosts(postsWithCompleteURLs);
       }
-    }
+    };
 
     fetchPosts();
   }, []);
 
   return (
-    <PostContainer>
+    <S.PostContainer>
       {posts.map((post) => (
         <NavLink to={`/post/${post.pid}`} key={post.pid} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <PostItem>
+          <S.PostItem>
             <h2>{post.title}</h2>
             <div>
-              <img src={post.image_url} alt={post.title} />
+              {post.image_urls.length > 0 && (
+                <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${post.image_urls[0]}`} alt={post.title} />
+              )}
             </div>
-          </PostItem>
+          </S.PostItem>
         </NavLink>
       ))}
-    </PostContainer>
+    </S.PostContainer>
   );
 };
 
 export default GetPost;
-
-const PostContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-`;
-
-const PostItem = styled.div`
-  border: 1px solid #ddd;
-  padding: 10px;
-  width: 150px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-`;
