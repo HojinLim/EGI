@@ -47,7 +47,7 @@ const Comments = () => {
     <S.CommentsContainer>
       <S.CommentsPanel>
         <div>
-          <div> 댓글 {comments?.length}개</div>
+          <div>댓글 {comments?.length}개</div>
         </div>
         <div>
           <button onClick={handleCommentFormBtnClick}>작성하기</button>
