@@ -16,7 +16,10 @@ export interface Comment {
 
 export interface Post {
   pid: number;
+  location: string;
+  price: number;
   title: string;
   body: string;
+  category: string;
   image_urls: string[];
 }
