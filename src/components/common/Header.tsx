@@ -33,14 +33,6 @@ const Header = () => {
     }
   };
 
-  // const tokenKey = localStorage.getItem('sb-bbakvkybkyfoiijevbec-auth-token');
-  // const parsedToken = tokenKey ? JSON.parse(tokenKey) : null;
-  // let userId: string | undefined;
-
-  // if (parsedToken && parsedToken.user) {
-  //   userId = parsedToken.user.id;
-  // }
-  // console.log('userId', userId);
   if (isLoading) {
     return <div>데이터 로딩 중입니다.</div>;
   }
@@ -58,7 +50,7 @@ const Header = () => {
       <div>
         {userData ? (
           <div key={userData.uid}>
-            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileImg}`} alt="User Profile" />
+            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileImg}`} />
             {userData.nickname}
           </div>
         ) : null}
