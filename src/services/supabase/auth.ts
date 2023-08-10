@@ -19,9 +19,9 @@ export const signUpService = async (userData: UserType) => {
 
       const uploadData = await uploadProfileImage(profileImgFile);
       profileImgUrl = uploadData.path;
+      console.log('profileImgUrl', profileImgUrl);
     }
 
-    console.log('profileImgUrl', profileImgUrl);
     const userInsertData = {
       uid: data.user?.id,
       nickname: userData.nickname,
@@ -108,8 +108,7 @@ export const uploadProfileImage = async (profileImgFile: File) => {
     const { data, error } = await supabase.storage
       .from('1st')
       .upload(`profileImgs/${profileImgFile.name}`, profileImgFile);
-    console.log('profileImgFile.name', profileImgFile.name);
-    console.log('uploadData', data);
+
     if (error) {
       throw new Error(error.message);
     }

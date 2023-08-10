@@ -20,9 +20,7 @@ const Header = () => {
     queryKey: ['users', userEmail],
     queryFn: () => getUserInfo(userEmail)
   });
-  console.log('userData!', userData);
 
-  console.log('유저 이메일>' + userEmail);
   const signOutHandler = async () => {
     try {
       await sigOutService();
