@@ -6,8 +6,8 @@ export interface UserType {
   profileimg: File | null;
 }
 export interface Comment {
-  cid?: number;
-  uid: number;
+  cid: number;
+  uid: string;
   pid: number;
   nickname: string;
   body: string;
@@ -18,5 +18,5 @@ export interface Post {
   pid: number;
   title: string;
   body: string;
-  image_url: string;
+  image_urls: string[];
 }
