@@ -83,7 +83,17 @@ const EditPost = () => {
     if (post && editTitle && editBody) {
       const { error } = await supabase
         .from('posts')
-        .update({ title: editTitle, body: editBody, image_urls: imageUrls, price, location, category })
+        .update({
+          title: editTitle,
+          body: editBody,
+          image_urls: imageUrls,
+          price,
+          location,
+          category,
+          conditionCategory,
+          exchangeCategory,
+          parcelCategory
+        })
         .eq('pid', post.pid);
 
       if (error) {
