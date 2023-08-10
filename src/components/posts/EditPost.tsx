@@ -44,8 +44,17 @@ const EditPost = () => {
   }, [id]);
 
   const handleEditPost = async () => {
-    if (!editTitle.trim() || !editBody.trim()) {
-      alert('제목과 본문을 모두 입력해주세요.');
+    if (
+      !editTitle.trim() ||
+      !editBody.trim() ||
+      !location.trim() ||
+      !price.toString().trim() ||
+      !category ||
+      !conditionCategory ||
+      !exchangeCategory ||
+      !parcelCategory
+    ) {
+      alert('모든 폼을 입력해주세요.');
       return;
     }
 

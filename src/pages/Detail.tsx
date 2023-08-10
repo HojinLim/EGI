@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { formatDistanceToNow } from 'date-fns';
+
 import { ko } from 'date-fns/locale';
 import Comments from '../components/comments/Comments';
 import * as S from '../components/posts/Styled.Posts';

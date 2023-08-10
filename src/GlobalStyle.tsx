@@ -9,6 +9,12 @@ const GlobalStyle = createGlobalStyle`
     font-size : 30px;
   }
 
+  body{
+    max-width : 1200px;
+    max-height : 800px;
+    margin : 0 auto;
+  }
+
   p {
     font-size : 15px;
   }
