@@ -5,15 +5,15 @@ import Header from '../components/common/Header';
 
 const Home = () => {
   return (
-    <>
+    <div>
       <Header />
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div>
         <Link to="/post">
           <button>글작성</button>
         </Link>
         <GetPost />
       </div>
-    </>
+    </div>
   );
 };
 

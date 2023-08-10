@@ -24,8 +24,6 @@ export const Image = styled.img`
 `;
 
 export const Container = styled.div`
-  width: 1200px;
-  height: 800px;
   margin: 0 auto;
   overflow: hidden;
 `;
