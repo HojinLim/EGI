@@ -14,18 +14,18 @@ export const signUpService = async (userData: UserType) => {
     }
     let profileImgUrl = '';
 
-    if (userData.profileImg) {
-      const profileImgFile = new File([userData.profileImg], userData.profileImg);
-
+    if (userData.profileimg) {
+      const profileImgFile = new File([userData.profileimg], userData.profileimg?.name);
       const uploadData = await uploadProfileImage(profileImgFile);
       profileImgUrl = uploadData.path;
+      console.log('uploadData', uploadData);
     }
 
     console.log('profileImgUrl', profileImgUrl);
     const userInsertData = {
       uid: data.user?.id,
       nickname: userData.nickname,
-      profileImg: profileImgUrl,
+      profileimg: profileImgUrl,
       email: userData.email
     };
 
@@ -72,7 +72,7 @@ export const getUserInfo = async (userEmail: string): Promise<Omit<UserType, 'pa
   try {
     const { data: userData, error } = await supabase
       .from('users')
-      .select('uid, email, nickname, profileImg')
+      .select('uid, email, nickname, profileimg')
       .eq('email', userEmail);
 
     if (error) {
@@ -103,16 +103,15 @@ export const resetPassword = async (email: string) => {
   }
 };
 
-export const uploadProfileImage = async (profileImgFile: File) => {
+export const uploadProfileImage = async (selectedProfileImg: File) => {
   try {
     const { data, error } = await supabase.storage
       .from('1st')
-      .upload(`profileImgs/${profileImgFile.name}`, profileImgFile);
-    console.log('profileImgFile.name', profileImgFile.name);
-    console.log('uploadData', data);
+      .upload(`profileimgs/${selectedProfileImg.name}`, selectedProfileImg);
     if (error) {
       throw new Error(error.message);
     }
+    console.log('profileImgFile', selectedProfileImg);
 
     return data;
   } catch (error) {

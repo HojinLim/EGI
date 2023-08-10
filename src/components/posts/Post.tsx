@@ -28,10 +28,9 @@ const Post = () => {
         alert('이미지 업로드 중 에러가 발생했습니다!');
         return;
       }
-
+      
       imageUrls.push(data.path);
     }
-
     const { error: insertError } = await supabase
       .from('posts')
       .insert([{ title: newTitle, body: newBody, image_urls: imageUrls }]);
@@ -40,7 +39,6 @@ const Post = () => {
       alert('에러가 발생했습니다!');
       return;
     }
-
     setNewTitle('');
     setNewBody('');
     setSelectedImages([]);
