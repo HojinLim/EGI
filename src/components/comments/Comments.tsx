@@ -4,58 +4,28 @@ import { fetchComments } from '../../services/supabase/comments';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { Comment } from '../../types/supabase';
-import useCommentMutation from '../../hooks/useCommentMutation'; // 이에 맞게 경로 설정
+import useCommentMutation from '../../hooks/useCommentMutation';
+import CommentForm from './CommentForm';
+import CommentsPanel from './CommentPanel';
 
 const Comments = () => {
   // login 완료되면 수정하기
   const uid = '3';
+  const { id: pid } = useParams() as { id: string };
 
-  // const queryClient = useQueryClient();
+  // 댓글 작성 버튼 컨트롤
   const [isCommenting, setIsCommenting] = useState(false);
-  const [commentText, setCommentText] = useState('');
 
   // 댓글 수정 state들
   const [updateCommentId, setUpdateCommentId] = useState<number | null>(0);
   const [updateComment, setUpdateComment] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { id: pid } = useParams() as { id: string };
-
-  const { addCommentMutation, updateCommentMutation, deleteCommentMutation } = useCommentMutation();
+  // useMutation Hooks
+  const { updateCommentMutation, deleteCommentMutation } = useCommentMutation();
 
   const handleCommentFormBtnClick = () => {
     setIsCommenting(!isCommenting);
-  };
-
-  const handleCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommentText(e.target.value);
-  };
-
-  const handleAddSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (commentText === '') {
-      alert('댓글을 작성해 주세요.');
-      return false;
-    }
-    // const newComment = {
-    //   uid: 1,
-    //   pid: parseInt(pid),
-    //   nickname: '테스트',
-    //   profileimg: '아무튼url',
-    //   body: commentText,
-    //   created_at: new Date().toISOString()
-    // };
-    const newComment = {
-      uid: uid,
-      pid: Number(pid),
-      nickname: '테스트',
-      body: commentText,
-      created_at: new Date().toISOString()
-    };
-
-    addCommentMutation.mutate(newComment);
-    setCommentText('');
   };
 
   const handleUpdateCommentBtnClick = (cid: number, comment: string) => {
@@ -150,47 +120,23 @@ const Comments = () => {
                 <S.CommentBody>{comment.body}</S.CommentBody>
               )}
             </S.CommentTextBox>
-            {uid === comment.uid && (
-              <S.CommentPanel>
-                {isUpdating && updateCommentId == comment.cid ? (
-                  <>
-                    <S.Button width="50px" height="30px" onClick={handleUpdateClickBtn}>
-                      완료
-                    </S.Button>
-                    <S.Button width="50px" height="30px" onClick={handleUpdateCommentCancel}>
-                      취소
-                    </S.Button>
-                  </>
-                ) : (
-                  <>
-                    <S.Button
-                      width="50px"
-                      height="30px"
-                      onClick={() => handleUpdateCommentBtnClick(comment.cid, comment.body)}
-                    >
-                      수정
-                    </S.Button>
-                    <S.Button width="50px" height="30px" onClick={() => handleDeleteCommentBtnClick(comment.cid)}>
-                      삭제
-                    </S.Button>
-                  </>
-                )}
-              </S.CommentPanel>
+            {uid === comment.uid && isUpdating && updateCommentId == comment.cid ? (
+              <CommentsPanel
+                commenting={true}
+                handleUpdateClickBtn={handleUpdateClickBtn}
+                handleUpdateCommentCancel={handleUpdateCommentCancel}
+              />
+            ) : (
+              <CommentsPanel
+                commenting={false}
+                handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.cid, comment.body)}
+                handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.cid)}
+              />
             )}
           </S.CommentItem>
         ))}
       </S.CommentList>
-      <S.CommentForm isCommenting={isCommenting} onSubmit={handleAddSubmitBtn}>
-        <S.CommentItem>
-          <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
-          <S.CommentInput type="text" value={commentText} onChange={handleCommentInputChange} />
-          <S.CommentPanel>
-            <S.Button width="50px" height="30px">
-              등록
-            </S.Button>
-          </S.CommentPanel>
-        </S.CommentItem>
-      </S.CommentForm>
+      {isCommenting && <CommentForm uid={uid} pid={pid} />}
     </S.CommentsContainer>
   );
 };

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const CommentsContainer = styled.div`
   margin-top: 50px;
@@ -85,14 +85,9 @@ export const CommentAdd = styled.div`
 `;
 
 export const CommentForm = styled.form<{ isCommenting?: boolean }>`
-  display: none;
+  display: flex;
   max-width: 1200px;
-  ${(props) =>
-    props.isCommenting &&
-    css`
-      margin-top: 20px;
-      display: flex; /* 추가: 수직 정렬을 위해 컨테이너를 flex로 설정 */
-
-      border-top: 1px solid black;
-    `};
+  margin-top: 20px;
+  display: flex;
+  border-top: 1px solid black;
 `;
