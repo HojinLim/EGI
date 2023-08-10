@@ -1,20 +1,24 @@
 import React, { Dispatch, useState } from 'react';
 import * as S from './Styled.Comments';
-import CommentsPanel from './CommentPanel';
+import CommentPanel from './CommentPanel';
+import ReplyCommentForm from './ReplyCommentForm';
 
-import type { Comment } from '../../types/supabase';
+import type { CommentType } from '../../types/supabase';
 import useCommentMutation from '../../hooks/useCommentMutation';
 import { SetStateAction } from 'jotai';
 
 interface CommentItemProps {
   uid: string;
-  comment: Comment;
+  pid: string;
+  comment: CommentType;
   isUpdating: boolean;
   setIsUpdating: Dispatch<SetStateAction<boolean>>;
 }
 
-const CommentItem = ({ comment, uid, isUpdating, setIsUpdating }: CommentItemProps) => {
+const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentItemProps) => {
   const [updateComment, setUpdateComment] = useState('');
+  const [isAddReply, setIsAddReply] = useState(false);
+
   const [updateCommentId, setUpdateCommentId] = useState<number | null>(0);
 
   const { updateCommentMutation, deleteCommentMutation } = useCommentMutation();
@@ -31,11 +35,11 @@ const CommentItem = ({ comment, uid, isUpdating, setIsUpdating }: CommentItemPro
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleUpdateClickBtn();
+      handleUpdateBtnClick();
     }
   };
 
-  const handleUpdateClickBtn = () => {
+  const handleUpdateBtnClick = () => {
     if (updateComment === '') {
       alert('작성된 댓글이 없습니다.');
       return false;
@@ -67,39 +71,45 @@ const CommentItem = ({ comment, uid, isUpdating, setIsUpdating }: CommentItemPro
   };
 
   return (
-    <S.CommentItem>
-      <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
-      <S.CommentTextBox>
-        <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
-        {isUpdating && updateCommentId == comment.cid ? (
-          <S.CommentInput
-            type="text"
-            value={updateComment}
-            onChange={handleUpdateCommentInputChange}
-            onKeyDown={handleKeyDown}
-          />
+    <>
+      <S.CommentItem>
+        <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
+        <S.CommentTextBox>
+          <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
+          {isUpdating && updateCommentId == comment.cid ? (
+            <S.CommentInput
+              type="text"
+              value={updateComment}
+              onChange={handleUpdateCommentInputChange}
+              onKeyDown={handleKeyDown}
+            />
+          ) : (
+            <>
+              <S.CommentBody>{comment.body}</S.CommentBody>
+              <S.Button onClick={() => setIsAddReply(!isAddReply)}>답글달기</S.Button>
+            </>
+          )}
+        </S.CommentTextBox>
+        {uid === comment.uid ? (
+          isUpdating && updateCommentId === comment.cid ? (
+            <CommentPanel
+              commenting={true}
+              handleUpdateBtnClick={handleUpdateBtnClick}
+              handleUpdateCommentCancel={handleUpdateCommentCancel}
+            />
+          ) : (
+            <CommentPanel
+              commenting={false}
+              handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.cid, comment.body)}
+              handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.cid)}
+            />
+          )
         ) : (
-          <S.CommentBody>{comment.body}</S.CommentBody>
+          <div style={{ width: '105px' }} />
         )}
-      </S.CommentTextBox>
-      {uid === comment.uid ? (
-        isUpdating && updateCommentId === comment.cid ? (
-          <CommentsPanel
-            commenting={true}
-            handleUpdateClickBtn={handleUpdateClickBtn}
-            handleUpdateCommentCancel={handleUpdateCommentCancel}
-          />
-        ) : (
-          <CommentsPanel
-            commenting={false}
-            handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.cid, comment.body)}
-            handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.cid)}
-          />
-        )
-      ) : (
-        <div></div>
-      )}
-    </S.CommentItem>
+      </S.CommentItem>
+      {isAddReply && <ReplyCommentForm uid={uid} pid={pid} cid={comment.cid} setIsAddReply={setIsAddReply} />}
+    </>
   );
 };
 

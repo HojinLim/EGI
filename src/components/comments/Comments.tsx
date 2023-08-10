@@ -7,10 +7,10 @@ import ReplyComments from './ReplyComments';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
-import type { Comment } from '../../types/supabase';
+import type { CommentType } from '../../types/supabase';
 const Comments = () => {
   // login 완료되면 수정하기
-  const uid = '23';
+  const uid = '234';
   const { id: pid } = useParams() as { id: string };
 
   // 댓글 작성 버튼 컨트롤
@@ -18,9 +18,6 @@ const Comments = () => {
 
   // 댓글 수정
   const [isUpdating, setIsUpdating] = useState(false);
-
-  // 대댓글 보기
-  const [isViewingReply, setIsViewingReply] = useState(false);
 
   const handleCommentFormBtnClick = () => {
     setIsCommenting(!isCommenting);
@@ -33,13 +30,13 @@ const Comments = () => {
     refetchOnReconnect: false
   };
 
-  const { data: comments, error, isFetching } = useQuery<Comment[]>(defaultQueryOptions);
+  const { data: comments, error, isLoading } = useQuery<CommentType[]>(defaultQueryOptions);
 
   if (error) {
     return <div>데이터를 가져오는 도중 오류가 발생했습니다.</div>;
   }
 
-  if (isFetching) {
+  if (isLoading) {
     return <div>로딩중입니다.</div>;
   }
 
@@ -57,12 +54,12 @@ const Comments = () => {
       <S.CommentList>
         {comments?.map((comment) => (
           <React.Fragment key={comment.cid}>
-            <CommentItem comment={comment} uid={uid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
-            <ReplyComments isViewingReply={isViewingReply} setIsViewingReply={setIsViewingReply} />
+            <CommentItem comment={comment} uid={uid} pid={pid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
+            <ReplyComments cid={comment.cid} uid={uid} pid={pid} />
           </React.Fragment>
         ))}
       </S.CommentList>
-      {isCommenting && <CommentForm uid={uid} pid={pid} />}
+      {isCommenting && <CommentForm uid={uid} pid={pid} setIsCommenting={setIsCommenting} />}
     </S.CommentsContainer>
   );
 };
