@@ -3,11 +3,11 @@ export interface UserType {
   email: string;
   password: string;
   nickname: string;
-  profileImg: string;
+  profileimg: File | null;
 }
 export interface Comment {
-  cid?: number;
-  uid: number;
+  cid: number;
+  uid: string;
   pid: number;
   nickname: string;
   body: string;
@@ -16,9 +16,10 @@ export interface Comment {
 
 export interface Post {
   pid: number;
+  location: string;
+  price: number;
   title: string;
   body: string;
-  image_url: string;
-
-  uid: string   // 만든이 구별
+  category: string;
+  image_urls: string[];
 }

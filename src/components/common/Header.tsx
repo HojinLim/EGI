@@ -17,20 +17,14 @@ const Header = () => {
   };
 
   const {
-    // isLoading,
+    isLoading,
     // isError,
     data: userData
   } = useQuery<Omit<UserType, 'password'> | null>({
     queryKey: ['users', userEmail],
     queryFn: () => getUserInfo(userEmail)
   });
-  
-  console.log('userData!', userData);
-  
- 
 
-
-  console.log('유저 이메일>' + userEmail);
   const signOutHandler = async () => {
     try {
       await sigOutService();
@@ -40,18 +34,11 @@ const Header = () => {
       console.error(error);
     }
   };
+  console.log(userData)
 
-  // const tokenKey = localStorage.getItem('sb-bbakvkybkyfoiijevbec-auth-token');
-  // const parsedToken = tokenKey ? JSON.parse(tokenKey) : null;
-  // let userId: string | undefined;
-
-  // if (parsedToken && parsedToken.user) { 
-  //   userId = parsedToken.user.id;
-  // }
-  // console.log('userId', userId);
-  // if (isLoading) {
-  //   return <div>데이터 로딩 중입니다.</div>;
-  // }
+  if (isLoading) {
+    return <div>데이터 로딩 중입니다.</div>;
+  }
 
   // if (isError) {
   //   return <div>데이터를 불러오는 동안 오류가 발생했습니다</div>;
@@ -66,7 +53,7 @@ const Header = () => {
       <div>
         {userData ? (
           <div key={userData.uid}>
-            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileImg}`} alt="User Profile" />
+            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileimg}`} />
             {userData.nickname}
           </div>
         ) : null}

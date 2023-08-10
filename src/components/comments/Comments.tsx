@@ -1,68 +1,33 @@
 import React, { useState } from 'react';
 import * as S from './Styled.Comments';
-import { fetchComments, insertComment } from '../../services/supabase/comments';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchComments } from '../../services/supabase/comments';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import { Comment } from '../../types/supabase';
+import ReplyComments from './ReplyComments';
+import CommentForm from './CommentForm';
+import CommentItem from './CommentItem';
 
+import type { Comment } from '../../types/supabase';
 const Comments = () => {
-  const queryClient = useQueryClient();
-  const [isCommenting, setIsCommenting] = useState(false);
-  const [commentText, setCommentText] = useState('');
+  // login 완료되면 수정하기
+  const uid = '23';
+  const { id: pid } = useParams() as { id: string };
 
-  const { id: pid } = useParams<{ id?: string }>();
-  if (!pid) {
-    return <div>pid가 유효하지 않습니다.</div>;
-  }
+  // 댓글 작성 버튼 컨트롤
+  const [isCommenting, setIsCommenting] = useState(false);
+
+  // 댓글 수정
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // 대댓글 보기
+  const [isViewingReply, setIsViewingReply] = useState(false);
 
   const handleCommentFormBtnClick = () => {
     setIsCommenting(!isCommenting);
   };
 
-  const handleCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCommentText(e.target.value);
-  };
-
-  const handleSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (commentText.trim() === '') {
-      return;
-    }
-
-    // const newComment = {
-    //   uid: 1,
-    //   pid: parseInt(pid),
-    //   nickname: '테스트',
-    //   profileimg: '아무튼url',
-    //   body: commentText,
-    //   created_at: new Date().toISOString()
-    // };
-    const newComment = {
-      uid: 3,
-      pid: parseInt(pid),
-      nickname: '테스트',
-      body: commentText,
-      created_at: new Date().toISOString()
-    };
-
-    addCommentMutation.mutate(newComment);
-    setCommentText('');
-  };
-
-  const addCommentMutation = useMutation(insertComment, {
-    onSuccess: () => {
-      // 댓글이 성공적으로 삽입되면 해당 쿼리를 다시 가져오도록 갱신
-      queryClient.invalidateQueries(['comments', pid]);
-      setCommentText(''); // 입력 필드 초기화
-    },
-    onError: (error) => {
-      alert(`댓글 삽입 중 오류가 발생했습니다.: ${error}`);
-    }
-  });
-
   const defaultQueryOptions = {
-    queryKey: ['comments', pid], // Use pid as part of the query key
+    queryKey: ['comments', pid],
     queryFn: () => fetchComments(pid),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false
@@ -82,7 +47,7 @@ const Comments = () => {
     <S.CommentsContainer>
       <S.CommentsPanel>
         <div>
-          <div> 댓글 {comments?.length} </div>
+          <div>댓글 {comments?.length}개</div>
         </div>
         <div>
           <button onClick={handleCommentFormBtnClick}>작성하기</button>
@@ -91,23 +56,13 @@ const Comments = () => {
       <S.CommentsHr />
       <S.CommentList>
         {comments?.map((comment) => (
-          <S.CommentItem key={comment.cid}>
-            <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
-            <S.CommentTextBox>
-              <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
-              <S.CommentBody>{comment.body}</S.CommentBody>
-            </S.CommentTextBox>
-          </S.CommentItem>
+          <React.Fragment key={comment.cid}>
+            <CommentItem comment={comment} uid={uid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
+            <ReplyComments isViewingReply={isViewingReply} setIsViewingReply={setIsViewingReply} />
+          </React.Fragment>
         ))}
       </S.CommentList>
-      <S.CommentForm isCommenting={isCommenting} onSubmit={handleSubmitBtn}>
-        <S.CommentItem>
-          <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
-          <S.CommentBody>
-            <input type="text" value={commentText} onChange={handleCommentInputChange} />
-          </S.CommentBody>
-        </S.CommentItem>
-      </S.CommentForm>
+      {isCommenting && <CommentForm uid={uid} pid={pid} />}
     </S.CommentsContainer>
   );
 };

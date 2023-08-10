@@ -1,35 +1,29 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { Post } from '../types/supabase';
-
-
-
-// 페이지 네이션 틀
-interface PaginationProps {
-  postMode: string;
-  posts: Post[]; // 이 부분을 추가
+interface Post {
+  pid: number;
+  nickname: string;
+  title: string;
+  category: string;
+  price: number;
+  date: string;
 }
 
-// Pagination 컴포넌트 내부에서 posts 속성을 활용합니다.
-const Pagination = ({ postMode, posts }: PaginationProps) => {
-  //  임의로 받았다고 가정
+//  TODO: 실제 데이터 props나 상태 관리로 가져오기
+const Pagination = () => {
+  // 더미 데이터 생성
+  const dummyPosts: Post[] = [
+    { pid: 1, nickname: 'user1', title: 'Post 1', category: 'Tech', price: 100, date: '2023-08-10' },
+    { pid: 2, nickname: 'user2', title: 'Post 2', category: 'Food', price: 50, date: '2023-08-11' },
+    { pid: 3, nickname: 'user3', title: 'Post 3', category: 'Travel', price: 200, date: '2023-08-12' },
+    { pid: 4, nickname: 'user1', title: 'Post 4', category: 'Tech', price: 150, date: '2023-08-13' },
+    { pid: 5, nickname: 'user2', title: 'Post 5', category: 'Food', price: 30, date: '2023-08-14' }
+  ];
 
-  console.log(postMode);
-  // interface Data {
-  //   pid: number;
-  //   created_at: string;
-  //   title: string;
-  //   price: number;
-  //   image_url: string;
-  // }
-  
-  
   const pagePerObjects = 3; // 페이지 당 데이터 수
-
-  const totalCount = posts.length; // 데이터의 총 길이
+  const totalCount = dummyPosts.length; // 데이터의 총 길이
   const totalPages = Math.ceil(totalCount / pagePerObjects);
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePreviousPage = () => {
@@ -44,15 +38,13 @@ const Pagination = ({ postMode, posts }: PaginationProps) => {
     setCurrentPage(pageNumber);
   };
 
-  // const startIdx = (currentPage - 1) * pagePerObjects;
-  // const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
-  // const paginatedData = posts.slice(startIdx, endIdx);
+  const startIdx = (currentPage - 1) * pagePerObjects;
+  const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
+  const paginatedData = dummyPosts.slice(startIdx, endIdx);
 
-  // const handleClick = (data: Data) => {
-  //   // 클릭 시 수행할 작업을 여기에 추가
-
-  //   console.log('카드가 클릭되었습니다:', data.title);
-  // };
+  const handleClick = (data: Post) => {
+    console.log('카드가 클릭되었습니다:', data.title);
+  };
 
   return (
     <>
@@ -65,7 +57,7 @@ const Pagination = ({ postMode, posts }: PaginationProps) => {
       </div>
       <div>
         <CardList>
-          {/* {paginatedData.map((data) => (
+          {paginatedData.map((data) => (
             <StyledCard key={data.pid} onClick={() => handleClick(data)}>
               <p>작성자: {data.nickname}</p>
               <p>제목: {data.title}</p>
@@ -73,9 +65,8 @@ const Pagination = ({ postMode, posts }: PaginationProps) => {
               <p>가격: {data.price}</p>
               <p>작성일자: {data.date}</p>
             </StyledCard>
-          ))} */}
+          ))}
         </CardList>
-
         <div>
           <StyledButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
             ⬅
@@ -101,12 +92,10 @@ const Pagination = ({ postMode, posts }: PaginationProps) => {
 
 export default Pagination;
 
-// Styled-components를 사용하여 버튼 스타일 정의
 interface ButtonProps {
   selected: boolean;
 }
 
-// Styled-components를 사용하여 버튼 스타일 정의
 const StyledButton = styled.button<ButtonProps>`
   margin: 4px;
   padding: 8px 16px;
@@ -126,14 +115,14 @@ const CardList = styled.ul`
   padding: 0;
 `;
 
-// const StyledCard = styled.li`
-//   border: 1px solid #ddd;
-//   padding: 10px;
-//   margin: 10px 0;
-//   cursor: pointer;
-//   transition: background-color 0.2s;
+const StyledCard = styled.li`
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
 
-//   &:hover {
-//     background-color: #f0f0f0;
-//   }
-// `;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;

@@ -4,6 +4,7 @@ import { supabase } from './supabase';
 
 // 회원가입
 export const signUpService = async (userData: UserType) => {
+  
   try {
     const { data, error } = await supabase.auth.signUp({
       email: userData.email,
@@ -13,19 +14,20 @@ export const signUpService = async (userData: UserType) => {
     if (error) {
       throw new Error(error.message);
     }
+    let profileImgUrl = '';
 
-    // let profileImgUrl = '';
+    if (userData.profileimg) {
+      const profileImgFile = new File([userData.profileimg], userData.profileimg?.name);
+      const uploadData = await uploadProfileImage(profileImgFile);
+      profileImgUrl = uploadData.path;
+      console.log('uploadData', uploadData);
+    }
 
-    // if (userData.profileImg) {
-    //   const profileImgFile = new File([userData.profileImg], profileImgUrl);
-
-    //   profileImgUrl = await uploadProfileImage(profileImgFile);
-    // }
-
+    console.log('profileImgUrl', profileImgUrl);
     const userInsertData = {
       uid: data.user?.id,
       nickname: userData.nickname,
-      // profileImg: profileImgUrl,
+      profileimg: profileImgUrl,
       email: userData.email
     };
 
@@ -72,7 +74,7 @@ export const getUserInfo = async (userEmail: string): Promise<Omit<UserType, 'pa
   try {
     const { data: userData, error } = await supabase
       .from('users')
-      .select('uid, email, nickname, profileImg')
+      .select('uid, email, nickname, profileimg')
       .eq('email', userEmail);
 
     if (error) {
@@ -128,18 +130,19 @@ export const updateUserInfo = async (userEmail: string, newNickname: string): Pr
 };
 
 
-// export const uploadProfileImage = async (profileImgFile: File) => {
-//   try {
-//     const { data, error } = await supabase.storage.from('1st').upload(`images/${profileImgFile.name}`, profileImgFile);
+export const uploadProfileImage = async (selectedProfileImg: File) => {
+  try {
+    const { data, error } = await supabase.storage
+      .from('1st')
+      .upload(`profileimgs/${selectedProfileImg.name}`, selectedProfileImg);
+    if (error) {
+      throw new Error(error.message);
+    }
+    console.log('profileImgFile', selectedProfileImg);
 
-//     if (error) {
-//       throw new Error(error.message);
-//     }
-
-//     const imageUrl = data.path;
-//     return imageUrl;
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// };
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

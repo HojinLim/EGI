@@ -1,12 +1,12 @@
-// SignUp.tsx
-
-import React from 'react';
+// import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 // import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
 import { signUpService } from '../../services/supabase/auth';
 import type { UserType } from '../../types/supabase';
+import { v4 as uuidv4 } from 'uuid';
 
 type SignUpType = {
   setLoginModal: (isOpen: boolean) => void;
@@ -18,13 +18,13 @@ export const userDataAtom = atom<UserType>({
   email: '',
   password: '',
   nickname: '',
-  profileImg: ''
+  profileimg: null
 });
 
 const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const queryClient = useQueryClient();
   const [userData, setUserData] = useAtom(userDataAtom);
-  // const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(null);
+  const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(null);
 
   const signUpMutation = useMutation(signUpService, {
     onSuccess: async () => {
@@ -35,18 +35,16 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // if (!selectedProfileImg) {
-      //   throw new Error('Please select a profile image');
-      // }
+      if (!selectedProfileImg) {
+        return;
+      }
 
-      // const profileImgUrl = await uploadProfileImage(selectedProfileImg);
+      const userDataWithImage = {
+        ...userData,
+        profileimg: selectedProfileImg
+      };
 
-      // const userDataWithImage = {
-      //   ...userData,
-      //   profileImg: profileImgUrl
-      // };
-
-      await signUpMutation.mutateAsync(userData);
+      signUpMutation.mutate(userDataWithImage);
 
       alert('회원가입이 완료되었습니다!');
       setSignUpmodal(false);
@@ -58,6 +56,16 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
 
   const closeSignUpModal = () => {
     setSignUpmodal(false);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files && e.target.files[0];
+    if (selectedFile) {
+      const originalFileName = selectedFile.name;
+      const fileExtension = originalFileName.split('.').pop();
+      const randomFileName = uuidv4() + '.' + fileExtension;
+      setSelectedProfileImg(new File([selectedFile], randomFileName));
+    }
   };
 
   return (
@@ -86,13 +94,8 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
             onChange={(e) => setUserData({ ...userData, nickname: e.target.value })}
             placeholder="nickname"
           ></input>
-          {/* 프로필 사진 :
-          <input
-            type="file"
-            value={userData.profileImg}
-            onChange={(e) => setSelectedProfileImg(e.target.files && e.target.files[0])}
-            placeholder="profileImg"
-          ></input> */}
+          프로필 사진 :
+          <input type="file" value={userData.profileimg?.name} accept="image/*" onChange={handleImageChange}></input>
           <button>회원 가입 완료</button>
         </form>
       </Wapper>

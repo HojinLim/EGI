@@ -1,6 +1,7 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const CommentsContainer = styled.div`
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
 `;
@@ -8,13 +9,14 @@ export const CommentsContainer = styled.div`
 export const CommentsPanel = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 99vw;
   max-width: 1200px;
 `;
 
 export const CommentsHr = styled.hr`
   border: 1px solid #ccc;
   margin: 20px 0px 0px 0px;
-  width: 1200px;
+  max-width: 1200px;
 `;
 
 export const CommentList = styled.ul`
@@ -31,11 +33,14 @@ export const CommentItem = styled.li`
   height: 80px;
   padding: 5px 0;
   max-width: 1200px;
+  width: 99vw;
+  justify-content: space-between;
 `;
 
 export const CommentProfileImgBox = styled.div`
   margin: 10px 20px 0 20px;
   width: 5%;
+  min-width: 50px;
 `;
 
 export const CommentTextBox = styled.div`
@@ -52,19 +57,37 @@ export const CommentBody = styled.div`
   margin-top: 5px;
   width: 80%;
   height: 80%;
-  input {
-    width: 100%;
-    height: 100%;
-  }
+`;
+
+export const CommentPanel = styled.div`
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+`;
+
+export const CommentInput = styled.input`
+  width: 80%;
+`;
+
+interface ButtonProp {
+  width?: string;
+  height?: string;
+}
+
+export const Button = styled.button<ButtonProp>`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+`;
+
+export const CommentAdd = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const CommentForm = styled.form<{ isCommenting?: boolean }>`
-  display: none;
+  display: flex;
   max-width: 1200px;
-  ${(props) =>
-    props.isCommenting &&
-    css`
-      display: block;
-      border: 1px solid black;
-    `};
+  margin-top: 20px;
+  display: flex;
+  border-top: 1px solid black;
 `;
