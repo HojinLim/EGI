@@ -12,15 +12,16 @@ export const signUpService = async (userData: UserType) => {
     if (error) {
       throw new Error(error.message);
     }
-
     let profileImgUrl = '';
 
     if (userData.profileImg) {
-      const profileImgFile = new File([userData.profileImg], profileImgUrl);
+      const profileImgFile = new File([userData.profileImg], userData.profileImg);
 
-      profileImgUrl = await uploadProfileImage(profileImgFile);
+      const uploadData = await uploadProfileImage(profileImgFile);
+      profileImgUrl = uploadData.path;
     }
 
+    console.log('profileImgUrl', profileImgUrl);
     const userInsertData = {
       uid: data.user?.id,
       nickname: userData.nickname,
@@ -67,13 +68,26 @@ export const loginService = async (userData: Omit<UserType, 'nickname' | 'profil
 };
 
 // 유저 정보 조회
-export const getUserInfo = async (email: string): Promise<Omit<UserType[], 'email' | 'password'>> => {
-  const { data, error } = await supabase.from('users').select('*').eq('email', email);
+export const getUserInfo = async (userEmail: string): Promise<Omit<UserType, 'password'> | null> => {
+  try {
+    const { data: userData, error } = await supabase
+      .from('users')
+      .select('uid, email, nickname, profileImg')
+      .eq('email', userEmail);
 
-  if (error) {
-    throw new Error(error.message);
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (userData && userData.length > 0) {
+      return userData[0];
+    }
+
+    return null;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
-  return data;
 };
 
 // 비밀번호 찾기
@@ -91,14 +105,16 @@ export const resetPassword = async (email: string) => {
 
 export const uploadProfileImage = async (profileImgFile: File) => {
   try {
-    const { data, error } = await supabase.storage.from('1st').upload(`images/${profileImgFile.name}`, profileImgFile);
-
+    const { data, error } = await supabase.storage
+      .from('1st')
+      .upload(`profileImgs/${profileImgFile.name}`, profileImgFile);
+    console.log('profileImgFile.name', profileImgFile.name);
+    console.log('uploadData', data);
     if (error) {
       throw new Error(error.message);
     }
 
-    const imageUrl = data.path;
-    return imageUrl;
+    return data;
   } catch (error) {
     console.error(error);
     throw error;

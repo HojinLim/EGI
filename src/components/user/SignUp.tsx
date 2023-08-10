@@ -1,7 +1,9 @@
+// import React, { useState } from 'react';
 import React, { useState } from 'react';
 import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+// import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
 import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
 import type { UserType } from '../../types/supabase';
 
@@ -25,25 +27,27 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
 
   const signUpMutation = useMutation(signUpService, {
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: [userData] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     }
   });
 
   const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (!selectedProfileImg) {
-        throw new Error('Please select a profile image');
-      }
+      let profileImgUrl = '';
 
-      const profileImgUrl = await uploadProfileImage(selectedProfileImg);
+      if (selectedProfileImg) {
+        const profileImgFile = new File([selectedProfileImg], selectedProfileImg.name);
+        const uploadData = await uploadProfileImage(profileImgFile);
+        profileImgUrl = uploadData.path;
+      }
 
       const userDataWithImage = {
         ...userData,
         profileImg: profileImgUrl
       };
 
-      await signUpMutation.mutateAsync(userDataWithImage);
+      signUpMutation.mutate(userDataWithImage);
 
       alert('회원가입이 완료되었습니다!');
       setSignUpmodal(false);
@@ -88,7 +92,6 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
             type="file"
             value={userData.profileImg}
             onChange={(e) => setSelectedProfileImg(e.target.files && e.target.files[0])}
-            placeholder="profileImg"
           ></input>
           <button>회원 가입 완료</button>
         </form>
