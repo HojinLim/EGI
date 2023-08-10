@@ -2,8 +2,8 @@ import React from 'react';
 import * as S from './Styled.Comments';
 
 interface CommentPanelProps {
-  commenting: boolean;
-  handleUpdateClickBtn?: () => void;
+  commenting?: boolean;
+  handleUpdateBtnClick?: () => void;
   handleUpdateCommentCancel?: () => void;
   handleUpdateCommentBtnClick?: () => void;
   handleDeleteCommentBtnClick?: () => void;
@@ -11,7 +11,7 @@ interface CommentPanelProps {
 
 const CommentPanel = ({
   commenting,
-  handleUpdateClickBtn,
+  handleUpdateBtnClick,
   handleUpdateCommentCancel,
   handleUpdateCommentBtnClick, // 추가
   handleDeleteCommentBtnClick
@@ -20,7 +20,7 @@ const CommentPanel = ({
     <>
       {commenting ? (
         <S.CommentPanel>
-          <S.Button width="50px" height="30px" onClick={handleUpdateClickBtn}>
+          <S.Button width="50px" height="30px" onClick={handleUpdateBtnClick}>
             완료
           </S.Button>
           <S.Button width="50px" height="30px" onClick={handleUpdateCommentCancel}>

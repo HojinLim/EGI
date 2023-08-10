@@ -26,15 +26,21 @@ export const CommentList = styled.ul`
   width: 1200px;
 `;
 
-export const CommentItem = styled.li`
+interface StyledReplyProps {
+  margin?: string;
+}
+
+export const CommentItem = styled.li<StyledReplyProps>`
   display: flex;
+  border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   gap: 10px;
-  height: 80px;
+  min-height: 100px;
   padding: 5px 0;
   max-width: 1200px;
   width: 99vw;
   justify-content: space-between;
+  margin: ${(props) => props.margin};
 `;
 
 export const CommentProfileImgBox = styled.div`
@@ -56,7 +62,8 @@ export const CommentAuthor = styled.div`
 export const CommentBody = styled.div`
   margin-top: 5px;
   width: 80%;
-  height: 80%;
+  min-height: 50%;
+  word-break: break-all;
 `;
 
 export const CommentPanel = styled.div`
@@ -67,16 +74,19 @@ export const CommentPanel = styled.div`
 
 export const CommentInput = styled.input`
   width: 80%;
+  height: 50%;
 `;
 
 interface ButtonProp {
   width?: string;
   height?: string;
+  margin?: string;
 }
 
 export const Button = styled.button<ButtonProp>`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
+  margin: ${(props) => props.margin};
 `;
 
 export const CommentAdd = styled.div`

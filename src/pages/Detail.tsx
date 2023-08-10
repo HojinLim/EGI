@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { formatDistanceToNow } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import Comments from '../components/comments/Comments';
-
 import * as S from '../components/posts/Styled.Posts';
 import { Post } from '../types/supabase';
 import { supabase } from '../services/supabase/supabase';
@@ -47,32 +50,46 @@ const Detail = () => {
     }
   };
 
+  let timeAgo = '';
+  if (post) {
+    timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
+  }
+
   if (!post) {
     return <div>Loading...</div>;
   }
 
   return (
-    <>
-      <div>
-        <h2>{post.title}</h2>
-        <div>
-          {post.image_urls.map((imageUrl, index) => (
-            <S.Image
-              key={index}
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`}
-              alt={`Image ${index}`}
-              style={{ width: '250px', height: '250px' }}
-            />
-          ))}
-        </div>
-        <br />
-        <div dangerouslySetInnerHTML={{ __html: post.body }} />
-        <br />
-        <button onClick={handleEdit}>수정하기</button>
-        <button onClick={handleDelete}>삭제하기</button>
-      </div>
+    <S.Container>
+      <S.MainContainer>
+        <S.CarouselContainer>
+          <Carousel>
+            {post.image_urls.map((imageUrl, index) => (
+              <div key={index}>
+                <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`} alt={`Image ${index}`} />
+              </div>
+            ))}
+          </Carousel>
+        </S.CarouselContainer>
+        <S.ContentsContainer>
+          <h1>{post.title}</h1>
+          <h1>{post.price}원</h1>
+          <p>{post.category + '⚪' + timeAgo}</p>
+          <div dangerouslySetInnerHTML={{ __html: post.body }} />
+          <p>거래지역 {post.location}</p>
+
+          <p>상품상태 {post.condition}</p>
+          <p>배송비 {post.parcel}</p>
+          <p>교환여부 {post.exchange}</p>
+
+          <S.EditDeleteButtons>
+            <button onClick={handleEdit}>수정하기</button>
+            <button onClick={handleDelete}>삭제하기</button>
+          </S.EditDeleteButtons>
+        </S.ContentsContainer>
+      </S.MainContainer>
       <Comments />
-    </>
+    </S.Container>
   );
 };
 
