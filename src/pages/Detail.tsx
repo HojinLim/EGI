@@ -15,6 +15,9 @@ const Detail = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
 
+  // const [userId, setUserId] = useState(""); 
+  // console.log(id)
+
   useEffect(() => {
     const fetchPost = async () => {
       const { data: posts, error } = await supabase.from('posts').select('*').eq('pid', id).single();
@@ -59,6 +62,18 @@ const Detail = () => {
     return <div>Loading...</div>;
   }
 
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const user = await supabase.auth.user();
+  //     if (user) {
+  //       setUserId(user.id);
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, []);
+  console.log(post)
+
   return (
     <S.Container>
       <S.MainContainer>
@@ -81,6 +96,7 @@ const Detail = () => {
           <p>상품상태 {post.condition}</p>
           <p>배송비 {post.parcel}</p>
           <p>교환여부 {post.exchange}</p>
+          
 
           <S.EditDeleteButtons>
             <button onClick={handleEdit}>수정하기</button>
