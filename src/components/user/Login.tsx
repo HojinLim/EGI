@@ -19,7 +19,7 @@ export const userEmailAtom = atom('');
 
 const Login = ({ setLoginModal }: LoginType) => {
   const queryClient = useQueryClient();
-
+  const [userEmail, setUserEmail] = useAtom(userEmailAtom);
   const [, setUser] = useAtom(userAtom);
   const [signUpModal, setSignUpModal] = useAtom(signUpModalAtom);
   const [userData, setUserData] = useState<Omit<UserType, 'nickname'>>({
@@ -28,7 +28,7 @@ const Login = ({ setLoginModal }: LoginType) => {
     password: '',
     profileimg: null
   });
-  const [userEmail, setUserEmail] = useAtom(userEmailAtom);
+
   console.log(userEmail);
 
   const initialUserData = {
@@ -48,8 +48,10 @@ const Login = ({ setLoginModal }: LoginType) => {
   };
 
   const loginMutation = useMutation(loginService, {
+   
     onSuccess: () => {
       setUser(userData);
+      console.log(userData)
       setLoginModal(false);
       setUserEmail(userData.email);
       queryClient.invalidateQueries({ queryKey: ['users'] });
