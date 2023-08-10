@@ -1,12 +1,11 @@
-// import React, { useState } from 'react';
 import React, { useState } from 'react';
-import { atom, useAtom } from 'jotai';
-import { styled } from 'styled-components';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-// import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
-import { signUpService } from '../../services/supabase/auth';
-import type { UserType } from '../../types/supabase';
 import { v4 as uuidv4 } from 'uuid';
+import { atom, useAtom } from 'jotai';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { checkEmailDuplication, signUpService } from '../../services/supabase/auth';
+import * as S from './Styled.SignUp';
+
+import type { UserType } from '../../types/supabase';
 
 type SignUpType = {
   setLoginModal: (isOpen: boolean) => void;
@@ -25,6 +24,9 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const queryClient = useQueryClient();
   const [userData, setUserData] = useAtom(userDataAtom);
   const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(null);
+  const [isEmailCheked, setIsEmailCheked] = useState(false);
+  const [confirmedPassword, setConfirmedPassword] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
   const signUpMutation = useMutation(signUpService, {
     onSuccess: async () => {
@@ -39,6 +41,12 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
         return;
       }
 
+      if (userData.password !== confirmedPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        setPasswordsMatch(false);
+        return;
+      }
+
       const userDataWithImage = {
         ...userData,
         profileimg: selectedProfileImg
@@ -49,13 +57,43 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
       alert('회원가입이 완료되었습니다!');
       setSignUpmodal(false);
       setLoginModal(true);
+      setUserData(initialUserData);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const initialUserData = {
+    uid: '',
+    email: '',
+    password: '',
+    nickname: '',
+    profileimg: null
+  };
+
   const closeSignUpModal = () => {
     setSignUpmodal(false);
+    setUserData(initialUserData);
+  };
+
+  const checkEmailHandler = async () => {
+    if (userData.email.trim() === '') {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    try {
+      const isEmailDuplicated = await checkEmailDuplication(userData.email);
+
+      if (isEmailDuplicated) {
+        setIsEmailCheked(true);
+        alert('중복된 이메일입니다.');
+      } else {
+        setIsEmailCheked(false);
+        alert('사용 가능한 이메일입니다.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,71 +107,75 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   };
 
   return (
-    <Container>
-      <CloseBtn onClick={closeSignUpModal}>x</CloseBtn>
-      <Wapper>
-        <form onSubmit={signUpHandler}>
-          이메일 :
-          <input
-            type="email"
-            value={userData.email}
-            onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-            placeholder="Email"
-          ></input>
-          비밀번호 :
-          <input
-            type="password"
-            value={userData.password}
-            onChange={(e) => setUserData({ ...userData, password: e.target.value })}
-            placeholder="password"
-          ></input>
-          닉네임 :
-          <input
-            type="text"
-            value={userData.nickname}
-            onChange={(e) => setUserData({ ...userData, nickname: e.target.value })}
-            placeholder="nickname"
-          ></input>
-          프로필 사진 :
-          <input type="file" value={userData.profileimg?.name} accept="image/*" onChange={handleImageChange}></input>
-          <button>회원 가입 완료</button>
-        </form>
-      </Wapper>
-    </Container>
+    <S.Container>
+      <S.CloseBtn onClick={closeSignUpModal}>x</S.CloseBtn>
+      <div>
+        <S.Title>회원가입</S.Title>
+        <S.Line1></S.Line1>
+        <S.Wapper onSubmit={signUpHandler}>
+          <S.InputWrapper>
+            <S.EmailBox>
+              <S.EmailLabel>이메일 </S.EmailLabel>
+              <S.EmailInput
+                type="email"
+                value={userData.email}
+                onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                placeholder="Email"
+              />
+              <S.CheckEmailBtn onClick={checkEmailHandler}>중복 확인</S.CheckEmailBtn>
+            </S.EmailBox>
+            {isEmailCheked && <S.Text>이미 사용 중인 이메일입니다.</S.Text>}
+          </S.InputWrapper>
+          <S.InputWrapper>
+            <S.PasswordBox>
+              <S.PasswordLabel> 비밀번호</S.PasswordLabel>
+              <S.PasswordInput
+                type="password"
+                value={userData.password}
+                onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+                placeholder="password"
+              />
+            </S.PasswordBox>
+          </S.InputWrapper>
+          <S.InputWrapper>
+            <S.PasswordConfirmBox>
+              <S.PasswordConfirmLabel> 비밀번호 확인</S.PasswordConfirmLabel>
+              <S.PasswordConfirmInput
+                type="password"
+                value={confirmedPassword}
+                onChange={(e) => setConfirmedPassword(e.target.value)}
+                placeholder="Confirm Password"
+              />
+            </S.PasswordConfirmBox>
+            {!passwordsMatch && <S.Text>비밀번호가 일치하지 않습니다.</S.Text>}
+          </S.InputWrapper>
+          <S.InputWrapper>
+            <S.NicknameBox>
+              <S.NicknameLabel> 닉네임 </S.NicknameLabel>
+              <S.NicknameInput
+                type="text"
+                value={userData.nickname}
+                onChange={(e) => setUserData({ ...userData, nickname: e.target.value })}
+                placeholder="nickname"
+              />
+            </S.NicknameBox>
+          </S.InputWrapper>
+          <S.InputWrapper>
+            <S.ProfileImgnameBox>
+              <S.ProfileImgLabel> 프로필 사진 </S.ProfileImgLabel>
+              <S.ProfileImgInput
+                type="file"
+                value={userData.profileimg?.name}
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </S.ProfileImgnameBox>
+          </S.InputWrapper>
+          <S.SignUpBtn>가입 하기</S.SignUpBtn>
+        </S.Wapper>
+      </div>
+    </S.Container>
   );
 };
 
 export default SignUp;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  width: 300px;
-  height: 400px;
-
-  z-index: 999;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  background-color: gray;
-  border: 1px solid black;
-  border-radius: 8px;
-`;
-
-const Wapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const CloseBtn = styled.button`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-`;

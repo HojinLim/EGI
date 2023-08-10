@@ -24,8 +24,6 @@ export const Image = styled.img`
 `;
 
 export const Container = styled.div`
-  width: 1200px;
-  height: 800px;
   margin: 0 auto;
   overflow: hidden;
 `;
@@ -42,6 +40,8 @@ export const CarouselContainer = styled.div`
 export const ContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 80vh;
+  overflow-y: scroll;
   gap: 20px;
 `;
 
