@@ -4,8 +4,9 @@ import { atom, useAtom } from 'jotai';
 import { styled } from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 // import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
-import { signUpService, uploadProfileImage } from '../../services/supabase/auth';
+import { signUpService } from '../../services/supabase/auth';
 import type { UserType } from '../../types/supabase';
+import { v4 as uuidv4 } from 'uuid';
 
 type SignUpType = {
   setLoginModal: (isOpen: boolean) => void;
@@ -17,7 +18,7 @@ export const userDataAtom = atom<UserType>({
   email: '',
   password: '',
   nickname: '',
-  profileImg: ''
+  profileimg: null
 });
 
 const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
@@ -34,17 +35,13 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      let profileImgUrl = '';
-
-      if (selectedProfileImg) {
-        const profileImgFile = new File([selectedProfileImg], selectedProfileImg.name);
-        const uploadData = await uploadProfileImage(profileImgFile);
-        profileImgUrl = uploadData.path;
+      if (!selectedProfileImg) {
+        return;
       }
 
       const userDataWithImage = {
         ...userData,
-        profileImg: profileImgUrl
+        profileimg: selectedProfileImg
       };
 
       signUpMutation.mutate(userDataWithImage);
@@ -59,6 +56,16 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
 
   const closeSignUpModal = () => {
     setSignUpmodal(false);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files && e.target.files[0];
+    if (selectedFile) {
+      const originalFileName = selectedFile.name;
+      const fileExtension = originalFileName.split('.').pop();
+      const randomFileName = uuidv4() + '.' + fileExtension;
+      setSelectedProfileImg(new File([selectedFile], randomFileName));
+    }
   };
 
   return (
@@ -88,11 +95,7 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
             placeholder="nickname"
           ></input>
           프로필 사진 :
-          <input
-            type="file"
-            value={userData.profileImg}
-            onChange={(e) => setSelectedProfileImg(e.target.files && e.target.files[0])}
-          ></input>
+          <input type="file" value={userData.profileimg?.name} accept="image/*" onChange={handleImageChange}></input>
           <button>회원 가입 완료</button>
         </form>
       </Wapper>

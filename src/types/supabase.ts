@@ -3,7 +3,7 @@ export interface UserType {
   email: string;
   password: string;
   nickname: string;
-  profileImg: string;
+  profileimg: File | null;
 }
 export interface Comment {
   cid: number;

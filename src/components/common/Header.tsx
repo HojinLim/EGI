@@ -20,9 +20,7 @@ const Header = () => {
     queryKey: ['users', userEmail],
     queryFn: () => getUserInfo(userEmail)
   });
-  console.log('userData!', userData);
 
-  console.log('유저 이메일>' + userEmail);
   const signOutHandler = async () => {
     try {
       await sigOutService();
@@ -50,7 +48,7 @@ const Header = () => {
       <div>
         {userData ? (
           <div key={userData.uid}>
-            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileImg}`} />
+            <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData.profileimg}`} />
             {userData.nickname}
           </div>
         ) : null}
