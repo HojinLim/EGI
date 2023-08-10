@@ -42,6 +42,8 @@ export const CarouselContainer = styled.div`
 export const ContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 80vh;
+  overflow-y: scroll;
   gap: 20px;
 `;
 
