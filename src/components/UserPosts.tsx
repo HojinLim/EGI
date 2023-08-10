@@ -5,13 +5,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import { createClient } from '@supabase/supabase-js';
 import { Post } from '../types/supabase';
 
-// interface Data {
-//   pid: number;
-//   created_at: string;
-//   title: string;
-//   price: number;
-//   image_url: string;
-// }
+
+
+// const [user] = useAtom(userAtom); // userAtom의 값을 가져옴
 
 const UserPosts = () => {
   const [postMode, setPostMode] = useState<string>('');
@@ -28,13 +24,19 @@ const UserPosts = () => {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  console.log(posts)
-  const temp= "hi"
+  // console.log(user?.email)
+  console.log(posts);
+
+
+  // const uid= userDB?.uid?.toString()
+  const temp = 'hi';
 
   useEffect(() => {
     async function fetchPosts() {
-      const { data, error } = await supabase.from('posts').select('*').eq('uid', temp)
+      const { data, error } = await supabase.from('posts').select('*').eq('uid', temp);
       console.log('data=>' + data);
+
+      
       if (error) {
         console.error('Error fetching posts:', error);
       } else {

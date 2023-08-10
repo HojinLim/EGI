@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import SignUp from './SignUp';
 import { atom, useAtom } from 'jotai';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { loginService } from '../../services/supabase/auth';
 import type { UserType } from '../../types/supabase';
 // import { supabase } from '../../services/supabase';
@@ -12,22 +12,20 @@ type LoginType = {
   setLoginModal: (isOpen: boolean) => void;
 };
 
-
 export const userAtom = atom<Omit<UserType, 'nickname' | 'profileImg'> | null>(null);
 export const signUpModalAtom = atom<boolean>(false);
+export const userEmailAtom = atom('');
 
 const Login = ({ setLoginModal }: LoginType) => {
   const queryClient = useQueryClient();
-
+  const [userEmail, setUserEmail] = useAtom(userEmailAtom);
   const [, setUser] = useAtom(userAtom);
-  // const [resetPasswordModal, setResetPasswordModal] = useState(false);
   const [signUpModal, setSignUpModal] = useAtom(signUpModalAtom);
   const [userData, setUserData] = useState<Omit<UserType, 'nickname' | 'profileImg'>>({
     uid: '',
     email: '',
     password: ''
   });
-
   // 회원가입 모달 열기
   const showSignUpModal = () => {
     setSignUpModal(true);
@@ -38,11 +36,16 @@ const Login = ({ setLoginModal }: LoginType) => {
   };
 
   const loginMutation = useMutation(loginService, {
+   
     onSuccess: () => {
       setUser(userData);
       console.log(userData)
       setLoginModal(false);
-      queryClient.invalidateQueries({ queryKey: [userData] });
+      setUserEmail(userData.email);
+      console.log('유저 데이터 이메일>' + userData.email);
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+
+      console.log('유저 이메일>' + userEmail);
     }
   });
 
@@ -56,41 +59,6 @@ const Login = ({ setLoginModal }: LoginType) => {
     }
   };
 
-  // const passwordMutation = useMutation(resetPassword, {
-  //   onSuccess: () => {
-  //     setEmail('');
-  //     queryClient.invalidateQueries({ queryKey: [email] });
-  //   }
-  // });
-
-  // const resetPasswordHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     passwordMutation.mutate(email);
-  //     setResetPasswordModal(true);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   supabase.auth.onAuthStateChange(async (event, session) => {
-  //     if (event == 'PASSWORD_RECOVERY') {
-  //       const newPassword = prompt('What would you like your new password to be?');
-  //       if (newPassword !== null) {
-  //         const { data, error } = await supabase.auth.updateUser({ password: newPassword });
-
-  //         if (data) {
-  //           alert('Password updated successfully!');
-  //         } else if (error) {
-  //           alert('There was an error updating your password.');
-  //         }
-  //       }
-  //     }
-  //     console.log(session);
-  //   });
-  // }, []);
   const emailInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, email: e.target.value });
   };

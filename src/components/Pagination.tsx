@@ -16,13 +16,13 @@ const Pagination = ({ postMode, posts }: PaginationProps) => {
   //  임의로 받았다고 가정
 
   console.log(postMode);
-  interface Data {
-    pid: number;
-    created_at: string;
-    title: string;
-    price: number;
-    image_url: string;
-  }
+  // interface Data {
+  //   pid: number;
+  //   created_at: string;
+  //   title: string;
+  //   price: number;
+  //   image_url: string;
+  // }
   
   
   const pagePerObjects = 3; // 페이지 당 데이터 수
@@ -44,15 +44,15 @@ const Pagination = ({ postMode, posts }: PaginationProps) => {
     setCurrentPage(pageNumber);
   };
 
-  const startIdx = (currentPage - 1) * pagePerObjects;
-  const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
-  const paginatedData = posts.slice(startIdx, endIdx);
+  // const startIdx = (currentPage - 1) * pagePerObjects;
+  // const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
+  // const paginatedData = posts.slice(startIdx, endIdx);
 
-  const handleClick = (data: Data) => {
-    // 클릭 시 수행할 작업을 여기에 추가
+  // const handleClick = (data: Data) => {
+  //   // 클릭 시 수행할 작업을 여기에 추가
 
-    console.log('카드가 클릭되었습니다:', data.title);
-  };
+  //   console.log('카드가 클릭되었습니다:', data.title);
+  // };
 
   return (
     <>
@@ -126,14 +126,14 @@ const CardList = styled.ul`
   padding: 0;
 `;
 
-const StyledCard = styled.li`
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: background-color 0.2s;
+// const StyledCard = styled.li`
+//   border: 1px solid #ddd;
+//   padding: 10px;
+//   margin: 10px 0;
+//   cursor: pointer;
+//   transition: background-color 0.2s;
 
-  &:hover {
-    background-color: #f0f0f0;
-  }
-`;
+//   &:hover {
+//     background-color: #f0f0f0;
+//   }
+// `;
