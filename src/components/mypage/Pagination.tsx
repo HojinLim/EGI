@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { useNavigate } from 'react-router-dom';
+import * as S from './Styled.Pagination';
 
 const Pagination = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -80,15 +81,15 @@ const Pagination = () => {
         <br />
       </div> */}
       <div>
-        <CardList>
+        <S.CardList>
           {paginatedData.map((data) => (
-            <StyledCard key={data.pid} onClick={() => handleClick(data)}>
+            <S.StyledCard key={data.pid} onClick={() => handleClick(data)}>
               <p>제목: {data.title}</p>
               <p>카테고리: {data.category}</p>
               <p>가격: {data.price}</p>
-            </StyledCard>
+            </S.StyledCard>
           ))}
-        </CardList>
+        </S.CardList>
         <div>
           <StyledButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
             ⬅
@@ -129,22 +130,5 @@ const StyledButton = styled.button<ButtonProps>`
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-  }
-`;
-
-const CardList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-
-const StyledCard = styled.li`
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f0f0f0;
   }
 `;
