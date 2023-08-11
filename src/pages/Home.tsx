@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import GetPost from '../components/posts/GetPost';
-import Header from '../components/common/Header';
+// import Header from '../components/common/Header';
 // import { useAtom } from 'jotai';
 // import { userAtom } from '../components/user/Login';
 
@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       {/* {user && <Link to="/mypage">마이페이지</Link>} */}
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }} />

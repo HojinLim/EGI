@@ -105,3 +105,9 @@ export const CommentForm = styled.form<{ isCommenting?: boolean }>`
   display: flex;
   border-top: 1px solid black;
 `;
+
+export const CommentProfileImg = styled.img`
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+`;

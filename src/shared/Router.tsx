@@ -7,11 +7,15 @@ import Detail from '../pages/Detail';
 import PostPage from '../pages/PostPage';
 import EditPage from '../pages/EditPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
+import Header from '../components/common/Header';
+import GlobalStyle from '../GlobalStyle';
 
 const Router: React.FC = () => {
   return (
     <>
       <BrowserRouter>
+        <GlobalStyle />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/mypage" element={<Mypage />} />
