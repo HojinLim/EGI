@@ -79,7 +79,12 @@ const Detail = () => {
   }
 
   if (!post) {
-    return <div>Loading...<CircularProgress /></div>;
+    return (
+      <div>
+        Loading...
+        <CircularProgress />
+      </div>
+    );
   }
 
   // useEffect(() => {
@@ -120,6 +125,7 @@ const Detail = () => {
           </Carousel>
         </S.CarouselContainer>
         <S.ContentsContainer>
+          <div>{post.nickname}</div>
           <S.PostTitle>{post.title}</S.PostTitle>
           <S.Price>{post.price}원</S.Price>
           <S.PostInfo>

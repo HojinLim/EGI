@@ -55,6 +55,7 @@ const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) =>
             src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
             alt="Profile"
           />
+          <div>{jotaiUserData?.nickname}</div>
         </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={replyCommentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>

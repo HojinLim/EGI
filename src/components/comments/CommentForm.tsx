@@ -37,7 +37,7 @@ const CommentForm = ({ pid }: CommentFormProps) => {
         setShowAlert(false);
         console.log('Alert hidden');
       }, 3000);
-      return false
+      return false;
     }
 
     const newComment = {
@@ -70,7 +70,9 @@ const CommentForm = ({ pid }: CommentFormProps) => {
             }
             alt="Profile"
           />
+          <div>{jotaiUserData?.nickname}</div>
         </S.CommentProfileImgBox>
+
         <S.CommentInput type="text" value={commentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>
           <S.Button width="50px" height="30px">

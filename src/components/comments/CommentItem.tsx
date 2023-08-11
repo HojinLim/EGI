@@ -109,6 +109,8 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
     setIsAddReply
   ]);
 
+  console.log('comment', comment);
+
   return (
     <>
       <S.CommentItem>
@@ -117,11 +119,9 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
             src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg || baseProfile}`}
             alt="Profile"
           />
-        </S.CommentProfileImgBox>
-        <S.CommentTextBox>
           <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
-          {renderCommentBody}
-        </S.CommentTextBox>
+        </S.CommentProfileImgBox>
+        <S.CommentTextBox>{renderCommentBody}</S.CommentTextBox>
         {jotaiUserData?.uid === comment.uid ? (
           isUpdating && updateCommentId === comment.cid ? (
             <CommentPanel

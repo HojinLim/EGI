@@ -50,6 +50,8 @@ export interface Post {
   exchange: string;
   parcel: string;
   uid: string;
+  nickname: string;
+  profileimg: File | string | null;
 }
 
 export interface JjimType {
