@@ -10,10 +10,12 @@ import type { UserType, UserTypes } from '../../types/supabase';
 
 import { supabase } from '../../services/supabase/supabase';
 import { sosialUserAtom } from '../user/social/SosialLogin';
+import { useNavigate } from 'react-router';
 
 export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
 
 const Header = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loginModal, setLoginModal] = useState(false);
   const [showLogoutButton, setShowLogoutButton] = useState(false);
@@ -139,42 +141,45 @@ const Header = () => {
   }
 
   return (
-    <S.HeaderContainer>
-      <S.Logo src={icon} />
-      <div>
-        {jotaiUserData ? (
-          <S.ProfileWrapper>
-            <div>
-              {jotaiUserData ? (
-                <S.ProfileBox key={jotaiUserData.uid}>
-                  <S.ProfileImg
-                    src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData.profileimg}`}
-                    alt="Profile"
-                  />
-                  <S.NickName>{jotaiUserData.nickname}</S.NickName>
-                </S.ProfileBox>
-              ) : null}
-            </div>
-            <S.ButtonWrapper>
-              <S.ButtonBox>
-                <S.ToggleButton onClick={toggleLogoutButton}>▼</S.ToggleButton>
-                {showLogoutButton && (
-                  <>
-                    <S.LogOutButton onClick={signOutHandler}>로그아웃</S.LogOutButton>
-                    <S.LinkButton to="/mypage">마이페이지</S.LinkButton>
-                    <S.PostLinkButton to="/post">글작성</S.PostLinkButton>
-                  </>
-                )}
-              </S.ButtonBox>
-            </S.ButtonWrapper>
-          </S.ProfileWrapper>
-        ) : (
-          <S.LoginButton onClick={showModal}>Login</S.LoginButton>
-        )}
+    <>
+      <S.HeaderContainer>
+        <S.Logo src={icon} onClick={() => navigate('/')} />
+        <div>
+          {jotaiUserData ? (
+            <S.ProfileWrapper>
+              <div>
+                {jotaiUserData ? (
+                  <S.ProfileBox key={jotaiUserData.uid}>
+                    <S.ProfileImg
+                      src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData.profileimg}`}
+                      alt="Profile"
+                    />
+                    <S.NickName>{jotaiUserData.nickname}</S.NickName>
+                  </S.ProfileBox>
+                ) : null}
+              </div>
+              <S.ButtonWrapper>
+                <S.ButtonBox>
+                  <S.ToggleButton onClick={toggleLogoutButton}>▼</S.ToggleButton>
+                  {showLogoutButton && (
+                    <>
+                      <S.LogOutButton onClick={signOutHandler}>로그아웃</S.LogOutButton>
+                      <S.LinkButton to="/mypage">마이페이지</S.LinkButton>
+                      <S.PostLinkButton to="/post">글작성</S.PostLinkButton>
+                    </>
+                  )}
+                </S.ButtonBox>
+              </S.ButtonWrapper>
+            </S.ProfileWrapper>
+          ) : (
+            <S.LoginButton onClick={showModal}>Login</S.LoginButton>
+          )}
 
-        {loginModal && <Login setLoginModal={setLoginModal} />}
-      </div>
-    </S.HeaderContainer>
+          {loginModal && <Login setLoginModal={setLoginModal} />}
+        </div>
+      </S.HeaderContainer>
+      <S.Line></S.Line>
+    </>
   );
 };
 

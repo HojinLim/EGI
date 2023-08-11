@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { jotaiUserDataAtom } from '../components/common/Header';
 import { useAtom } from 'jotai';
 import { supabase } from '../services/supabase/supabase';
@@ -8,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { handleImageChange } from '../components/posts/HandleImage';
 import UserPosts from '../components/mypage/UserPosts';
 import { userAtom } from '../components/user/login/Login';
+import * as S from '../pages/Styled.Mypage';
 
 const EditProfile = () => {
   const queryClient = useQueryClient();
@@ -109,8 +109,12 @@ const EditProfile = () => {
     }
   };
 
-  const handleEditClick = () => {
+  const handleEditClickOpen = () => {
     setIsEditing(true);
+  };
+
+  const handleEditClickClose = () => {
+    setIsEditing(false);
   };
 
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,41 +122,54 @@ const EditProfile = () => {
   };
 
   return (
-    <div>
-      <Link to="/">Home</Link>
+    <S.MypageContainer>
       {user || jotaiUserData ? (
         <div>
-          <h1>마이 페이지</h1>
-          <div>
-            <img
+          <S.ProfileBox>
+            <S.ProfileImg
               src={
                 jotaiUserData?.profileimg
                   ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
                   : '-'
               }
               alt={`프로필 이미지 - ${user?.uid}`}
-              style={{
-                width: 200,
-                height: 200,
-                borderRadius: 70,
-                border: '3px solid black'
-              }}
             />
+            <S.ProfileInfo>
+              {isEditing ? (
+                <S.NickNameBox>
+                  <S.EditNickName>닉네임 :</S.EditNickName>
+                  <S.InputNickName type="text" value={editnickname} onChange={handleNicknameChange} />
+                </S.NickNameBox>
+              ) : (
+                <S.NickName>{jotaiUserData ? jotaiUserData.nickname : ''}</S.NickName>
+              )}
+              <S.Email>{jotaiUserData ? jotaiUserData.email : ''}</S.Email>
 
-            <button className="material-symbols-outlined" onClick={handleEditClick}>
-              edit
-            </button>
-
-            <p>이메일: {jotaiUserData ? jotaiUserData.email : ''}</p>
-            <p>닉네임: {jotaiUserData ? jotaiUserData.nickname : ''}</p>
-          </div>
-          {isEditing && (
-            <div>
-              <input type="text" value={editnickname} onChange={handleNicknameChange} />
-              <input type="file" accept="image/*" onChange={handleImageChangeWrapper} />
-              <button onClick={handleEdit}>수정하기</button>
-            </div>
-          )}
+              {isEditing ? (
+                <div>
+                  <S.EditBtn onClick={handleEdit}>저장하기</S.EditBtn>
+                  <S.EditBtn onClick={handleEditClickClose}>취소하기</S.EditBtn>
+                </div>
+              ) : (
+                <S.EditBtn onClick={handleEditClickOpen}>프로필 수정</S.EditBtn>
+              )}
+            </S.ProfileInfo>
+          </S.ProfileBox>
+          <S.EditProfile>
+            {isEditing ? (
+              <div>
+                <div>
+                  <S.EditProfileLabel htmlFor="file-input">파일선택</S.EditProfileLabel>
+                  <S.EditProfileInput
+                    id="file-input"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChangeWrapper}
+                  />
+                </div>
+              </div>
+            ) : null}
+          </S.EditProfile>
           <UserPosts />
         </div>
       ) : (
@@ -161,7 +178,7 @@ const EditProfile = () => {
           <p>Loading user data...</p>
         </div>
       )}
-    </div>
+    </S.MypageContainer>
   );
 };
 

@@ -4,6 +4,38 @@ interface ButtonProps {
   selected: boolean;
 }
 
+export const MyWrittenPost = styled.button`
+  padding: 5px;
+
+  margin: 0 15px 15px 0;
+
+  width: 80px;
+  height: 40px;
+
+  font-size: 14px;
+
+  border: 2px solid black;
+  border-radius: 5px;
+
+  background-color: transparent;
+
+  cursor: pointer;
+`;
+
+export const MyZzimPost = styled.button`
+  padding: 5px;
+
+  width: 80px;
+  height: 40px;
+
+  border: 2px solid black;
+  border-radius: 5px;
+
+  background-color: transparent;
+
+  cursor: pointer;
+`;
+
 export const Card = styled.ul`
   list-style: none;
   padding: 5px;

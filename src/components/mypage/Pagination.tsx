@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { useNavigate } from 'react-router-dom';
@@ -74,7 +73,7 @@ const Pagination = () => {
   return (
     <>
       <div>
-        <S.CardList>
+        <S.Card>
           {paginatedData.map((data) => (
             <S.StyledCard key={data.pid} onClick={() => handleClick(data)}>
               <p>제목: {data.title}</p>
@@ -82,24 +81,24 @@ const Pagination = () => {
               <p>가격: {data.price}</p>
             </S.StyledCard>
           ))}
-        </S.CardList>
+        </S.Card>
         <div>
-          <StyledButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
+          <S.StyledButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
             ⬅
-          </StyledButton>
+          </S.StyledButton>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-            <StyledButton
+            <S.StyledButton
               key={pageNumber}
               onClick={() => handlePageClick(pageNumber)}
               selected={pageNumber === currentPage}
               disabled={currentPage === pageNumber}
             >
               {pageNumber}
-            </StyledButton>
+            </S.StyledButton>
           ))}
-          <StyledButton onClick={handleNextPage} disabled={currentPage === totalPages} selected={false}>
+          <S.StyledButton onClick={handleNextPage} disabled={currentPage === totalPages} selected={false}>
             ➡
-          </StyledButton>
+          </S.StyledButton>
         </div>
       </div>
     </>
@@ -107,21 +106,3 @@ const Pagination = () => {
 };
 
 export default Pagination;
-
-interface ButtonProps {
-  selected: boolean;
-}
-
-const StyledButton = styled.button<ButtonProps>`
-  margin: 4px;
-  padding: 8px 16px;
-  border: none;
-  background-color: ${(props) => (props.selected ? 'yellow' : '#f0f0f0')};
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-`;
