@@ -24,8 +24,8 @@ const Editor: React.FC<EditorProps> = ({ value, onChange }) => {
           ['blockquote'],
           [{ list: 'ordered' }, { list: 'bullet' }],
           [{ color: [] }, { background: [] }],
-          [{ align: [] }, 'link'],
-          ['image', 'video']
+          [{ align: [] }, 'link']
+          // ['image', 'video'] 사이트의 취지와 안맞아서 주석처리
         ]
       },
       ImageResize: {
