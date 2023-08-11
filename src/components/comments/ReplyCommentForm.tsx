@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import useCommentMutation from '../../hooks/useCommentMutation';
 import * as S from './Styled.Comments';
 import { jotaiUserDataAtom } from '../common/Header';
-import baseProfile from '../../image/baseprofile.jpeg';
 import { useAtom } from 'jotai';
 
 interface ReplyCommentFormProps {
@@ -25,12 +24,12 @@ const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) =>
     e.preventDefault();
     if (!jotaiUserData) {
       alert('로그인 후 사용 가능합니다.');
-      return false;
+      return;
     }
 
     if (replyCommentText === '') {
       alert('댓글을 작성해 주세요.');
-      return false;
+      return;
     }
 
     const newComment = {
@@ -52,14 +51,10 @@ const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) =>
     <S.CommentForm onSubmit={handleAddSubmitBtn}>
       <S.CommentItem>
         <S.CommentProfileImgBox>
-          {jotaiUserData?.profileimg ? (
-            <S.CommentProfileImg
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
-              alt="Profile"
-            />
-          ) : (
-            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
-          )}
+          <S.CommentProfileImg
+            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
+            alt="Profile"
+          />
         </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={replyCommentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>

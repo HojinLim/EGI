@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import * as S from './Styled.Comments';
 import CommentPanel from './CommentPanel';
 import { useQuery } from '@tanstack/react-query';
@@ -7,8 +7,9 @@ import useCommentMutation from '../../hooks/useCommentMutation';
 import { jotaiUserDataAtom } from '../common/Header';
 import { useAtom } from 'jotai';
 import baseProfile from '../../image/baseprofile.jpeg';
+import * as SL from '../common/Styled.Loading';
 
-import { ReplyCommentType } from '../../types/supabase';
+import type { ReplyCommentType } from '../../types/supabase';
 interface ReplyCommentsProps {
   cid: number;
   pid: string;
@@ -17,9 +18,6 @@ interface ReplyCommentsProps {
 const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   const { deleteReplyCommentMutation, updateReplyCommentMutation } = useCommentMutation();
 
-  // 대댓글 보기
-  const [isViewingReply, setIsViewingReply] = useState(false);
-
   // 대댓글 수정 관련
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateReply, setUpdateReply] = useState('');
@@ -27,12 +25,16 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
 
   const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
-  const defaultQueryOptions = {
-    queryKey: ['replyComments'],
-    queryFn: () => fetchReplyComments(pid),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false
-  };
+  const defaultQueryOptions = useMemo(
+    () => ({
+      queryKey: ['replyComments', pid],
+      queryFn: () => fetchReplyComments(pid),
+      refetchOnWindowFocus: false
+    }),
+    [pid]
+  );
+
+  const { data: replyComments, error, isLoading } = useQuery<ReplyCommentType[]>(defaultQueryOptions);
 
   const handleUpdateReplyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateReply(e.target.value);
@@ -83,25 +85,20 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
     deleteReplyCommentMutation.mutate(rid);
   };
 
-  const { data: replyComments, error, isLoading } = useQuery<ReplyCommentType[]>(defaultQueryOptions);
-
   if (error) {
     return <div>데이터를 가져오는 도중 오류가 발생했습니다.</div>;
   }
 
   if (isLoading) {
-    return <div>로딩중입니다.</div>;
+    return <div>로딩중입니다.<SL.LoadingOverlay /></div>;
   }
 
   const filteredComments = replyComments?.filter((comment) => comment.cid === cid);
 
-  return isViewingReply ? (
+  return (
     <>
-      <S.Button onClick={() => setIsViewingReply(!isViewingReply)} margin={'10px'}>
-        닫기
-      </S.Button>
       {filteredComments?.map((comment) => (
-        <S.CommentItem key={comment.rid} margin={'20px'}>
+        <S.CommentItem key={comment.rid} margin={'40px'}>
           {comment?.profileimg ? (
             <S.CommentProfileImg
               src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
@@ -144,12 +141,6 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
           </S.CommentPanel>
         </S.CommentItem>
       ))}
-    </>
-  ) : (
-    <>
-      <S.Button onClick={() => setIsViewingReply(!isViewingReply)} margin={'10px'}>
-        열기
-      </S.Button>
     </>
   );
 };

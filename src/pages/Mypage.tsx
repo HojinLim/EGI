@@ -10,6 +10,7 @@ import UserPosts from '../components/mypage/UserPosts';
 import { userAtom, userEmailAtom } from '../components/user/login/Login';
 import * as S from '../components/mypage/Styled.Mypage';
 
+
 const EditProfile = () => {
   const [user] = useAtom(userAtom);
   const [editnickname, setEditNickName] = useState('');
@@ -155,7 +156,7 @@ const EditProfile = () => {
       ) : (
         <div>
           <h1>마이 페이지</h1>
-          <p>Loading user data...</p>
+          <S.LoadingOverlay />
         </div>
       )}
     </div>
