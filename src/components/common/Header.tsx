@@ -11,6 +11,7 @@ import type { UserType, UserTypes } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { sosialUserAtom } from '../user/social/SosialLogin';
 import { useNavigate } from 'react-router';
+import * as SL from '../common/Styled.Loading';
 
 export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
 
@@ -26,8 +27,6 @@ const Header = () => {
   const [socialUser, setSocialUser] = useAtom(sosialUserAtom);
   console.log('user', user);
   console.log('socialUser', socialUser);
-
-  console.log('jotaiUserData', jotaiUserData);
   // 유저 정보 조회하는 쿼리
   const {
     isLoading,
@@ -54,6 +53,8 @@ const Header = () => {
       setSocialUser(null);
       setUser(null); // userData 초기화
       setUserEmail('');
+      navigate('/');
+      setLoginModal(true);
       await logoutMutation.mutateAsync();
     } catch (error) {
       console.error(error);
@@ -100,8 +101,6 @@ const Header = () => {
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       setJotaiUserData(parsedUserData);
-
-      queryClient.invalidateQueries(['users', userEmail]);
     }
   }, []);
 
@@ -133,7 +132,7 @@ const Header = () => {
   };
 
   if (isLoading) {
-    return <div>데이터 로딩 중입니다.</div>;
+    return <SL.LoadingOverlay />;
   }
 
   if (isError) {

@@ -65,7 +65,7 @@ export const sigOutService = async () => {
   }
 };
 
-// 유저 정보 조회
+// 해당 유저 정보 조회
 export const getUserInfo = async (userEmail: string): Promise<Omit<UserType, 'password'> | null> => {
   try {
     const { data: userData, error } = await supabase
