@@ -10,6 +10,8 @@ import * as S from '../components/posts/Styled.Posts';
 import { Post } from '../types/supabase';
 import { supabase } from '../services/supabase/supabase';
 
+// 작성자 딱지 > post의 uid props로 넘기기.
+
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();

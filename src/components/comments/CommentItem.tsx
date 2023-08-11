@@ -73,7 +73,12 @@ const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentIt
   return (
     <>
       <S.CommentItem>
-        <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
+        <S.CommentProfileImgBox>
+          <S.CommentProfileImg
+            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}`}
+            alt="Profile"
+          ></S.CommentProfileImg>
+        </S.CommentProfileImgBox>
         <S.CommentTextBox>
           <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
           {isUpdating && updateCommentId == comment.cid ? (

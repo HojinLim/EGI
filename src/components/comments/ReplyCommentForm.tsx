@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import useCommentMutation from '../../hooks/useCommentMutation';
 import * as S from './Styled.Comments';
 
+import type { UserType } from '../../types/supabase';
 interface ReplyCommentFormProps {
   cid: number;
   uid: string;
@@ -12,6 +13,12 @@ interface ReplyCommentFormProps {
 const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProps) => {
   const { addReplyCommentMutation } = useCommentMutation();
   const [replyCommentText, setReplyCommentText] = useState('');
+  let userData: Omit<UserType, 'password'> | null = null;
+  const localUserData = localStorage.getItem('jotaiUserData');
+
+  if (localUserData) {
+    userData = JSON.parse(localUserData);
+  }
 
   const handleCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReplyCommentText(e.target.value);
@@ -19,6 +26,10 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
 
   const handleAddSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!userData) {
+      alert('로그인 후 사용 가능합니다.');
+      return false;
+    }
 
     if (replyCommentText === '') {
       alert('댓글을 작성해 주세요.');
@@ -31,7 +42,8 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
       pid: Number(pid),
       nickname: '테스트',
       body: replyCommentText,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      profileimg: userData?.profileimg
     };
 
     addReplyCommentMutation.mutate(newComment);
@@ -42,7 +54,12 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
   return (
     <S.CommentForm onSubmit={handleAddSubmitBtn}>
       <S.CommentItem>
-        <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
+        <S.CommentProfileImgBox>
+          <S.CommentProfileImg
+            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData?.profileimg}`}
+            alt="Profile"
+          />
+        </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={replyCommentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>
           <S.Button width="50px" height="30px">

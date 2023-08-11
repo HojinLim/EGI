@@ -8,7 +8,7 @@ import * as S from './Styled.Header';
 
 import type { UserType } from '../../types/supabase';
 
-const jotaiUserDataAtom = atom<Omit<UserType, 'password'> | null>(null);
+export const jotaiUserDataAtom = atom<Omit<UserType, 'password'> | null>(null);
 
 const Header = () => {
   const queryClient = useQueryClient();
