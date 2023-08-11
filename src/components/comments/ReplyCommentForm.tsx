@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import useCommentMutation from '../../hooks/useCommentMutation';
 import * as S from './Styled.Comments';
 import { jotaiUserDataAtom } from '../common/Header';
+import baseProfile from '../../image/baseprofile.jpeg';
 import { useAtom } from 'jotai';
 
 interface ReplyCommentFormProps {
@@ -51,10 +52,14 @@ const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) =>
     <S.CommentForm onSubmit={handleAddSubmitBtn}>
       <S.CommentItem>
         <S.CommentProfileImgBox>
-          <S.CommentProfileImg
-            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
-            alt="Profile"
-          />
+          {jotaiUserData?.profileimg ? (
+            <S.CommentProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
+              alt="Profile"
+            />
+          ) : (
+            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
+          )}
         </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={replyCommentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>
