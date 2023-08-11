@@ -31,6 +31,7 @@ const EditProfile = () => {
   }, []);
 
   const handleEditClick = () => {
+    setEditNickName(jotaiUserData?.nickname || '');
     setIsEditing(true);
   };
 
@@ -83,6 +84,20 @@ const EditProfile = () => {
         alert('에러가 발생했습니다!');
       } else {
         alert('수정이 완료되었습니다.');
+
+        // 수정된 데이터를 다시 가져와서 스토리지에 저장
+        const { data, error: fetchError } = await supabase
+          .from('users')
+          .select()
+          .eq('uid', jotaiUserData?.uid)
+          .single();
+
+        if (fetchError) {
+          console.error('Error fetching updated user data:', fetchError);
+        } else {
+          localStorage.setItem('jotaiUserData', JSON.stringify(data));
+          setJotaiUserData(data);
+        }
       }
     }
   };
@@ -96,10 +111,15 @@ const EditProfile = () => {
     }
   };
 
+  const closeBtn = () => {
+    setEditNickName('');
+    setSelectedImages([]);
+    setIsEditing(false);
+  };
+
   return (
     <div>
       <Link to="/">Home</Link>
-
       {user || jotaiUserData ? (
         <div>
           <h1>마이 페이지</h1>
@@ -130,6 +150,7 @@ const EditProfile = () => {
             <div>
               <input type="text" value={editnickname} onChange={handleNicknameChange} />
               <input type="file" accept="image/*" onChange={handleImageChangeWrapper} />
+              <button onClick={closeBtn}>X</button>
               <button onClick={handleEdit}>수정하기</button>
             </div>
           )}

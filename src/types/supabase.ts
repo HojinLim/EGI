@@ -6,15 +6,23 @@ export interface UserType {
   profileimg: File | null;
 }
 
+export interface UserTypes {
+  uid: string | null;
+  email: string | null;
+  password: string | null;
+  nickname: string | null;
+  profileimg: File | string | null;
+}
+
 // 일반 댓글
 export interface CommentType {
   cid: number;
-  uid: string;
+  uid: string | null;
   pid: number;
-  nickname: string;
+  nickname: string | null;
   body: string;
   created_at: string;
-  profileimg: File | null;
+  profileimg: File | string | null;
 }
 
 // 대댓글
@@ -22,11 +30,11 @@ export interface ReplyCommentType {
   rid: number;
   pid: number;
   cid: number;
-  uid: string;
-  nickname: string;
+  uid: string | null;
+  nickname: string | null;
   body: string;
   created_at: string;
-  profileimg: File | null;
+  profileimg: File | string | null;
 }
 
 export interface Post {
@@ -42,4 +50,9 @@ export interface Post {
   exchange: string;
   parcel: string;
   uid: string;
+}
+
+export interface JjimType {
+  uid: string;
+  pid: string;
 }
