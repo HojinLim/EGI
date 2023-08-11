@@ -59,8 +59,6 @@ const Header = () => {
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       setJotaiUserData(parsedUserData);
-
-      queryClient.invalidateQueries(['users', userEmail]);
     }
   }, []);
 
