@@ -5,6 +5,7 @@ import { useAtom } from 'jotai';
 import { userAtom } from '../components/user/Login';
 import { supabase } from '../services/supabase/supabase';
 import { UserType } from '../types/supabase';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { handleImageChange } from '../components/posts/HandleImage';
 import UserPosts from '../components/mypage/UserPosts';
@@ -16,6 +17,7 @@ const EditProfile = () => {
   const [editnickname, setEditNickName] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [userData, setUserData] = useState<UserType | null>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -88,6 +90,7 @@ const EditProfile = () => {
       } else {
         console.log('수정완료', editnickname);
         console.log('수정완료', profileimg);
+        queryClient.invalidateQueries(['users', user?.email]);
         alert('수정이 완료되었습니다.');
 
         const { data, error: fetchError } = await supabase.from('users').select('*').eq('email', user?.email);
@@ -97,6 +100,9 @@ const EditProfile = () => {
         } else {
           setUserData(data[0]);
           setNickname(data[0].nickname);
+
+          const updatedJotaiUserData = { ...data[0], nickname: editnickname };
+          localStorage.setItem('jotaiUserData', JSON.stringify(updatedJotaiUserData));
         }
       }
     }
