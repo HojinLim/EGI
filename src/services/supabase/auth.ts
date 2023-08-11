@@ -36,18 +36,6 @@ export const signUpService = async (userData: UserType) => {
   }
 };
 
-// 로그아웃
-export const sigOutService = async () => {
-  try {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      throw new Error(error.message);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 // 로그인
 export const loginService = async (userData: Omit<UserType, 'nickname' | 'profileImg'>) => {
   try {
@@ -59,6 +47,18 @@ export const loginService = async (userData: Omit<UserType, 'nickname' | 'profil
       throw new Error(error.message);
     }
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 로그아웃
+export const sigOutService = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw new Error(error.message);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -105,7 +105,9 @@ export async function checkEmailDuplication(email: string): Promise<boolean> {
 // 비밀번호 찾기
 export const resetPassword = async (email: string) => {
   try {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:3000/reset-password'
+    });
     console.log(data);
     if (!error) {
       alert('Please check your email');
