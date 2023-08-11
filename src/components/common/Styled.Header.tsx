@@ -29,32 +29,35 @@ export const ProfileImg = styled.img`
   max-width: 50px;
   max-height: 50px;
   border-radius: 50%;
+  /* border: 1px solid #aaa9a9; */
 `;
 
 export const NickName = styled.div`
   margin-left: 10px;
 `;
 
-export const ButtonBox = styled.div`
+export const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
 `;
 
-export const ToggleButtonWrapper = styled.div`
+export const ButtonBox = styled.div`
   position: relative;
 `;
 
 export const ToggleButton = styled.button`
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 11px;
   cursor: pointer;
   margin-left: 10px;
 `;
 
-export const LogoutButton = styled.button`
+export const LogOutButton = styled.button`
   position: absolute;
+  top: 140%;
+  left: -40%;
   width: 100px;
   top: 500%;
   left: 0;
@@ -64,6 +67,10 @@ export const LogoutButton = styled.button`
 
   border: 1px solid #dddddd;
   border-radius: 5px;
+  padding: 10px 10px;
+
+  width: 70px;
+  font-size: 10px;
   padding: 10px 15px;
   margin-top: 5px;
 `;
