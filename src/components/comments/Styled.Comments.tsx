@@ -4,6 +4,7 @@ export const CommentsContainer = styled.div`
   margin-top: 50px;
   display: flex;
   flex-direction: column;
+
 `;
 
 export const CommentsPanel = styled.div`
@@ -46,7 +47,10 @@ export const CommentItem = styled.li<StyledReplyProps>`
 export const CommentProfileImgBox = styled.div`
   margin: 10px 20px 0 20px;
   width: 5%;
-  min-width: 50px;
+  width: 80px;
+  height : 100px;
+  border: black solid 1px;
+  
 `;
 
 export const CommentTextBox = styled.div`
