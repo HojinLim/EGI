@@ -23,8 +23,8 @@ const Header = () => {
   const [userEmail, setUserEmail] = useAtom(userEmailAtom);
   const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
   const [socialUser, setSocialUser] = useAtom(sosialUserAtom);
-  console.log('socialUser', socialUser);
   console.log('user', user);
+  console.log('socialUser', socialUser);
 
   // 유저 정보 조회하는 쿼리
   const {
@@ -69,7 +69,9 @@ const Header = () => {
 
   // 소셜 로그인 토큰 생성 => jotaiUserData
   useEffect(() => {
-    if (socialUser) {
+    if (!socialUser?.identities) {
+      return;
+    } else if (socialUser?.identities[0].provider !== 'email') {
       const tokenKey = localStorage.getItem('sb-bbakvkybkyfoiijevbec-auth-token');
       const parsedToken = tokenKey ? JSON.parse(tokenKey) : null;
 
@@ -86,7 +88,6 @@ const Header = () => {
       };
       const userDataString = JSON.stringify(userInsertData);
       localStorage.setItem('jotaiUserData', userDataString);
-
       setJotaiUserData(userInsertData);
     }
   }, [socialUser]);
