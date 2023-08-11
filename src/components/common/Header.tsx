@@ -4,15 +4,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Login, { userAtom, userEmailAtom } from '../user/login/Login';
 import { getUserInfo, sigOutService } from '../../services/supabase/auth';
 import icon from '../../image/icon.png';
-import baseProfile from '../../image/baseprofile.jpeg';
 import * as S from './Styled.Header';
 
-import type { UserType } from '../../types/supabase';
+import type { UserType, UserTypes } from '../../types/supabase';
 
 import { supabase } from '../../services/supabase/supabase';
 import { sosialUserAtom } from '../user/social/SosialLogin';
 
-export const jotaiUserDataAtom = atom<Omit<UserType, 'password'> | null>(null);
+export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
 
 const Header = () => {
   const queryClient = useQueryClient();
@@ -23,8 +22,8 @@ const Header = () => {
   const [user, setUser] = useAtom(userAtom);
   const [userEmail, setUserEmail] = useAtom(userEmailAtom);
   const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
-  const [soSialUser, setSoSialUser] = useAtom(sosialUserAtom);
-  console.log('soSialUser', soSialUser);
+  const [socialUser, setSocialUser] = useAtom(sosialUserAtom);
+  console.log('socialUser', socialUser);
   console.log('user', user);
 
   // 유저 정보 조회하는 쿼리
@@ -50,7 +49,7 @@ const Header = () => {
   // 로그아웃 핸들러
   const signOutHandler = async () => {
     try {
-      setSoSialUser(null);
+      setSocialUser(null);
       setUser(null); // userData 초기화
       setUserEmail('');
       await logoutMutation.mutateAsync();
@@ -59,7 +58,7 @@ const Header = () => {
     }
   };
 
-  // 토큰 생성
+  // 이메일 로그인 토큰 생성 => jotaiUserData
   useEffect(() => {
     if (userData) {
       const userDataString = JSON.stringify(userData);
@@ -67,6 +66,30 @@ const Header = () => {
       setJotaiUserData(userData);
     }
   }, [userData]);
+
+  // 소셜 로그인 토큰 생성 => jotaiUserData
+  useEffect(() => {
+    if (socialUser) {
+      const tokenKey = localStorage.getItem('sb-bbakvkybkyfoiijevbec-auth-token');
+      const parsedToken = tokenKey ? JSON.parse(tokenKey) : null;
+
+      const userId = parsedToken?.user.id;
+      const userName = parsedToken?.user.user_metadata.name;
+      const userEmail = parsedToken?.user.email;
+
+      const userInsertData = {
+        uid: userId,
+        nickname: userName,
+        profileimg: 'neverdelete/461839d7-4ae5-4981-a29c-7793179d98ac.jpeg',
+        email: userEmail,
+        password: ''
+      };
+      const userDataString = JSON.stringify(userInsertData);
+      localStorage.setItem('jotaiUserData', userDataString);
+
+      setJotaiUserData(userInsertData);
+    }
+  }, [socialUser]);
 
   // 생성한 토큰 가져와서 새로고침 방지
   useEffect(() => {
@@ -84,7 +107,7 @@ const Header = () => {
     const {
       data: { user }
     } = await supabase.auth.getUser();
-    setSoSialUser(user);
+    setSocialUser(user);
   };
 
   // window.addEventListener('hashchange' =>브라우저의 URL 해시(예: # 뒤의 일부)가 변경될 때 발생
@@ -106,12 +129,6 @@ const Header = () => {
     setShowLogoutButton((prevState) => !prevState);
   };
 
-  const userName = soSialUser?.user_metadata.name;
-  const userId = soSialUser?.id;
-
-  console.log('userName', userName);
-  console.log('userId', userId);
-
   if (isLoading) {
     return <div>데이터 로딩 중입니다.</div>;
   }
@@ -124,14 +141,8 @@ const Header = () => {
     <S.HeaderContainer>
       <S.Logo src={icon} />
       <div>
-        {jotaiUserData || soSialUser ? (
+        {jotaiUserData ? (
           <S.ProfileWrapper>
-            {userName && (
-              <S.ProfileBox>
-                <S.ProfileImg src={baseProfile} />
-                <S.NickName>{userName}</S.NickName>
-              </S.ProfileBox>
-            )}
             <div>
               {jotaiUserData ? (
                 <S.ProfileBox key={jotaiUserData.uid}>

@@ -4,7 +4,6 @@ import { supabase } from './supabase';
 
 // 회원가입
 export const signUpService = async (userData: UserType) => {
-  
   try {
     const { data, error } = await supabase.auth.signUp({
       email: userData.email,
@@ -135,7 +134,6 @@ export const updateUserInfo = async (userEmail: string, newNickname: string): Pr
     if (userData !== null) {
       if (Array.isArray(userData) && userData > 0) {
         // 변경된 회원 정보 반환 혹은 필요한 작업 수행
-        
       }
     }
   } catch (error) {
@@ -143,7 +141,6 @@ export const updateUserInfo = async (userEmail: string, newNickname: string): Pr
     throw error;
   }
 };
-
 
 // 이미지 파일 업로드
 export const uploadProfileImage = async (selectedProfileImg: File) => {
