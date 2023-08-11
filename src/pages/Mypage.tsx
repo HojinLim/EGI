@@ -1,97 +1,174 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import UserPosts from '../components/UserPosts';
-import Header from '../components/common/Header';
+import Header, { jotaiUserDataAtom } from '../components/common/Header';
 import { useAtom } from 'jotai';
-import { userAtom } from '../components/user/Login';
-import { supabase } from '../services/supabase/supabase';
 
-const Mypage = () => {
+import { supabase } from '../services/supabase/supabase';
+import { UserType } from '../types/supabase';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { handleImageChange } from '../components/posts/HandleImage';
+import UserPosts from '../components/mypage/UserPosts';
+import { userAtom, userEmailAtom } from '../components/user/login/Login';
+
+const EditProfile = () => {
   const [user] = useAtom(userAtom);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedNickname, setEditedNickname] = useState('');
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [, setNickname] = useState('');
+  const [editnickname, setEditNickName] = useState('');
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [userData, setUserData] = useState<UserType | null>(null);
+  const queryClient = useQueryClient();
+  const [userEmail] = useAtom(userEmailAtom);
+  const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     if (user) {
+  //       const { data, error } = await supabase.from('users').select('*').eq('email', user.email);
+  //       if (error) {
+  //         console.error('Error fetching user data:', error);
+  //       } else {
+  //         setUserData(data[0]);
+  //         setNickname(data[0].nickname);
+  //       }
+  //     }
+  //   };
+  //   fetchUserData();
+  // }, []);
 
-  const imageInputRef = useRef<HTMLInputElement | null>(null);
+  // 생성한 토큰 가져와서 새로고침 방지
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('jotaiUserData');
+    if (storedUserData) {
+      const parsedUserData = JSON.parse(storedUserData);
+      setJotaiUserData(parsedUserData);
 
-  const handleImageClick = () => {
-    if (imageInputRef.current) {
-      imageInputRef.current.click();
+      queryClient.invalidateQueries(['users', userEmail]);
     }
+  }, []);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setSelectedImage(event.target.files[0]);
-    }
+  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditNickName(event.target.value);
   };
 
-  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => setEditedNickname(event.target.value);
+  const handleEdit = async () => {
+    let profileimg: string | null = null;
 
-  // 닉네임 변경
-  const saveChanges = async () => {
-    try {
-      if (user) {
-        await supabase.from('users').update({ nickname: editedNickname }).eq('uid', user.uid);
-        setIsEditing(false);
+    if (user?.profileimg && Array.isArray(user.profileimg)) {
+      profileimg = user.profileimg.join(';');
+    }
+
+    if (selectedImages.length > 0) {
+      const newImageUrls: string[] = [];
+
+      for (const selectedImage of selectedImages) {
+        const { data, error } = await supabase.storage
+          .from('1st')
+          .upload(`images/${selectedImage.name}`, selectedImage);
+
+        if (error) {
+          console.error('Error uploading image to Supabase storage:', error);
+          alert('이미지 업로드 중 에러가 발생했습니다!');
+          return;
+        }
+
+        newImageUrls.push(data.path);
       }
-    } catch (error) {
-      console.error('Error updating user information:', error);
+
+      if (profileimg === null) {
+        profileimg = newImageUrls.join(';');
+      } else {
+        profileimg += ';' + newImageUrls.join(';');
+      }
+    }
+
+    if (editnickname) {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          nickname: editnickname,
+          profileimg
+        })
+        .eq('uid', userData?.uid);
+      console.log('설마 너냐?', user?.uid);
+
+      console.log('나 실행돼~', editnickname);
+      if (error) {
+        console.error('Error editing post:', error);
+        alert('에러가 발생했습니다!');
+      } else {
+        console.log('수정완료', editnickname);
+        console.log('수정완료', profileimg);
+        queryClient.invalidateQueries(['users', user?.email]);
+        alert('수정이 완료되었습니다.');
+
+        const { data, error: fetchError } = await supabase.from('users').select('*').eq('email', user?.email);
+
+        if (fetchError) {
+          console.error('Error fetching user data:', fetchError);
+        } else {
+          setUserData(data[0]);
+          setNickname(data[0]?.nickname);
+
+          const updatedJotaiUserData = { ...data[0], nickname: editnickname };
+          localStorage.setItem('jotaiUserData', JSON.stringify(updatedJotaiUserData));
+        }
+      }
+    }
+  };
+
+  const handleImageChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files;
+
+    if (selectedFiles) {
+      const updatedSelectedImages = handleImageChange(selectedFiles);
+      setSelectedImages(updatedSelectedImages);
     }
   };
 
   return (
     <div>
-      {/* 홈으로 이동 */}
       <Link to="/">Home</Link>
       <Header />
 
-      {user ? (
+      {user || jotaiUserData ? (
         <div>
           <h1>마이 페이지</h1>
           <div>
             <img
-              src={selectedImage ? URL.createObjectURL(selectedImage) : '-'}
-              alt={`프로필 이미지 - ${user.uid}`}
+              src={
+                jotaiUserData?.profileimg
+                  ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
+                  : '-'
+              }
+              alt={`프로필 이미지 - ${user?.uid}`}
               style={{
                 width: 200,
                 height: 200,
                 borderRadius: 70,
-                cursor: 'pointer',
                 border: '3px solid black'
               }}
-              onClick={handleImageClick} // Click to change image
             />
 
-            <input
-              type="file"
-              accept="image/*"
-              ref={imageInputRef}
-              onChange={handleImageChange}
-              style={{ display: 'none' }}
-            />
-            {/* 수정 버튼 */}
-            <button className="material-symbols-outlined" onClick={() => setIsEditing(!isEditing)}>
+            <button className="material-symbols-outlined" onClick={handleEditClick}>
               edit
             </button>
 
-            <p>이메일: {user.email}</p>
-            <p>닉네임: {editedNickname}</p>
+            <p>이메일: {jotaiUserData ? jotaiUserData.email : ''}</p>
+            <p>닉네임: {jotaiUserData ? jotaiUserData.nickname : ''}</p>
           </div>
-          {/* 수정 버튼 클릭시 입력폼 */}
           {isEditing && (
-            <>
-              <span>닉네임 입력:</span>
-              <input type="text" value={editedNickname} onChange={handleNicknameChange} />
-              <p />
-              <button onClick={saveChanges}>Save</button>
-              <p />
-            </>
+            <div>
+              <input type="text" value={editnickname} onChange={handleNicknameChange} />
+              <input type="file" accept="image/*" onChange={handleImageChangeWrapper} />
+              <button onClick={handleEdit}>수정하기</button>
+            </div>
           )}
-          {/* 유저 포스팅 */}
-          <div>
-            <UserPosts />
-          </div>
+          <UserPosts />
         </div>
       ) : (
         <div>
@@ -103,4 +180,4 @@ const Mypage = () => {
   );
 };
 
-export default Mypage;
+export default EditProfile;
