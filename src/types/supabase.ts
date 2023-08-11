@@ -53,6 +53,6 @@ export interface Post {
 }
 
 export interface JjimType {
-  uid: string;
+  uid: string | null;
   pid: string;
 }

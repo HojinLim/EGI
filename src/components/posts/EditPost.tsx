@@ -7,6 +7,9 @@ import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
 import { CategoryRadio } from '../category/CategorySelect';
+import CircularProgress from '@mui/material/CircularProgress';
+
+
 
 const EditPost = () => {
   const { id } = useParams();
@@ -116,7 +119,7 @@ const EditPost = () => {
   };
 
   if (!post) {
-    return <div>Loading...</div>;
+    return <div>Loading...<CircularProgress /></div>;
   }
 
   return (

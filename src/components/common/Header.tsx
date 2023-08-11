@@ -6,10 +6,12 @@ import { getUserInfo, sigOutService } from '../../services/supabase/auth';
 import icon from '../../image/icon.png';
 import * as S from './Styled.Header';
 
+
 import type { UserType, UserTypes } from '../../types/supabase';
 
 import { supabase } from '../../services/supabase/supabase';
 import { sosialUserAtom } from '../user/social/SosialLogin';
+import * as SL from '../common/Styled.Loading';
 
 export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
 
@@ -127,7 +129,7 @@ const Header = () => {
   };
 
   if (isLoading) {
-    return <div>데이터 로딩 중입니다.</div>;
+    return <SL.LoadingOverlay />;
   }
 
   if (isError) {
