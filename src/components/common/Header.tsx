@@ -15,7 +15,6 @@ export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
 
 const Header = () => {
   const queryClient = useQueryClient();
-
   const [loginModal, setLoginModal] = useState(false);
   const [showLogoutButton, setShowLogoutButton] = useState(false);
 
@@ -26,6 +25,7 @@ const Header = () => {
   console.log('user', user);
   console.log('socialUser', socialUser);
 
+  console.log('jotaiUserData', jotaiUserData);
   // 유저 정보 조회하는 쿼리
   const {
     isLoading,
