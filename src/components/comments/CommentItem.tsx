@@ -1,25 +1,27 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch, useMemo, useState } from 'react';
 import * as S from './Styled.Comments';
 import CommentPanel from './CommentPanel';
 import ReplyCommentForm from './ReplyCommentForm';
+import baseProfile from '../../image/baseprofile.jpeg';
+import useCommentMutation from '../../hooks/useCommentMutation';
+import { SetStateAction, useAtom } from 'jotai';
+import { jotaiUserDataAtom } from '../common/Header';
 
 import type { CommentType } from '../../types/supabase';
-import useCommentMutation from '../../hooks/useCommentMutation';
-import { SetStateAction } from 'jotai';
-
 interface CommentItemProps {
-  uid: string;
   pid: string;
   comment: CommentType;
   isUpdating: boolean;
   setIsUpdating: Dispatch<SetStateAction<boolean>>;
 }
 
-const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentItemProps) => {
+const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemProps) => {
   const [updateComment, setUpdateComment] = useState('');
   const [isAddReply, setIsAddReply] = useState(false);
 
-  const [updateCommentId, setUpdateCommentId] = useState<number | null>(0);
+  const [updateCommentId, setUpdateCommentId] = useState<number | null>(null);
+
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
   const { updateCommentMutation, deleteCommentMutation } = useCommentMutation();
 
@@ -42,7 +44,7 @@ const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentIt
   const handleUpdateBtnClick = () => {
     if (updateComment === '') {
       alert('작성된 댓글이 없습니다.');
-      return false;
+      return;
     }
 
     const newComment = {
@@ -65,36 +67,66 @@ const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentIt
   const handleDeleteCommentBtnClick = (cid: number) => {
     const isConfirmed = window.confirm('삭제하시겠습니까?');
     if (!isConfirmed) {
-      return false;
+      return;
     }
+
     deleteCommentMutation.mutate(cid);
   };
+
+  const handleReplyBtnClick = () => {
+    if (!jotaiUserData) {
+      alert('로그인 후 사용 가능합니다.');
+      return;
+    }
+    setIsAddReply(!isAddReply);
+  };
+
+  const renderCommentBody = useMemo(() => {
+    if (isUpdating && updateCommentId === comment.cid) {
+      return (
+        <S.CommentInput
+          type="text"
+          value={updateComment}
+          onChange={handleUpdateCommentInputChange}
+          onKeyDown={handleKeyDown}
+        />
+      );
+    } else {
+      return (
+        <>
+          <S.CommentBody>{comment.body}</S.CommentBody>
+          <S.Button onClick={handleReplyBtnClick}>답글달기</S.Button>
+        </>
+      );
+    }
+  }, [
+    isUpdating,
+    updateCommentId,
+    comment,
+    updateComment,
+    handleUpdateCommentInputChange,
+    handleKeyDown,
+    setIsAddReply
+  ]);
 
   return (
     <>
       <S.CommentItem>
-        <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
+        <S.CommentProfileImgBox>
+          <S.CommentProfileImg
+            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg || baseProfile}`}
+            alt="Profile"
+          />
+        </S.CommentProfileImgBox>
         <S.CommentTextBox>
           <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
-          {isUpdating && updateCommentId == comment.cid ? (
-            <S.CommentInput
-              type="text"
-              value={updateComment}
-              onChange={handleUpdateCommentInputChange}
-              onKeyDown={handleKeyDown}
-            />
-          ) : (
-            <>
-              <S.CommentBody>{comment.body}</S.CommentBody>
-              <S.Button onClick={() => setIsAddReply(!isAddReply)}>답글달기</S.Button>
-            </>
-          )}
+          {renderCommentBody}
         </S.CommentTextBox>
-        {uid === comment.uid ? (
+        {jotaiUserData?.uid === comment.uid ? (
           isUpdating && updateCommentId === comment.cid ? (
             <CommentPanel
               commenting={true}
-              handleUpdateBtnClick={handleUpdateBtnClick} 
+              handleUpdateBtnClick={handleUpdateBtnClick}
               handleUpdateCommentCancel={handleUpdateCommentCancel}
             />
           ) : (
@@ -108,7 +140,7 @@ const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentIt
           <div style={{ width: '105px' }} />
         )}
       </S.CommentItem>
-      {isAddReply && <ReplyCommentForm uid={uid} pid={pid} cid={comment.cid} setIsAddReply={setIsAddReply} />}
+      {isAddReply && <ReplyCommentForm pid={pid} cid={comment.cid} setIsAddReply={setIsAddReply} />}
     </>
   );
 };

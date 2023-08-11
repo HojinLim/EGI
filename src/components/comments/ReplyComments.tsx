@@ -1,33 +1,40 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import * as S from './Styled.Comments';
 import CommentPanel from './CommentPanel';
 import { useQuery } from '@tanstack/react-query';
-
-import { ReplyCommentType } from '../../types/supabase';
 import { fetchReplyComments } from '../../services/supabase/replyComments';
 import useCommentMutation from '../../hooks/useCommentMutation';
+import { jotaiUserDataAtom } from '../common/Header';
+import { useAtom } from 'jotai';
+import baseProfile from '../../image/baseprofile.jpeg';
+import * as SL from '../common/Styled.Loading';
 
+import type { ReplyCommentType } from '../../types/supabase';
 interface ReplyCommentsProps {
   cid: number;
-  uid: string;
   pid: string;
 }
 
-const ReplyComments = ({ cid, uid, pid }: ReplyCommentsProps) => {
+const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   const { deleteReplyCommentMutation, updateReplyCommentMutation } = useCommentMutation();
 
-  const [isViewingReply, setIsViewingReply] = useState(false);
-
+  // 대댓글 수정 관련
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateReply, setUpdateReply] = useState('');
   const [updateReplyId, setUpdateReplyId] = useState<number | null>(null);
 
-  const defaultQueryOptions = {
-    queryKey: ['replyComments'],
-    queryFn: () => fetchReplyComments(pid),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false
-  };
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
+
+  const defaultQueryOptions = useMemo(
+    () => ({
+      queryKey: ['replyComments', pid],
+      queryFn: () => fetchReplyComments(pid),
+      refetchOnWindowFocus: false
+    }),
+    [pid]
+  );
+
+  const { data: replyComments, error, isLoading } = useQuery<ReplyCommentType[]>(defaultQueryOptions);
 
   const handleUpdateReplyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateReply(e.target.value);
@@ -78,26 +85,28 @@ const ReplyComments = ({ cid, uid, pid }: ReplyCommentsProps) => {
     deleteReplyCommentMutation.mutate(rid);
   };
 
-  const { data: replyComments, error, isLoading } = useQuery<ReplyCommentType[]>(defaultQueryOptions);
-
   if (error) {
     return <div>데이터를 가져오는 도중 오류가 발생했습니다.</div>;
   }
 
   if (isLoading) {
-    return <div>로딩중입니다.</div>;
+    return <div>로딩중입니다.<SL.LoadingOverlay /></div>;
   }
 
   const filteredComments = replyComments?.filter((comment) => comment.cid === cid);
 
-  return isViewingReply ? (
+  return (
     <>
-      <S.Button onClick={() => setIsViewingReply(!isViewingReply)} margin={'10px'}>
-        닫기
-      </S.Button>
       {filteredComments?.map((comment) => (
-        <S.CommentItem key={comment.rid} margin={'20px'}>
-          <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
+        <S.CommentItem key={comment.rid} margin={'40px'}>
+          {comment?.profileimg ? (
+            <S.CommentProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
+              alt="Profile"
+            />
+          ) : (
+            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
+          )}
           <S.CommentTextBox>
             <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
             {isUpdating && updateReplyId == comment.rid ? (
@@ -112,7 +121,7 @@ const ReplyComments = ({ cid, uid, pid }: ReplyCommentsProps) => {
             )}
           </S.CommentTextBox>
           <S.CommentPanel>
-            {uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
+            {jotaiUserData?.uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
               isUpdating && updateReplyId == comment.rid ? (
                 <CommentPanel
                   commenting={true}
@@ -132,12 +141,6 @@ const ReplyComments = ({ cid, uid, pid }: ReplyCommentsProps) => {
           </S.CommentPanel>
         </S.CommentItem>
       ))}
-    </>
-  ) : (
-    <>
-      <S.Button onClick={() => setIsViewingReply(!isViewingReply)} margin={'10px'}>
-        열기
-      </S.Button>
     </>
   );
 };

@@ -5,33 +5,38 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { jotaiUserDataAtom } from '../components/common/Header';
 
 import Comments from '../components/comments/Comments';
 import * as S from '../components/posts/Styled.Posts';
 import { Post } from '../types/supabase';
 import { supabase } from '../services/supabase/supabase';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchJjimCount, toggleJjim } from '../services/supabase/jjim';
+import { useAtom } from 'jotai';
+import CircularProgress from '@mui/material/CircularProgress';
 
+// 작성자 딱지 > post의 uid props로 넘기기.
 
 const Detail = () => {
-  const { id } = useParams();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
+
+  const { id } = useParams() as { id: string };
   const [post, setPost] = useState<Post | null>(null);
-  const [uid, setUid] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = localStorage.getItem('jotaiUserData');
-      if (userData) {
-        const parsedUserData = JSON.parse(userData);
-        setUid(parsedUserData.uid);
-      }
-    };
+  const { data: jjimData } = useQuery(['jjim'], () => fetchJjimCount(id));
 
-    fetchUserData();
-  }, []);
-
-  // const [userId, setUserId] = useState("");
-  // console.log(id)
+  const toggleJjimMutation = useMutation(toggleJjim, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['jjim']);
+    },
+    onError: (error) => {
+      alert(`찜 업데이트 중 오류가 발생했습니다. : ${error}`);
+    }
+  });
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -74,7 +79,7 @@ const Detail = () => {
   }
 
   if (!post) {
-    return <div>Loading...</div>;
+    return <div>Loading...<CircularProgress /></div>;
   }
 
   // useEffect(() => {
@@ -88,8 +93,18 @@ const Detail = () => {
   //   fetchUser();
   // }, []);
 
-  console.log(post);
+  const handleJjim = () => {
+    if (!jotaiUserData) {
+      alert('로그인 후 사용 가능합니다.');
+      return;
+    }
 
+    const data = {
+      uid: jotaiUserData.uid,
+      pid: id
+    };
+    toggleJjimMutation.mutate(data);
+  };
   return (
     <S.Container>
       <S.MainContainer>
@@ -115,8 +130,8 @@ const Detail = () => {
           <S.PostInfo>상품상태 {post.condition}</S.PostInfo>
           <S.PostInfo>배송비 {post.parcel}</S.PostInfo>
           <S.PostInfo>교환여부 {post.exchange}</S.PostInfo>
-
-          {uid === post.uid && (
+          <button onClick={handleJjim}>찜 {jjimData?.length}</button>
+          {jotaiUserData?.uid === post.uid && (
             <S.EditDeleteButtons>
               <S.StyledButton onClick={handleEdit}>수정하기</S.StyledButton>
               <S.StyledButton onClick={handleDelete}>삭제하기</S.StyledButton>
@@ -130,5 +145,3 @@ const Detail = () => {
 };
 
 export default Detail;
-
-
