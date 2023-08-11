@@ -1,34 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import GetPost from '../components/posts/GetPost';
 import Header from '../components/common/Header';
+import { useAtom } from 'jotai';
+import { userAtom } from '../components/user/Login';
 import Banner from '../components/common/Banner';
 import CategoryFilter from '../components/category/CategoryFilter';
+import InfiniteScroll from '../components/InfiniteScroll';
 
 const Home = () => {
-  const [scroll, setScroll] = useState(0);
-  const onscroll = () => {
-    setScroll(window.scrollY);
-  };
-  useEffect(() => {
-    window.addEventListener('scroll', onscroll);
-    return () => {
-      window.removeEventListener('scroll', onscroll);
-    };
-  }, []);
+  const [user] = useAtom(userAtom);
 
   return (
-    <>
+    <div>
       <Header />
+      {user && <Link to="/mypage">마이페이지</Link>}
       <Banner />
       <CategoryFilter />
-      <div style={{ maxWidth: '1200px', margin: '0 auto', backgroundPositionY: scroll / 2 }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }} />
+      <div>
         <Link to="/post">
           <button>글작성</button>
         </Link>
         <GetPost />
+        <InfiniteScroll />
       </div>
-    </>
+    </div>
   );
 };
 
