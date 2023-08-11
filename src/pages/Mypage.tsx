@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { jotaiUserDataAtom } from '../components/common/Header';
 import { useAtom } from 'jotai';
-
 import { supabase } from '../services/supabase/supabase';
 import { UserType } from '../types/supabase';
 import { useQueryClient } from '@tanstack/react-query';
-
 import { handleImageChange } from '../components/posts/HandleImage';
 import UserPosts from '../components/mypage/UserPosts';
-import { userAtom, userEmailAtom } from '../components/user/login/Login';
+import { userAtom } from '../components/user/login/Login';
 
 const EditProfile = () => {
+  const queryClient = useQueryClient();
   const [user] = useAtom(userAtom);
   const [isEditing, setIsEditing] = useState(false);
   const [, setNickname] = useState('');
   const [editnickname, setEditNickName] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [userData, setUserData] = useState<UserType | null>(null);
-  const queryClient = useQueryClient();
-  const [userEmail] = useAtom(userEmailAtom);
-  const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
+
   // useEffect(() => {
   //   const fetchUserData = async () => {
   //     if (user) {
@@ -35,25 +33,6 @@ const EditProfile = () => {
   //   };
   //   fetchUserData();
   // }, []);
-
-  // 생성한 토큰 가져와서 새로고침 방지
-  useEffect(() => {
-    const storedUserData = localStorage.getItem('jotaiUserData');
-    if (storedUserData) {
-      const parsedUserData = JSON.parse(storedUserData);
-      setJotaiUserData(parsedUserData);
-
-      queryClient.invalidateQueries(['users', userEmail]);
-    }
-  }, []);
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditNickName(event.target.value);
-  };
 
   const handleEdit = async () => {
     let profileimg: string | null = null;
@@ -128,6 +107,14 @@ const EditProfile = () => {
       const updatedSelectedImages = handleImageChange(selectedFiles);
       setSelectedImages(updatedSelectedImages);
     }
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditNickName(event.target.value);
   };
 
   return (
