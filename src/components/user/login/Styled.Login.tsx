@@ -33,6 +33,18 @@ export const CloseBtn = styled.button`
   top: 10px;
 `;
 
+export const Title = styled.p`
+  padding: 15px;
+  font-size: 20px;
+`;
+
+export const Line1 = styled.div`
+  border-bottom: 1px solid black;
+  width: 250px;
+
+  margin-bottom: 30px;
+`;
+
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,7 +60,7 @@ export const FormBox = styled.form`
 `;
 
 export const EmailBox = styled.input`
-  width: 170px;
+  width: 220px;
   height: 30px;
 
   margin: 10px;
@@ -57,7 +69,7 @@ export const EmailBox = styled.input`
 `;
 
 export const PasswordBox = styled.input`
-  width: 170px;
+  width: 220px;
   height: 30px;
   margin: 10px;
   border: 1px solid black;
@@ -71,14 +83,26 @@ export const LoginBtn = styled.button`
   border: 1px solid #dddddd;
   border-radius: 5px;
   padding: 10px 15px;
+  cursor: pointer;
+
+  margin-top: 20px;
+`;
+
+export const ModalBox = styled.div`
+  background-color: translate;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 15px 0 0 2px;
 `;
 
 export const SignUpBtn = styled.button`
-  width: 100px;
-  height: 35px;
-  margin: 10px;
+  border: none;
 
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  padding: 10px 15px;
+  background-color: transparent;
+  font-size: 6px;
+  cursor: pointer;
+
+  margin-right: 5px;
 `;
