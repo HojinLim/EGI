@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { jotaiUserDataAtom } from '../components/common/Header';
 import { useAtom } from 'jotai';
 import { supabase } from '../services/supabase/supabase';
 import { useQueryClient } from '@tanstack/react-query';
-
-import { jotaiUserDataAtom } from '../components/common/Header';
 import { handleImageChange } from '../components/posts/HandleImage';
 import UserPosts from '../components/mypage/UserPosts';
+import * as S from '../pages/Styled.Mypage';
+import * as L from '../components/common/Styled.Loading';
 import { userAtom, userEmailAtom } from '../components/user/login/Login';
-import * as S from '../components/mypage/Styled.Mypage';
+import { sosialUserAtom } from '../components/user/social/SosialLogin';
 
-
-const EditProfile = () => {
+const Mypage = () => {
   const [user] = useAtom(userAtom);
   const [editnickname, setEditNickName] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const queryClient = useQueryClient();
   const [userEmail] = useAtom(userEmailAtom);
   const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
+  const [isEditing, setIsEditing] = useState(false);
+  const [socialUser] = useAtom(sosialUserAtom);
 
   // 생성한 토큰 가져와서 새로고침 방지
   useEffect(() => {
@@ -30,10 +31,7 @@ const EditProfile = () => {
     }
   }, []);
 
-  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditNickName(event.target.value);
-  };
-
+  // 프로필 수정 => 저장
   const handleEdit = async () => {
     let profileimg: string | null = null;
 
@@ -94,6 +92,7 @@ const EditProfile = () => {
         }
         setEditNickName('');
         setSelectedImages([]);
+        setIsEditing(false);
       }
     }
   };
@@ -107,60 +106,82 @@ const EditProfile = () => {
     }
   };
 
-  const handleEditClick = () => {
-    setEditNickName(jotaiUserData?.nickname || '');
+  const handleEditClickOpen = () => {
+    if (!socialUser?.identities || jotaiUserData) {
+      setEditNickName(jotaiUserData?.nickname || '');
+      setIsEditing(true);
+    } else if (socialUser?.identities[0].provider !== 'email') {
+      // setIsEditing(false);
+      alert('소셜 로그인 시 프로필 수정이 불가능합니다.');
+    }
   };
 
-  const closeBtn = () => {
-    setEditNickName('');
-    setSelectedImages([]);
+  const handleEditClickClose = () => {
+    setIsEditing(false);
+  };
+
+  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditNickName(event.target.value);
   };
 
   return (
-    <div>
-      <Link to="/">Home</Link>
+    <S.MypageContainer>
       {user || jotaiUserData ? (
         <div>
-          <h1>마이 페이지</h1>
-          <div>
-            <img
+          <S.ProfileBox>
+            <S.ProfileImg
               src={
                 jotaiUserData?.profileimg
                   ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
                   : '-'
               }
               alt={`프로필 이미지 - ${user?.uid}`}
-              style={{
-                width: 200,
-                height: 200,
-                borderRadius: 70,
-                border: '3px solid black'
-              }}
             />
+            <S.ProfileInfo>
+              {isEditing ? (
+                <S.NickNameBox>
+                  <S.EditNickName>닉네임 :</S.EditNickName>
+                  <S.InputNickName type="text" value={editnickname} onChange={handleNicknameChange} />
+                </S.NickNameBox>
+              ) : (
+                <S.NickName>{jotaiUserData ? jotaiUserData.nickname : ''}</S.NickName>
+              )}
+              <S.Email>{jotaiUserData ? jotaiUserData.email : ''}</S.Email>
 
-            <button className="material-symbols-outlined" onClick={handleEditClick}>
-              edit
-            </button>
-
-            <p>이메일: {jotaiUserData ? jotaiUserData.email : ''}</p>
-            <p>닉네임: {jotaiUserData ? jotaiUserData.nickname : ''}</p>
-          </div>
-
-          <S.CancelButton onClick={closeBtn}>X</S.CancelButton>
-          <input type="text" value={editnickname} onChange={handleNicknameChange} />
-          <input type="file" accept="image/*" onChange={handleImageChangeWrapper} />
-          <S.EditButton onClick={handleEdit}>수정하기</S.EditButton>
-
+              {isEditing ? (
+                <div>
+                  <S.EditBtn onClick={handleEdit}>저장하기</S.EditBtn>
+                  <S.EditBtn onClick={handleEditClickClose}>취소하기</S.EditBtn>
+                </div>
+              ) : (
+                <S.EditBtn onClick={handleEditClickOpen}>프로필 수정</S.EditBtn>
+              )}
+            </S.ProfileInfo>
+          </S.ProfileBox>
+          <S.EditProfile>
+            {isEditing ? (
+              <div>
+                <div>
+                  <S.EditProfileLabel htmlFor="file-input">파일선택</S.EditProfileLabel>
+                  <S.EditProfileInput
+                    id="file-input"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChangeWrapper}
+                  />
+                </div>
+              </div>
+            ) : null}
+          </S.EditProfile>
           <UserPosts />
         </div>
       ) : (
         <div>
-          <h1>마이 페이지</h1>
-          <S.LoadingOverlay />
+          <L.LoadingOverlay />
         </div>
       )}
-    </div>
+    </S.MypageContainer>
   );
 };
 
-export default EditProfile;
+export default Mypage;

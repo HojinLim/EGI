@@ -10,6 +10,8 @@ import { supabase } from '../../services/supabase/supabase';
 import { CategoryRadio } from '../category/CategorySelect';
 
 import { Link } from 'react-router-dom';
+import { jotaiUserDataAtom } from '../common/Header';
+import { useAtom } from 'jotai';
 
 const Post = () => {
   // const [user] = useAtom(userAtom); // userAtom의 값을 가져옴
@@ -27,7 +29,7 @@ const Post = () => {
   // const [parcelCategory, setParcelCategory] = useState('');
   const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
   const [uid, setUid] = useState('');
-
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
   useEffect(() => {
     // userDataAtom의 값을 로컬 스토리지에서 가져오기
     const userData = localStorage.getItem('jotaiUserData');
@@ -60,7 +62,9 @@ const Post = () => {
     const { error: insertError } = await supabase.from('posts').insert([
       {
         title: newTitle,
+        nickname: jotaiUserData?.nickname,
         body: newBody,
+        profileimg: jotaiUserData?.profileimg,
         image_urls: imageUrls,
         price: newPrice,
         location: newLocation,

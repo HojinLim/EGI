@@ -6,11 +6,15 @@ export const HeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
+
+  margin-top: 15px;
 `;
 
 export const Logo = styled.img`
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 180px;
+  max-height: 180px;
+
+  cursor: pointer;
 `;
 
 export const ProfileWrapper = styled.div`
@@ -28,7 +32,7 @@ export const ProfileBox = styled.div`
 export const ProfileImg = styled.img`
   max-width: 50px;
   max-height: 50px;
-  border-radius: 50%;
+  border-radius: 70%;
   /* border: 1px solid #aaa9a9; */
 `;
 
@@ -51,14 +55,13 @@ export const ToggleButton = styled.button`
   border: none;
   font-size: 11px;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 20px;
 `;
 
 export const LogOutButton = styled.button`
   position: absolute;
   top: 140%;
   left: -40%;
-  width: 100px;
   top: 500%;
   left: 0;
   z-index: 1;
@@ -81,16 +84,23 @@ export const LoginButton = styled.button`
   border: 1px solid #dddddd;
   border-radius: 5px;
   padding: 10px 15px;
+
+  width: 100px;
+  height: 50px;
 `;
 
 export const LinkButton = styled(Link)`
   position: absolute;
-  width: 100px;
+  /* width: 100px; */
   top: 300%;
   left: 0;
   z-index: 1;
 
   background-color: transparent;
+
+  width: 70px;
+  font-size: 10px;
+  padding: 10px 15px;
 
   border: 1px solid #dddddd;
   border-radius: 5px;
@@ -99,6 +109,7 @@ export const LinkButton = styled(Link)`
   color: #333333;
   margin-top: 5px;
 `;
+
 export const PostLinkButton = styled(Link)`
   position: absolute;
   width: 100px;
@@ -114,4 +125,9 @@ export const PostLinkButton = styled(Link)`
   text-decoration: none;
   color: #333333;
   margin-top: 5px;
+`;
+export const Line = styled.div`
+  border-bottom: 1px solid black;
+
+  margin-bottom: 30px;
 `;

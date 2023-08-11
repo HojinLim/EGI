@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
 
   body{
-    max-width: 1200px;
+    max-width: 1500px;
     min-width: 800px;
     margin: 0 auto
   }
@@ -13,12 +13,6 @@ const GlobalStyle = createGlobalStyle`
   h1 {
     font-weight: bold;
     font-size : 30px;
-  }
-
-  body{
-    max-width : 1200px;
-    max-height : 800px;
-    margin : 0 auto;
   }
 
   p {

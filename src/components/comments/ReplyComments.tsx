@@ -90,7 +90,12 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   }
 
   if (isLoading) {
-    return <div>로딩중입니다.<SL.LoadingOverlay /></div>;
+    return (
+      <div>
+        로딩중입니다.
+        <SL.LoadingOverlay />
+      </div>
+    );
   }
 
   const filteredComments = replyComments?.filter((comment) => comment.cid === cid);
@@ -100,15 +105,17 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
       {filteredComments?.map((comment) => (
         <S.CommentItem key={comment.rid} margin={'40px'}>
           {comment?.profileimg ? (
-            <S.CommentProfileImg
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
-              alt="Profile"
-            />
+            <div>
+              <S.CommentProfileImg
+                src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
+                alt="Profile"
+              />
+              <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
+            </div>
           ) : (
             <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
           )}
           <S.CommentTextBox>
-            <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
             {isUpdating && updateReplyId == comment.rid ? (
               <S.CommentInput
                 type="text"
