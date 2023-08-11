@@ -1,17 +1,21 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import useCommentMutation from '../../hooks/useCommentMutation';
 import * as S from './Styled.Comments';
+import { jotaiUserDataAtom } from '../common/Header';
+import baseProfile from '../../image/baseprofile.jpeg';
+import { useAtom } from 'jotai';
 
 interface ReplyCommentFormProps {
   cid: number;
-  uid: string;
   pid: string;
   setIsAddReply: Dispatch<SetStateAction<boolean>>;
 }
 
-const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProps) => {
+const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) => {
   const { addReplyCommentMutation } = useCommentMutation();
   const [replyCommentText, setReplyCommentText] = useState('');
+
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
   const handleCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReplyCommentText(e.target.value);
@@ -19,6 +23,10 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
 
   const handleAddSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!jotaiUserData) {
+      alert('로그인 후 사용 가능합니다.');
+      return false;
+    }
 
     if (replyCommentText === '') {
       alert('댓글을 작성해 주세요.');
@@ -27,11 +35,12 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
 
     const newComment = {
       cid,
-      uid,
+      uid: jotaiUserData.uid,
       pid: Number(pid),
-      nickname: '테스트',
+      nickname: jotaiUserData.nickname,
       body: replyCommentText,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      profileimg: jotaiUserData.profileimg
     };
 
     addReplyCommentMutation.mutate(newComment);
@@ -42,7 +51,16 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
   return (
     <S.CommentForm onSubmit={handleAddSubmitBtn}>
       <S.CommentItem>
-        <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
+        <S.CommentProfileImgBox>
+          {jotaiUserData?.profileimg ? (
+            <S.CommentProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
+              alt="Profile"
+            />
+          ) : (
+            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
+          )}
+        </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={replyCommentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>
           <S.Button width="50px" height="30px">

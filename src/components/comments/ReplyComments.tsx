@@ -2,25 +2,30 @@ import React, { useState } from 'react';
 import * as S from './Styled.Comments';
 import CommentPanel from './CommentPanel';
 import { useQuery } from '@tanstack/react-query';
-
-import { ReplyCommentType } from '../../types/supabase';
 import { fetchReplyComments } from '../../services/supabase/replyComments';
 import useCommentMutation from '../../hooks/useCommentMutation';
+import { jotaiUserDataAtom } from '../common/Header';
+import { useAtom } from 'jotai';
+import baseProfile from '../../image/baseprofile.jpeg';
 
+import { ReplyCommentType } from '../../types/supabase';
 interface ReplyCommentsProps {
   cid: number;
-  uid: string;
   pid: string;
 }
 
-const ReplyComments = ({ cid, uid, pid }: ReplyCommentsProps) => {
+const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   const { deleteReplyCommentMutation, updateReplyCommentMutation } = useCommentMutation();
 
+  // 대댓글 보기
   const [isViewingReply, setIsViewingReply] = useState(false);
 
+  // 대댓글 수정 관련
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateReply, setUpdateReply] = useState('');
   const [updateReplyId, setUpdateReplyId] = useState<number | null>(null);
+
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
   const defaultQueryOptions = {
     queryKey: ['replyComments'],
@@ -97,7 +102,14 @@ const ReplyComments = ({ cid, uid, pid }: ReplyCommentsProps) => {
       </S.Button>
       {filteredComments?.map((comment) => (
         <S.CommentItem key={comment.rid} margin={'20px'}>
-          <S.CommentProfileImgBox>사진</S.CommentProfileImgBox>
+          {comment?.profileimg ? (
+            <S.CommentProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
+              alt="Profile"
+            />
+          ) : (
+            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
+          )}
           <S.CommentTextBox>
             <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
             {isUpdating && updateReplyId == comment.rid ? (
@@ -112,7 +124,7 @@ const ReplyComments = ({ cid, uid, pid }: ReplyCommentsProps) => {
             )}
           </S.CommentTextBox>
           <S.CommentPanel>
-            {uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
+            {jotaiUserData?.uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
               isUpdating && updateReplyId == comment.rid ? (
                 <CommentPanel
                   commenting={true}

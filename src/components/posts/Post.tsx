@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Editor from '../editor/Editor';
@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 const Post = () => {
   // const [user] = useAtom(userAtom); // userAtom의 값을 가져옴
- 
+
   const navigate = useNavigate();
   const [newTitle, setNewTitle] = useState('');
   const [newBody, setNewBody] = useState('');
@@ -22,6 +22,16 @@ const Post = () => {
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
   const [parcelCategory, setParcelCategory] = useState('');
+  const [uid, setUid] = useState('');
+
+  useEffect(() => {
+    // userDataAtom의 값을 로컬 스토리지에서 가져오기
+    const userData = localStorage.getItem('jotaiUserData');
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      setUid(parsedUserData.uid);
+    }
+  }, []);
 
   const handleAddPost = async () => {
     if (!newTitle.trim() || !newBody.trim() || !newPrice.trim() || !newLocation.trim()) {
@@ -33,7 +43,7 @@ const Post = () => {
 
     for (const selectedImage of selectedImages) {
       const { data, error } = await supabase.storage.from('1st').upload(`images/${selectedImage.name}`, selectedImage);
-      
+
       if (error) {
         console.error('Error uploading image to Supabase storage:', error);
         alert('이미지 업로드 중 에러가 발생했습니다!');
@@ -53,7 +63,8 @@ const Post = () => {
         category: category,
         condition: conditionCategory,
         exchange: exchangeCategory,
-        parcel: parcelCategory
+        parcel: parcelCategory,
+        uid
       }
     ]);
 

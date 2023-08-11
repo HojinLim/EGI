@@ -7,21 +7,22 @@ import ReplyComments from './ReplyComments';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
+// 댓글, 대댓글 차이 두기 > 색상, 위치.
+
+// 페이지네이션 고민
+// 대댓글 > 그냥 보이게
+// 작성자 딱지 > 좋은듯?
+
+// 댓글 작성하기 버튼 삭제 > 폼 항상 보이기 > 완료
+
 import type { CommentType } from '../../types/supabase';
 const Comments = () => {
   // login 완료되면 수정하기
-  const uid = '234';
-  const { id: pid } = useParams() as { id: string };
 
-  // 댓글 작성 버튼 컨트롤
-  const [isCommenting, setIsCommenting] = useState(false);
+  const { id: pid } = useParams() as { id: string };
 
   // 댓글 수정
   const [isUpdating, setIsUpdating] = useState(false);
-
-  const handleCommentFormBtnClick = () => {
-    setIsCommenting(!isCommenting);
-  };
 
   const defaultQueryOptions = {
     queryKey: ['comments', pid],
@@ -46,20 +47,17 @@ const Comments = () => {
         <div>
           <div>댓글 {comments?.length}개</div>
         </div>
-        <div>
-          <button onClick={handleCommentFormBtnClick}>작성하기</button>
-        </div>
       </S.CommentsPanel>
       <S.CommentsHr />
       <S.CommentList>
         {comments?.map((comment) => (
           <React.Fragment key={comment.cid}>
-            <CommentItem comment={comment} uid={uid} pid={pid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
-            <ReplyComments cid={comment.cid} uid={uid} pid={pid} />
+            <CommentItem comment={comment} pid={pid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
+            <ReplyComments cid={comment.cid} pid={pid} />
           </React.Fragment>
         ))}
       </S.CommentList>
-      {isCommenting && <CommentForm uid={uid} pid={pid} setIsCommenting={setIsCommenting} />}
+      <CommentForm pid={pid} />
     </S.CommentsContainer>
   );
 };

@@ -4,7 +4,6 @@ import { supabase } from './supabase';
 
 // 회원가입
 export const signUpService = async (userData: UserType) => {
-  
   try {
     const { data, error } = await supabase.auth.signUp({
       email: userData.email,
@@ -38,18 +37,6 @@ export const signUpService = async (userData: UserType) => {
   }
 };
 
-// 로그아웃
-export const sigOutService = async () => {
-  try {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      throw new Error(error.message);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 // 로그인
 export const loginService = async (userData: Omit<UserType, 'nickname' | 'profileImg'>) => {
   try {
@@ -61,6 +48,18 @@ export const loginService = async (userData: Omit<UserType, 'nickname' | 'profil
       throw new Error(error.message);
     }
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 로그아웃
+export const sigOutService = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw new Error(error.message);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -88,6 +87,7 @@ export const getUserInfo = async (userEmail: string): Promise<Omit<UserType, 'pa
     throw error;
   }
 };
+
 // 아이디 중복 확인
 export async function checkEmailDuplication(email: string): Promise<boolean> {
   try {
@@ -107,7 +107,9 @@ export async function checkEmailDuplication(email: string): Promise<boolean> {
 // 비밀번호 찾기
 export const resetPassword = async (email: string) => {
   try {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:3000/reset-password'
+    });
     console.log(data);
     if (!error) {
       alert('Please check your email');
@@ -132,7 +134,6 @@ export const updateUserInfo = async (userEmail: string, newNickname: string): Pr
     if (userData !== null) {
       if (Array.isArray(userData) && userData > 0) {
         // 변경된 회원 정보 반환 혹은 필요한 작업 수행
-        
       }
     }
   } catch (error) {
@@ -140,7 +141,6 @@ export const updateUserInfo = async (userEmail: string, newNickname: string): Pr
     throw error;
   }
 };
-
 
 // 이미지 파일 업로드
 export const uploadProfileImage = async (selectedProfileImg: File) => {
