@@ -15,17 +15,9 @@ import CommentItem from './CommentItem';
 
 // 댓글 작성하기 버튼 삭제 > 폼 항상 보이기 > 완료
 
-import type { CommentType, UserType } from '../../types/supabase';
+import type { CommentType } from '../../types/supabase';
 const Comments = () => {
   // login 완료되면 수정하기
-
-  const localUserData = localStorage.getItem('jotaiUserData');
-  let userData: Omit<UserType, 'password'> | null = null;
-  let uid = '';
-  if (localUserData) {
-    userData = JSON.parse(localUserData);
-    uid = userData!.uid;
-  }
 
   const { id: pid } = useParams() as { id: string };
 
@@ -60,8 +52,8 @@ const Comments = () => {
       <S.CommentList>
         {comments?.map((comment) => (
           <React.Fragment key={comment.cid}>
-            <CommentItem comment={comment} uid={uid} pid={pid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
-            <ReplyComments cid={comment.cid} uid={uid} pid={pid} />
+            <CommentItem comment={comment} pid={pid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
+            <ReplyComments cid={comment.cid} pid={pid} />
           </React.Fragment>
         ))}
       </S.CommentList>

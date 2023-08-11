@@ -14,6 +14,7 @@ export interface CommentType {
   nickname: string;
   body: string;
   created_at: string;
+  profileimg: File | null;
 }
 
 // 대댓글
@@ -25,6 +26,7 @@ export interface ReplyCommentType {
   nickname: string;
   body: string;
   created_at: string;
+  profileimg: File | null;
 }
 
 export interface Post {
@@ -39,4 +41,5 @@ export interface Post {
   condition: string;
   exchange: string;
   parcel: string;
+  uid: string;
 }

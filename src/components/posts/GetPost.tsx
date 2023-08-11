@@ -30,6 +30,7 @@ const GetPost = () => {
   return (
     <S.PostContainer>
       {posts.map((post) => (
+        
         <NavLink to={`/post/${post.pid}`} key={post.pid} style={{ textDecoration: 'none', color: 'inherit' }}>
           <S.PostItem>
             <h2>{post.title}</h2>

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { checkEmailDuplication, signUpService } from '../../services/supabase/auth';
+import { checkEmailDuplication, signUpService } from '../../../services/supabase/auth';
 import * as S from './Styled.SignUp';
 
-import type { UserType } from '../../types/supabase';
+import type { UserType } from '../../../types/supabase';
 
 type SignUpType = {
   setLoginModal: (isOpen: boolean) => void;
@@ -22,18 +22,27 @@ export const userDataAtom = atom<UserType>({
 
 const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const queryClient = useQueryClient();
+  // 초기 UserData
+  const initialUserData = {
+    uid: '',
+    email: '',
+    password: '',
+    nickname: '',
+    profileimg: null
+  };
   const [userData, setUserData] = useAtom(userDataAtom);
   const [selectedProfileImg, setSelectedProfileImg] = useState<File | null>(null);
   const [isEmailCheked, setIsEmailCheked] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
+  // 회원가입 뮤테이션
   const signUpMutation = useMutation(signUpService, {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     }
   });
-
+  // 회원가입 핸들러
   const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -63,19 +72,13 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
     }
   };
 
-  const initialUserData = {
-    uid: '',
-    email: '',
-    password: '',
-    nickname: '',
-    profileimg: null
-  };
-
+  // 회원가입 모달 닫기
   const closeSignUpModal = () => {
     setSignUpmodal(false);
     setUserData(initialUserData);
   };
 
+  // 이메일 유효성 체크 핸들러
   const checkEmailHandler = async () => {
     if (userData.email.trim() === '') {
       alert('이메일을 입력해주세요.');
@@ -96,6 +99,7 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
     }
   };
 
+  // 이미지 변환 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
     if (selectedFile) {

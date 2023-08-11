@@ -1,24 +1,20 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import useCommentMutation from '../../hooks/useCommentMutation';
 import * as S from './Styled.Comments';
+import { jotaiUserDataAtom } from '../common/Header';
+import { useAtom } from 'jotai';
 
-import type { UserType } from '../../types/supabase';
 interface ReplyCommentFormProps {
   cid: number;
-  uid: string;
   pid: string;
   setIsAddReply: Dispatch<SetStateAction<boolean>>;
 }
 
-const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProps) => {
+const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) => {
   const { addReplyCommentMutation } = useCommentMutation();
   const [replyCommentText, setReplyCommentText] = useState('');
-  let userData: Omit<UserType, 'password'> | null = null;
-  const localUserData = localStorage.getItem('jotaiUserData');
 
-  if (localUserData) {
-    userData = JSON.parse(localUserData);
-  }
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
   const handleCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReplyCommentText(e.target.value);
@@ -26,7 +22,7 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
 
   const handleAddSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!userData) {
+    if (!jotaiUserData) {
       alert('로그인 후 사용 가능합니다.');
       return false;
     }
@@ -38,12 +34,12 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
 
     const newComment = {
       cid,
-      uid,
+      uid: jotaiUserData.uid,
       pid: Number(pid),
-      nickname: '테스트',
+      nickname: jotaiUserData.nickname,
       body: replyCommentText,
       created_at: new Date().toISOString(),
-      profileimg: userData?.profileimg
+      profileimg: jotaiUserData.profileimg
     };
 
     addReplyCommentMutation.mutate(newComment);
@@ -56,7 +52,7 @@ const ReplyCommentForm = ({ uid, pid, cid, setIsAddReply }: ReplyCommentFormProp
       <S.CommentItem>
         <S.CommentProfileImgBox>
           <S.CommentProfileImg
-            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData?.profileimg}`}
+            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
             alt="Profile"
           />
         </S.CommentProfileImgBox>

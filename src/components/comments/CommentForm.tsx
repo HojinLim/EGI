@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import useCommentMutation from '../../hooks/useCommentMutation';
-import { UserType } from '../../types/supabase';
+import baseProfile from '../../image/baseprofile.jpeg';
 import * as S from './Styled.Comments';
+import { jotaiUserDataAtom } from '../common/Header';
+import { useAtom } from 'jotai';
 
 interface CommentFormProps {
   pid: string;
@@ -11,13 +13,7 @@ const CommentForm = ({ pid }: CommentFormProps) => {
   const { addCommentMutation } = useCommentMutation();
   const [commentText, setCommentText] = useState('');
 
-  const localUserData = localStorage.getItem('jotaiUserData');
-  let userData: Omit<UserType, 'password'> | null = null;
-  let uid = '';
-  if (localUserData) {
-    userData = JSON.parse(localUserData);
-    uid = userData!.uid;
-  }
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
   const handleCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentText(e.target.value);
@@ -25,21 +21,23 @@ const CommentForm = ({ pid }: CommentFormProps) => {
   const handleAddSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!userData) {
+    if (!jotaiUserData) {
       alert('로그인 후 사용 가능합니다.');
+      return false;
     }
+
     if (commentText === '') {
       alert('댓글을 작성해 주세요.');
       return false;
     }
 
     const newComment = {
-      uid: uid,
+      uid: jotaiUserData.uid,
       pid: Number(pid),
-      nickname: '테스트',
+      nickname: jotaiUserData.nickname,
       body: commentText,
       created_at: new Date().toISOString(),
-      pofileimg: userData!.profileimg
+      profileimg: jotaiUserData.profileimg
     };
 
     addCommentMutation.mutate(newComment);
@@ -49,10 +47,14 @@ const CommentForm = ({ pid }: CommentFormProps) => {
     <S.CommentForm onSubmit={handleAddSubmitBtn}>
       <S.CommentItem>
         <S.CommentProfileImgBox>
-          <S.CommentProfileImg
-            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${userData?.profileimg}`}
-            alt="Profile"
-          />
+          {jotaiUserData?.profileimg ? (
+            <S.CommentProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
+              alt="Profile"
+            />
+          ) : (
+            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
+          )}
         </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={commentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>

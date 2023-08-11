@@ -2,24 +2,26 @@ import React, { Dispatch, useState } from 'react';
 import * as S from './Styled.Comments';
 import CommentPanel from './CommentPanel';
 import ReplyCommentForm from './ReplyCommentForm';
+import baseProfile from '../../image/baseprofile.jpeg';
+import useCommentMutation from '../../hooks/useCommentMutation';
+import { SetStateAction, useAtom } from 'jotai';
+import { jotaiUserDataAtom } from '../common/Header';
 
 import type { CommentType } from '../../types/supabase';
-import useCommentMutation from '../../hooks/useCommentMutation';
-import { SetStateAction } from 'jotai';
-
 interface CommentItemProps {
-  uid: string;
   pid: string;
   comment: CommentType;
   isUpdating: boolean;
   setIsUpdating: Dispatch<SetStateAction<boolean>>;
 }
 
-const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentItemProps) => {
+const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemProps) => {
   const [updateComment, setUpdateComment] = useState('');
   const [isAddReply, setIsAddReply] = useState(false);
 
   const [updateCommentId, setUpdateCommentId] = useState<number | null>(0);
+
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
   const { updateCommentMutation, deleteCommentMutation } = useCommentMutation();
 
@@ -74,10 +76,14 @@ const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentIt
     <>
       <S.CommentItem>
         <S.CommentProfileImgBox>
-          <S.CommentProfileImg
-            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}`}
-            alt="Profile"
-          ></S.CommentProfileImg>
+          {comment?.profileimg ? (
+            <S.CommentProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
+              alt="Profile"
+            />
+          ) : (
+            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
+          )}
         </S.CommentProfileImgBox>
         <S.CommentTextBox>
           <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
@@ -95,7 +101,7 @@ const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentIt
             </>
           )}
         </S.CommentTextBox>
-        {uid === comment.uid ? (
+        {jotaiUserData?.uid === comment.uid ? (
           isUpdating && updateCommentId === comment.cid ? (
             <CommentPanel
               commenting={true}
@@ -113,7 +119,7 @@ const CommentItem = ({ comment, uid, pid, isUpdating, setIsUpdating }: CommentIt
           <div style={{ width: '105px' }} />
         )}
       </S.CommentItem>
-      {isAddReply && <ReplyCommentForm uid={uid} pid={pid} cid={comment.cid} setIsAddReply={setIsAddReply} />}
+      {isAddReply && <ReplyCommentForm pid={pid} cid={comment.cid} setIsAddReply={setIsAddReply} />}
     </>
   );
 };
