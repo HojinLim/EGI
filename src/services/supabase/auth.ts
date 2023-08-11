@@ -86,6 +86,7 @@ export const getUserInfo = async (userEmail: string): Promise<Omit<UserType, 'pa
     throw error;
   }
 };
+
 // 아이디 중복 확인
 export async function checkEmailDuplication(email: string): Promise<boolean> {
   try {
