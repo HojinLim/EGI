@@ -73,13 +73,6 @@ const Pagination = () => {
 
   return (
     <>
-      {/* <div>
-        <p>전체 데이터 수: {totalCount}</p>
-        <p>전체 페이지 수: {totalPages}</p>
-        <p>현재 페이지: {currentPage}</p>
-        <p>페이지 당 데이터 수: {pagePerObjects}</p>
-        <br />
-      </div> */}
       <div>
         <S.CardList>
           {paginatedData.map((data) => (
