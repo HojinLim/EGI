@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Editor from '../editor/Editor';
 
-import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
+import * as S from './Styled.Posts';
+import { categories, conditionCategories, exchangeCategories } from '../category/Category';
 import { handleImageChange } from './HandleImage';
 import { supabase } from '../../services/supabase/supabase';
 import { CategoryRadio } from '../category/CategorySelect';
+
 import { Link } from 'react-router-dom';
 
 const Post = () => {
@@ -21,7 +23,9 @@ const Post = () => {
   const [category, setCategory] = useState('');
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
-  const [parcelCategory, setParcelCategory] = useState('');
+
+  // const [parcelCategory, setParcelCategory] = useState('');
+  const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
   const [uid, setUid] = useState('');
 
   useEffect(() => {
@@ -63,7 +67,7 @@ const Post = () => {
         category: category,
         condition: conditionCategory,
         exchange: exchangeCategory,
-        parcel: parcelCategory,
+        parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
         uid
       }
     ]);
@@ -93,13 +97,25 @@ const Post = () => {
     }
   };
 
+  const priceChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.replace(/[^0-9]/g, '');
+    setNewPrice(inputValue);
+  };
+
+  const priceWithCommas = (price: string): string => {
+    const numberOfPrice = Number(price);
+    return numberOfPrice.toLocaleString();
+  };
+
   return (
     <div>
       <div>
         <Link to={'/'}>HOME</Link>
         <input type="text" placeholder="Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
         <br />
-        <input type="number" placeholder="Price" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} />
+
+        <input type="text" placeholder="Price" value={priceWithCommas(newPrice)} onChange={priceChangeHandler} />
+
         <br />
         <input
           type="text"
@@ -142,16 +158,15 @@ const Post = () => {
             />
           ))}
         </div>
+
         <div>
-          {parcelCategories.map((parcelCategoryOption) => (
-            <CategoryRadio
-              key={parcelCategoryOption.value}
-              value={parcelCategoryOption.value}
-              label={parcelCategoryOption.label}
-              checked={parcelCategoryOption.value === parcelCategory}
-              onChange={() => setParcelCategory(parcelCategoryOption.value)}
-            />
-          ))}
+          <input
+            type="checkbox"
+            value="택배비 포함"
+            checked={parcelCategorySelected}
+            onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
+          />
+          <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
         </div>
 
         <br />
