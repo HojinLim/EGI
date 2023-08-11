@@ -4,7 +4,6 @@ import { jotaiUserDataAtom } from '../components/common/Header';
 import { useAtom } from 'jotai';
 
 import { supabase } from '../services/supabase/supabase';
-import { UserType } from '../types/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { handleImageChange } from '../components/posts/HandleImage';
@@ -14,10 +13,8 @@ import { userAtom, userEmailAtom } from '../components/user/login/Login';
 const EditProfile = () => {
   const [user] = useAtom(userAtom);
   const [isEditing, setIsEditing] = useState(false);
-  const [, setNickname] = useState('');
   const [editnickname, setEditNickName] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  const [userData, setUserData] = useState<UserType | null>(null);
   const queryClient = useQueryClient();
   const [userEmail] = useAtom(userEmailAtom);
   const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
@@ -44,8 +41,8 @@ const EditProfile = () => {
   const handleEdit = async () => {
     let profileimg: string | null = null;
 
-    if (user?.profileimg && Array.isArray(user.profileimg)) {
-      profileimg = user.profileimg.join(';');
+    if (jotaiUserData?.profileimg && Array.isArray(jotaiUserData.profileimg)) {
+      profileimg = jotaiUserData.profileimg.join(';');
     }
 
     if (selectedImages.length > 0) {
@@ -79,25 +76,13 @@ const EditProfile = () => {
           nickname: editnickname,
           profileimg
         })
-        .eq('uid', userData?.uid);
+        .eq('uid', jotaiUserData?.uid);
 
       if (error) {
         console.error('Error editing post:', error);
         alert('에러가 발생했습니다!');
       } else {
         alert('수정이 완료되었습니다.');
-
-        const { data, error: fetchError } = await supabase.from('users').select('*').eq('email', user?.email);
-
-        if (fetchError) {
-          console.error('Error fetching user data:', fetchError);
-        } else {
-          setUserData(data[0]);
-          setNickname(data[0]?.nickname);
-
-          const updatedJotaiUserData = { profileimg, nickname: editnickname };
-          localStorage.setItem('jotaiUserData', JSON.stringify(updatedJotaiUserData));
-        }
       }
     }
   };
@@ -115,7 +100,7 @@ const EditProfile = () => {
     <div>
       <Link to="/">Home</Link>
 
-      {jotaiUserData ? (
+      {user || jotaiUserData ? (
         <div>
           <h1>마이 페이지</h1>
           <div>
@@ -125,7 +110,7 @@ const EditProfile = () => {
                   ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
                   : '-'
               }
-              alt={`프로필 이미지 - ${jotaiUserData?.uid}`}
+              alt={`프로필 이미지 - ${user?.uid}`}
               style={{
                 width: 200,
                 height: 200,
@@ -138,7 +123,7 @@ const EditProfile = () => {
               edit
             </button>
 
-            {/* <p>이메일: {jotaiUserData ? jotaiUserData.email : ''}</p> */}
+            <p>이메일: {jotaiUserData ? jotaiUserData.email : ''}</p>
             <p>닉네임: {jotaiUserData ? jotaiUserData.nickname : ''}</p>
           </div>
           {isEditing && (

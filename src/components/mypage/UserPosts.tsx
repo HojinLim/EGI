@@ -18,7 +18,6 @@ const UserPosts = () => {
 
       {/* 게시판 컨테이너 */}
       <div style={{ width: '1000px', height: '600px', border: '2px solid black' }}>
-        {/* TODO: 데이터들-> 페이지네이션 / 아직은 더미 데이터만... */}
         <Pagination />
       </div>
     </div>
