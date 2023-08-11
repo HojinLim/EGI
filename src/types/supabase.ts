@@ -39,4 +39,5 @@ export interface Post {
   condition: string;
   exchange: string;
   parcel: string;
+  uid: string;
 }

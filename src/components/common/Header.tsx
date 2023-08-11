@@ -59,6 +59,8 @@ const Header = () => {
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       setJotaiUserData(parsedUserData);
+
+      queryClient.invalidateQueries(['users', userEmail]);
     }
   }, []);
 
@@ -97,7 +99,13 @@ const Header = () => {
             <S.ButtonBox>
               <S.ToggleButtonWrapper>
                 <S.ToggleButton onClick={toggleLogoutButton}>▼</S.ToggleButton>
-                {showLogoutButton && <S.LogoutButton onClick={signOutHandler}>Logout</S.LogoutButton>}
+                {showLogoutButton && (
+                  <>
+                    <S.LogoutButton onClick={signOutHandler}>로그아웃</S.LogoutButton>
+                    <S.LinkButton to="/mypage">마이페이지</S.LinkButton>
+                    <S.PostLinkButton to="/post">글작성</S.PostLinkButton>
+                  </>
+                )}
               </S.ToggleButtonWrapper>
             </S.ButtonBox>
           </S.ProfileWrapper>

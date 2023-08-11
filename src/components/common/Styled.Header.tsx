@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -54,6 +55,46 @@ export const ToggleButton = styled.button`
 
 export const LogoutButton = styled.button`
   position: absolute;
+  width: 100px;
+  top: 500%;
+  left: 0;
+  z-index: 1;
+
+  background-color: transparent;
+
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-top: 5px;
+`;
+
+export const LoginButton = styled.button`
+  background-color: transparent;
+
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+`;
+
+export const LinkButton = styled(Link)`
+  position: absolute;
+  width: 100px;
+  top: 300%;
+  left: 0;
+  z-index: 1;
+
+  background-color: transparent;
+
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333333;
+  margin-top: 5px;
+`;
+export const PostLinkButton = styled(Link)`
+  position: absolute;
+  width: 100px;
   top: 100%;
   left: 0;
   z-index: 1;
@@ -63,12 +104,7 @@ export const LogoutButton = styled.button`
   border: 1px solid #dddddd;
   border-radius: 5px;
   padding: 10px 15px;
-`;
-
-export const LoginButton = styled.button`
-  background-color: transparent;
-
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  padding: 10px 15px;
+  text-decoration: none;
+  color: #333333;
+  margin-top: 5px;
 `;

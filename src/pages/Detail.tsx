@@ -5,6 +5,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
+
 import Comments from '../components/comments/Comments';
 import * as S from '../components/posts/Styled.Posts';
 import { Post } from '../types/supabase';
@@ -14,6 +15,19 @@ const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
+  const [uid, setUid] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userData = localStorage.getItem('jotaiUserData');
+      if (userData) {
+        const parsedUserData = JSON.parse(userData);
+        setUid(parsedUserData.uid);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   // const [userId, setUserId] = useState(""); 
   // console.log(id)
@@ -98,10 +112,12 @@ const Detail = () => {
           <p>교환여부 {post.exchange}</p>
           
 
-          <S.EditDeleteButtons>
-            <button onClick={handleEdit}>수정하기</button>
-            <button onClick={handleDelete}>삭제하기</button>
-          </S.EditDeleteButtons>
+          {uid === post.uid && (
+            <S.EditDeleteButtons>
+              <button onClick={handleEdit}>수정하기</button>
+              <button onClick={handleDelete}>삭제하기</button>
+            </S.EditDeleteButtons>
+          )}
         </S.ContentsContainer>
       </S.MainContainer>
       <Comments />
