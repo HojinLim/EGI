@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header, { jotaiUserDataAtom } from '../components/common/Header';
+import { jotaiUserDataAtom } from '../components/common/Header';
 import { useAtom } from 'jotai';
 
 import { supabase } from '../services/supabase/supabase';
@@ -133,8 +133,6 @@ const EditProfile = () => {
   return (
     <div>
       <Link to="/">Home</Link>
-      <Header />
-
       {user || jotaiUserData ? (
         <div>
           <h1>마이 페이지</h1>

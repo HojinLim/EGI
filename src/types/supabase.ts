@@ -6,6 +6,14 @@ export interface UserType {
   profileimg: File | null;
 }
 
+export interface UserTypes {
+  uid: string | null;
+  email: string | null;
+  password: string | null;
+  nickname: string | null;
+  profileimg: File | string | null;
+}
+
 // 일반 댓글
 export interface CommentType {
   cid: number;
