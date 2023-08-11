@@ -5,9 +5,14 @@ import { supabase } from '../../services/supabase/supabase';
 import { useNavigate } from 'react-router-dom';
 import * as S from './Styled.Pagination';
 
-const Pagination = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+interface PaginationProps {
+  postMode: string;
+}
+
+const Pagination = ({ postMode }: PaginationProps) => {
+  // const [posts, setPosts] = useState<Post[]>([]);
   const [uid, setUid] = useState<string | null>(null);
+  const [selectedPosts, setSelectedPosts] = useState<Post[]>([]);
 
   const navigate = useNavigate();
 
@@ -24,29 +29,59 @@ const Pagination = () => {
   }, []);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const { data, error } = await supabase.from('posts').select('*');
+    const fetchData = async () => {
+      if (!postMode) {
+        postMode = '내가 쓴 글';
+      }
 
-      if (error) {
-        console.error('Error fetching posts:', error);
-      } else {
-        const postsWithCompleteURLs = data.map((post) => ({
-          ...post,
-          image_urls: post.image_urls ? post.image_urls.replace(/\[|\]|"/g, '').split(',') : []
-        }));
+      if (uid) {
+        if (postMode === '찜 목록') {
+          const { data: jjimData, error: jjimError } = await supabase.from('jjim').select('pid').eq('uid', uid);
 
-        setPosts(postsWithCompleteURLs);
+          if (jjimError) {
+            console.error('Error fetching jjim:', jjimError);
+          } else {
+            const jjimPosts = jjimData.map((jjim) => jjim.pid);
+
+            const { data: jjimPostsData, error: jjimPostsError } = await supabase
+              .from('posts')
+              .select('*')
+              .in('pid', jjimPosts);
+
+            if (jjimPostsError) {
+              console.error('Error fetching jjim posts:', jjimPostsError);
+            } else {
+              const postsWithCompleteURLs = jjimPostsData.map((post) => ({
+                ...post,
+                image_urls: post.image_urls ? post.image_urls.replace(/\[|\]|"/g, '').split(',') : []
+              }));
+
+              setSelectedPosts(postsWithCompleteURLs);
+            }
+          }
+        } else if (postMode === '내가 쓴 글') {
+          const { data: myPostsData, error: myPostsError } = await supabase.from('posts').select('*').eq('uid', uid);
+
+          if (myPostsError) {
+            console.error('Error fetching my posts:', myPostsError);
+          } else {
+            const postsWithCompleteURLs = myPostsData.map((post) => ({
+              ...post,
+              image_urls: post.image_urls ? post.image_urls.replace(/\[|\]|"/g, '').split(',') : []
+            }));
+
+            setSelectedPosts(postsWithCompleteURLs);
+          }
+        }
       }
     };
 
-    fetchPosts();
-  }, []);
+    fetchData();
+  }, [uid, postMode]);
 
-  const filteredPosts = posts.filter((post) => post.uid === uid);
+  const pagePerObjects = 4; // 페이지 당 데이터 수
 
-  const pagePerObjects = 5; // 페이지 당 데이터 수
-
-  const totalCount = filteredPosts.length;
+  const totalCount = selectedPosts.length;
   const totalPages = Math.ceil(totalCount / pagePerObjects);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,7 +100,7 @@ const Pagination = () => {
 
   const startIdx = (currentPage - 1) * pagePerObjects;
   const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
-  const paginatedData = filteredPosts.slice(startIdx, endIdx);
+  const paginatedData = selectedPosts.slice(startIdx, endIdx);
 
   const handleClick = (data: Post) => {
     navigate(`/post/${data.pid}`);

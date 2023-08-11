@@ -24,8 +24,6 @@ const SosialLogin = () => {
     }
   };
 
-  //   console.log('tokenUserData', tokenUserData);
-
   // 깃허브 소셜 회원가입 핸들러
   const loginWithGithub = async () => {
     try {

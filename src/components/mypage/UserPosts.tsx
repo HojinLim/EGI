@@ -18,7 +18,7 @@ const UserPosts = () => {
 
       {/* 게시판 컨테이너 */}
       <div style={{ width: '1000px', height: '600px', border: '2px solid black' }}>
-        <Pagination />
+        <Pagination postMode={postMode} />
       </div>
     </div>
   );

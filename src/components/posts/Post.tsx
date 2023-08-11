@@ -6,7 +6,7 @@ import Editor from '../editor/Editor';
 import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
 import { handleImageChange } from './HandleImage';
 import { supabase } from '../../services/supabase/supabase';
-import CategorySelect from '../category/CategorySelect';
+import { CategoryRadio } from '../category/CategorySelect';
 import { Link } from 'react-router-dom';
 
 const Post = () => {
@@ -109,26 +109,50 @@ const Post = () => {
         />
         <br />
 
-        <CategorySelect
-          value={category}
-          options={categories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={conditionCategory}
-          options={conditionCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConditionCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={exchangeCategory}
-          options={exchangeCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExchangeCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={parcelCategory}
-          options={parcelCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setParcelCategory(e.target.value)}
-        />
+        <div>
+          {categories.map((categoryOption) => (
+            <CategoryRadio
+              key={categoryOption.value}
+              value={categoryOption.value}
+              label={categoryOption.label}
+              checked={categoryOption.value === category}
+              onChange={() => setCategory(categoryOption.value)}
+            />
+          ))}
+        </div>
+        <div>
+          {conditionCategories.map((conditionCategoryOption) => (
+            <CategoryRadio
+              key={conditionCategoryOption.value}
+              value={conditionCategoryOption.value}
+              label={conditionCategoryOption.label}
+              checked={conditionCategoryOption.value === conditionCategory}
+              onChange={() => setConditionCategory(conditionCategoryOption.value)}
+            />
+          ))}
+        </div>
+        <div>
+          {exchangeCategories.map((exchangeCategoryOption) => (
+            <CategoryRadio
+              key={exchangeCategoryOption.value}
+              value={exchangeCategoryOption.value}
+              label={exchangeCategoryOption.label}
+              checked={exchangeCategoryOption.value === exchangeCategory}
+              onChange={() => setExchangeCategory(exchangeCategoryOption.value)}
+            />
+          ))}
+        </div>
+        <div>
+          {parcelCategories.map((parcelCategoryOption) => (
+            <CategoryRadio
+              key={parcelCategoryOption.value}
+              value={parcelCategoryOption.value}
+              label={parcelCategoryOption.label}
+              checked={parcelCategoryOption.value === parcelCategory}
+              onChange={() => setParcelCategory(parcelCategoryOption.value)}
+            />
+          ))}
+        </div>
 
         <br />
         <Editor value={newBody} onChange={(content) => setNewBody(content)} />

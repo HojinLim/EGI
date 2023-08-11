@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { jotaiUserDataAtom } from '../components/common/Header';
 import { useAtom } from 'jotai';
-
 import { supabase } from '../services/supabase/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 
+import { jotaiUserDataAtom } from '../components/common/Header';
 import { handleImageChange } from '../components/posts/HandleImage';
 import UserPosts from '../components/mypage/UserPosts';
 import { userAtom, userEmailAtom } from '../components/user/login/Login';
+import * as S from '../components/mypage/Styled.Mypage';
 
 const EditProfile = () => {
   const [user] = useAtom(userAtom);
-  const [isEditing, setIsEditing] = useState(false);
   const [editnickname, setEditNickName] = useState('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const queryClient = useQueryClient();
@@ -29,11 +28,6 @@ const EditProfile = () => {
       queryClient.invalidateQueries(['users', userEmail]);
     }
   }, []);
-
-  const handleEditClick = () => {
-    setEditNickName(jotaiUserData?.nickname || '');
-    setIsEditing(true);
-  };
 
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditNickName(event.target.value);
@@ -75,7 +69,7 @@ const EditProfile = () => {
         .from('users')
         .update({
           nickname: editnickname,
-          profileimg
+          profileimg: profileimg || jotaiUserData?.profileimg
         })
         .eq('uid', jotaiUserData?.uid);
 
@@ -85,7 +79,6 @@ const EditProfile = () => {
       } else {
         alert('수정이 완료되었습니다.');
 
-        // 수정된 데이터를 다시 가져와서 스토리지에 저장
         const { data, error: fetchError } = await supabase
           .from('users')
           .select()
@@ -98,6 +91,8 @@ const EditProfile = () => {
           localStorage.setItem('jotaiUserData', JSON.stringify(data));
           setJotaiUserData(data);
         }
+        setEditNickName('');
+        setSelectedImages([]);
       }
     }
   };
@@ -111,10 +106,13 @@ const EditProfile = () => {
     }
   };
 
+  const handleEditClick = () => {
+    setEditNickName(jotaiUserData?.nickname || '');
+  };
+
   const closeBtn = () => {
     setEditNickName('');
     setSelectedImages([]);
-    setIsEditing(false);
   };
 
   return (
@@ -146,14 +144,12 @@ const EditProfile = () => {
             <p>이메일: {jotaiUserData ? jotaiUserData.email : ''}</p>
             <p>닉네임: {jotaiUserData ? jotaiUserData.nickname : ''}</p>
           </div>
-          {isEditing && (
-            <div>
-              <input type="text" value={editnickname} onChange={handleNicknameChange} />
-              <input type="file" accept="image/*" onChange={handleImageChangeWrapper} />
-              <button onClick={closeBtn}>X</button>
-              <button onClick={handleEdit}>수정하기</button>
-            </div>
-          )}
+
+          <S.CancelButton onClick={closeBtn}>X</S.CancelButton>
+          <input type="text" value={editnickname} onChange={handleNicknameChange} />
+          <input type="file" accept="image/*" onChange={handleImageChangeWrapper} />
+          <S.EditButton onClick={handleEdit}>수정하기</S.EditButton>
+
           <UserPosts />
         </div>
       ) : (

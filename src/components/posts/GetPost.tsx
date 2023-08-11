@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+
 import * as S from './Styled.Posts';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 
 const GetPost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-
-  
-
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -37,7 +35,7 @@ const GetPost = () => {
             <h2>{post.title}</h2>
             <div>
               {post.image_urls.length > 0 && (
-                <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${post.image_urls[0]} ` } alt={post.title}/>
+                <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${post.image_urls[0]} `} alt={post.title} />
               )}
             </div>
           </S.PostItem>
