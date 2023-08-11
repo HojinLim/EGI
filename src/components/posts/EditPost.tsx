@@ -8,6 +8,7 @@ import { supabase } from '../../services/supabase/supabase';
 import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
 import CategorySelect from '../category/CategorySelect';
 
+
 const EditPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();

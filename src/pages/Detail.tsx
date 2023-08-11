@@ -10,12 +10,13 @@ import * as S from '../components/posts/Styled.Posts';
 import { Post } from '../types/supabase';
 import { supabase } from '../services/supabase/supabase';
 
+
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
 
-  // const [userId, setUserId] = useState(""); 
+  // const [userId, setUserId] = useState("");
   // console.log(id)
 
   useEffect(() => {
@@ -72,7 +73,8 @@ const Detail = () => {
 
   //   fetchUser();
   // }, []);
-  console.log(post)
+
+  console.log(post);
 
   return (
     <S.Container>
@@ -81,26 +83,28 @@ const Detail = () => {
           <Carousel>
             {post.image_urls.map((imageUrl, index) => (
               <div key={index}>
-                <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`} alt={`Image ${index}`} />
+                <div style={{ border: 'black solid 1px' }}>
+                  <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`} alt={`Image ${index}`} />
+                </div>
               </div>
             ))}
           </Carousel>
         </S.CarouselContainer>
         <S.ContentsContainer>
-          <h1>{post.title}</h1>
-          <h1>{post.price}원</h1>
-          <p>{post.category + '⚪' + timeAgo}</p>
-          <div dangerouslySetInnerHTML={{ __html: post.body }} />
-          <p>거래지역 {post.location}</p>
-
-          <p>상품상태 {post.condition}</p>
-          <p>배송비 {post.parcel}</p>
-          <p>교환여부 {post.exchange}</p>
-          
+          <S.PostTitle>{post.title}</S.PostTitle>
+          <S.Price>{post.price}원</S.Price>
+          <S.PostInfo>
+            {post.category} ⚪ {timeAgo}
+          </S.PostInfo>
+          <S.PostBody dangerouslySetInnerHTML={{ __html: post.body }} />
+          <S.PostInfo>거래지역 {post.location}</S.PostInfo>
+          <S.PostInfo>상품상태 {post.condition}</S.PostInfo>
+          <S.PostInfo>배송비 {post.parcel}</S.PostInfo>
+          <S.PostInfo>교환여부 {post.exchange}</S.PostInfo>
 
           <S.EditDeleteButtons>
-            <button onClick={handleEdit}>수정하기</button>
-            <button onClick={handleDelete}>삭제하기</button>
+            <S.StyledButton onClick={handleEdit}>수정하기</S.StyledButton>
+            <S.StyledButton onClick={handleDelete}>삭제하기</S.StyledButton>
           </S.EditDeleteButtons>
         </S.ContentsContainer>
       </S.MainContainer>
@@ -110,3 +114,5 @@ const Detail = () => {
 };
 
 export default Detail;
+
+

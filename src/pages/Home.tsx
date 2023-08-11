@@ -15,6 +15,8 @@ const Home = () => {
 
       {user && <Link to="/mypage">마이페이지</Link>}
 
+      
+
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}/>
       <div>
         <Link to="/post">
