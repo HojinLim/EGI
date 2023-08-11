@@ -7,6 +7,7 @@ import useCommentMutation from '../../hooks/useCommentMutation';
 import { jotaiUserDataAtom } from '../common/Header';
 import { useAtom } from 'jotai';
 import baseProfile from '../../image/baseprofile.jpeg';
+import * as SL from '../common/Styled.Loading';
 
 import type { ReplyCommentType } from '../../types/supabase';
 interface ReplyCommentsProps {
@@ -89,7 +90,7 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   }
 
   if (isLoading) {
-    return <div>로딩중입니다.</div>;
+    return <div>로딩중입니다.<SL.LoadingOverlay /></div>;
   }
 
   const filteredComments = replyComments?.filter((comment) => comment.cid === cid);

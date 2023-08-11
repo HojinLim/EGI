@@ -14,6 +14,7 @@ import { supabase } from '../services/supabase/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJjimCount, toggleJjim } from '../services/supabase/jjim';
 import { useAtom } from 'jotai';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // 작성자 딱지 > post의 uid props로 넘기기.
 
@@ -78,7 +79,7 @@ const Detail = () => {
   }
 
   if (!post) {
-    return <div>Loading...</div>;
+    return <div>Loading...<CircularProgress /></div>;
   }
 
   // useEffect(() => {

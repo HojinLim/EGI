@@ -7,6 +7,8 @@ import ReplyComments from './ReplyComments';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
+import * as SL from '../common/Styled.Loading';
+
 // 댓글, 대댓글 차이 두기 > 색상, 위치.
 // 작성자 딱지 > 좋은듯? > 포스트의 uid 값 가져와서 comment uid와 비교
 
@@ -36,7 +38,7 @@ const Comments = () => {
   }
 
   if (isLoading) {
-    return <div>로딩중입니다.</div>;
+    return <SL.LoadingOverlay />
   }
 
   return (

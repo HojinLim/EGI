@@ -8,6 +8,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { handleImageChange } from '../components/posts/HandleImage';
 import UserPosts from '../components/mypage/UserPosts';
 import { userAtom } from '../components/user/login/Login';
+import * as S from '../components/common/Styled.Loading';
 
 const EditProfile = () => {
   const queryClient = useQueryClient();
@@ -158,7 +159,7 @@ const EditProfile = () => {
       ) : (
         <div>
           <h1>마이 페이지</h1>
-          <p>Loading user data...</p>
+          <S.LoadingOverlay />
         </div>
       )}
     </div>
