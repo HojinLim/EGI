@@ -25,9 +25,7 @@ const Header = () => {
   const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
   const [socialUser, setSocialUser] = useAtom(sosialUserAtom);
   console.log('user', user);
-  console.log('socialUser', socialUser);
 
-  console.log('jotaiUserData', jotaiUserData);
   // 유저 정보 조회하는 쿼리
   const {
     isLoading,
@@ -100,8 +98,6 @@ const Header = () => {
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       setJotaiUserData(parsedUserData);
-
-      queryClient.invalidateQueries(['users', userEmail]);
     }
   }, []);
 

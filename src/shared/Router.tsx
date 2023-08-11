@@ -19,7 +19,7 @@ const Router: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/mypage" element={<Mypage />} />
-          <Route path="/pagination" element={<Pagination />} />
+          <Route path="/pagination" element={<Pagination postMode="내가 쓴 글" />} />
           <Route path="/post" element={<PostPage />} />
           <Route path="/post/:id" element={<Detail />} />
           <Route path="/editpost/:id" element={<EditPage />} />
