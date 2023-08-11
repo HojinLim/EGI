@@ -8,11 +8,9 @@ import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
 // 댓글, 대댓글 차이 두기 > 색상, 위치.
+// 작성자 딱지 > 좋은듯? > 포스트의 uid 값 가져와서 comment uid와 비교
 
-// 페이지네이션 고민
-// 대댓글 > 그냥 보이게
-// 작성자 딱지 > 좋은듯?
-
+// 대댓글 > 그냥 보이게 > 완료
 // 댓글 작성하기 버튼 삭제 > 폼 항상 보이기 > 완료
 
 import type { CommentType } from '../../types/supabase';

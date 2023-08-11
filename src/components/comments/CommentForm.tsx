@@ -23,12 +23,12 @@ const CommentForm = ({ pid }: CommentFormProps) => {
 
     if (!jotaiUserData) {
       alert('로그인 후 사용 가능합니다.');
-      return false;
+      return;
     }
 
     if (commentText === '') {
       alert('댓글을 작성해 주세요.');
-      return false;
+      return;
     }
 
     const newComment = {
@@ -43,18 +43,19 @@ const CommentForm = ({ pid }: CommentFormProps) => {
     addCommentMutation.mutate(newComment);
     setCommentText('');
   };
+
   return (
     <S.CommentForm onSubmit={handleAddSubmitBtn}>
       <S.CommentItem>
         <S.CommentProfileImgBox>
-          {jotaiUserData?.profileimg ? (
-            <S.CommentProfileImg
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
-              alt="Profile"
-            />
-          ) : (
-            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
-          )}
+          <S.CommentProfileImg
+            src={
+              jotaiUserData?.profileimg
+                ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
+                : baseProfile
+            }
+            alt="Profile"
+          />
         </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={commentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>
