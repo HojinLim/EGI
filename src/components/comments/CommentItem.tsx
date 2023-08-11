@@ -105,7 +105,7 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
           isUpdating && updateCommentId === comment.cid ? (
             <CommentPanel
               commenting={true}
-              handleUpdateBtnClick={handleUpdateBtnClick}
+              handleUpdateBtnClick={handleUpdateBtnClick} 
               handleUpdateCommentCancel={handleUpdateCommentCancel}
             />
           ) : (
