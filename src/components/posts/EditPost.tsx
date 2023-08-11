@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
 
+import * as S from './Styled.Posts';
 import { handleImageChange } from './HandleImage';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
-import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
+import { categories, conditionCategories, exchangeCategories } from '../category/Category';
 import { CategoryRadio } from '../category/CategorySelect';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -23,7 +24,7 @@ const EditPost = () => {
   const [category, setCategory] = useState('');
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
-  const [parcelCategory, setParcelCategory] = useState('');
+  const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -39,7 +40,7 @@ const EditPost = () => {
         setCategory(posts.category);
         setConditionCategory(posts.condition);
         setExchangeCategory(posts.exchange);
-        setParcelCategory(posts.parcel);
+        setParcelCategorySelected(posts.parcel);
       }
     };
 
@@ -55,7 +56,7 @@ const EditPost = () => {
       !category ||
       !conditionCategory ||
       !exchangeCategory ||
-      !parcelCategory
+      !parcelCategorySelected
     ) {
       alert('모든 폼을 입력해주세요.');
       return;
@@ -95,7 +96,7 @@ const EditPost = () => {
           category,
           conditionCategory,
           exchangeCategory,
-          parcelCategory
+          parcelCategory: parcelCategorySelected
         })
         .eq('pid', post.pid);
 
@@ -164,16 +165,17 @@ const EditPost = () => {
           />
         ))}
       </div>
+
       <div>
-        {parcelCategories.map((parcelCategoryOption) => (
-          <CategoryRadio
-            key={parcelCategoryOption.value}
-            value={parcelCategoryOption.value}
-            label={parcelCategoryOption.label}
-            checked={parcelCategoryOption.value === parcelCategory}
-            onChange={() => setParcelCategory(parcelCategoryOption.value)}
+        <S.RoundedCheckboxWrapper>
+          <S.CustomCheckbox
+            type="checkbox"
+            value="택배비 포함"
+            checked={parcelCategorySelected}
+            onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
           />
-        ))}
+          <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
+        </S.RoundedCheckboxWrapper>
       </div>
 
       <br />

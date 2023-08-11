@@ -25,13 +25,12 @@ export const Image = styled.img`
 
   width: 100px;
   height: 100px;
-  
 `;
 
 export const Container = styled.div`
   margin: 0 auto;
   overflow: hidden;
-  margin-top : 50px;
+  margin-top: 50px;
 `;
 
 export const MainContainer = styled.div`
@@ -67,7 +66,6 @@ export const EditDeleteButtons = styled.div`
     margin-right: 10px;
   }
 `;
-
 
 export const PostTitle = styled.h1`
   font-size: 24px;
@@ -108,4 +106,31 @@ export const StyledButton = styled(Button)`
       background-color: #0056b3;
     }
   }
+`;
+
+export const RoundedCheckboxWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+`;
+
+export const CustomCheckbox = styled.input`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin-right: 8px;
+  outline: none;
+  cursor: pointer;
+
+  /* &:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  } */
+`;
+
+export const CheckboxLabel = styled.label`
+  cursor: pointer;
 `;
