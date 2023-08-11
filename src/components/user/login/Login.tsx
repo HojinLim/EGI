@@ -12,7 +12,6 @@ import SosialLogin from '../social/SosialLogin';
 type LoginType = {
   setLoginModal: (isOpen: boolean) => void;
 };
-
 export const userAtom = atom<Omit<UserType, 'nickname'> | null>(null);
 export const signUpModalAtom = atom<boolean>(false);
 export const userEmailAtom = atom('');
@@ -40,6 +39,7 @@ const Login = ({ setLoginModal }: LoginType) => {
   const loginMutation = useMutation(loginService, {
     onSuccess: (response) => {
       setUser(userData);
+      console.log(userData);
       setLoginModal(false);
       if (response) {
         setUserEmail(userData.email);

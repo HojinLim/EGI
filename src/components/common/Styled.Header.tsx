@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -57,6 +58,9 @@ export const LogOutButton = styled.button`
   position: absolute;
   top: 140%;
   left: -40%;
+  width: 100px;
+  top: 500%;
+  left: 0;
   z-index: 1;
 
   background-color: transparent;
@@ -67,6 +71,8 @@ export const LogOutButton = styled.button`
 
   width: 70px;
   font-size: 10px;
+  padding: 10px 15px;
+  margin-top: 5px;
 `;
 
 export const LoginButton = styled.button`
@@ -75,4 +81,37 @@ export const LoginButton = styled.button`
   border: 1px solid #dddddd;
   border-radius: 5px;
   padding: 10px 15px;
+`;
+
+export const LinkButton = styled(Link)`
+  position: absolute;
+  width: 100px;
+  top: 300%;
+  left: 0;
+  z-index: 1;
+
+  background-color: transparent;
+
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333333;
+  margin-top: 5px;
+`;
+export const PostLinkButton = styled(Link)`
+  position: absolute;
+  width: 100px;
+  top: 100%;
+  left: 0;
+  z-index: 1;
+
+  background-color: transparent;
+
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333333;
+  margin-top: 5px;
 `;

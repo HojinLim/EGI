@@ -1,8 +1,10 @@
+// auth.ts
 import { UserType } from '../../types/supabase';
 import { supabase } from './supabase';
 
 // 회원가입
 export const signUpService = async (userData: UserType) => {
+  
   try {
     const { data, error } = await supabase.auth.signUp({
       email: userData.email,
@@ -117,6 +119,31 @@ export const resetPassword = async (email: string) => {
     console.error(error);
   }
 };
+
+// 닉네임 변경 및 회원 정보 변경
+export const updateUserInfo = async (userEmail: string, newNickname: string): Promise<void> => {
+  try {
+    const { data: userData, error } = await supabase
+      .from('users')
+      .update({ nickname: newNickname })
+      .eq('email', userEmail);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (userData !== null) {
+      if (Array.isArray(userData) && userData > 0) {
+        // 변경된 회원 정보 반환 혹은 필요한 작업 수행
+        
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 
 // 이미지 파일 업로드
 export const uploadProfileImage = async (selectedProfileImg: File) => {

@@ -12,7 +12,7 @@ import type { UserType } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { sosialUserAtom } from '../user/social/SosialLogin';
 
-const jotaiUserDataAtom = atom<Omit<UserType, 'password'> | null>(null);
+export const jotaiUserDataAtom = atom<Omit<UserType, 'password'> | null>(null);
 
 const Header = () => {
   const queryClient = useQueryClient();
@@ -74,6 +74,8 @@ const Header = () => {
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       setJotaiUserData(parsedUserData);
+
+      queryClient.invalidateQueries(['users', userEmail]);
     }
   }, []);
 
@@ -144,7 +146,13 @@ const Header = () => {
             <S.ButtonWrapper>
               <S.ButtonBox>
                 <S.ToggleButton onClick={toggleLogoutButton}>▼</S.ToggleButton>
-                {showLogoutButton && <S.LogOutButton onClick={signOutHandler}>로그아웃</S.LogOutButton>}
+                {showLogoutButton && (
+                  <>
+                    <S.LogOutButton onClick={signOutHandler}>로그아웃</S.LogOutButton>
+                    <S.LinkButton to="/mypage">마이페이지</S.LinkButton>
+                    <S.PostLinkButton to="/post">글작성</S.PostLinkButton>
+                  </>
+                )}
               </S.ButtonBox>
             </S.ButtonWrapper>
           </S.ProfileWrapper>
