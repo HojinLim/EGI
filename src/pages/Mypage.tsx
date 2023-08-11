@@ -9,7 +9,7 @@ import { handleImageChange } from '../components/posts/HandleImage';
 import UserPosts from '../components/mypage/UserPosts';
 import { userAtom, userEmailAtom } from '../components/user/login/Login';
 import * as S from '../components/mypage/Styled.Mypage';
-
+import * as L from '../components/common/Styled.Loading';
 
 const EditProfile = () => {
   const [user] = useAtom(userAtom);
@@ -156,7 +156,7 @@ const EditProfile = () => {
       ) : (
         <div>
           <h1>마이 페이지</h1>
-          <S.LoadingOverlay />
+          <L.LoadingOverlay />
         </div>
       )}
     </div>
