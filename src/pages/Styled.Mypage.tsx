@@ -17,6 +17,10 @@ export const MypageWrap = styled.div`
   margin-bottom: 40px;
 `;
 
+export const ProfileTable = styled.div`
+  margin-left: 30px;
+`;
+
 export const ProfileBox = styled.div`
   display: flex;
 `;
@@ -86,6 +90,10 @@ export const EditBtn = styled.button`
   padding: 5px;
 
   cursor: pointer;
+
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const EditProfile = styled.div`
@@ -121,13 +129,12 @@ export const EditProfileInput = styled.input`
 `;
 
 export const EtcInfoBox = styled.div`
-  width: 270px;
+  width: 290px;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-bottom: 20px; */
 
-  margin: 0 50px 20px 0;
+  margin: 38px 30px 0 0;
 `;
 
 export const GradeBox = styled.div`

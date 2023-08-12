@@ -25,6 +25,10 @@ export const MyWrittenPost = styled.button`
   background-color: transparent;
 
   cursor: pointer;
+
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const MyZzimPost = styled.button`
@@ -42,6 +46,10 @@ export const MyZzimPost = styled.button`
   background-color: transparent;
 
   cursor: pointer;
+
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const CardContainer = styled.div`

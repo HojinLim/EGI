@@ -25,8 +25,8 @@ export const conditionCategories = [
 ];
 
 export const exchangeCategories = [
-  { value: '불가능', label: '불가능' },
-  { value: '가능', label: '가능' }
+  { value: '가능', label: '가능' },
+  { value: '불가능', label: '불가능' }
 ];
 
 export const directCategories = [
