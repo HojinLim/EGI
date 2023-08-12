@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
+
 import * as S from './Styled.Posts';
 import { handleImageChange } from './HandleImage';
 import { Post } from '../../types/supabase';
@@ -22,7 +23,7 @@ const EditPost = () => {
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
   const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
-  const [iscompleted, setIscompeted] = useState(false);
+
   useEffect(() => {
     const fetchPost = async () => {
       const { data: posts, error } = await supabase.from('posts').select('*').eq('pid', id).single();
@@ -37,12 +38,13 @@ const EditPost = () => {
         setCategory(posts.category);
         setConditionCategory(posts.condition);
         setExchangeCategory(posts.exchange);
-        setParcelCategorySelected(posts.parcel === '택배비 포함');
-        setIscompeted(posts.iscompleted === '판매 완료');
+        setParcelCategorySelected(posts.parcel);
       }
     };
+
     fetchPost();
   }, [id]);
+
   const handleEditPost = async () => {
     if (
       !editTitle.trim() ||
@@ -56,22 +58,29 @@ const EditPost = () => {
       alert('모든 폼을 입력해주세요.');
       return;
     }
+
     let imageUrls: string[] = post ? post.image_urls : []; // 기존 이미지 유지
+
     if (selectedImages.length > 0) {
       const newImageUrls: string[] = [];
+
       for (const selectedImage of selectedImages) {
         const { data, error } = await supabase.storage
           .from('1st')
           .upload(`images/${selectedImage.name}`, selectedImage);
+
         if (error) {
           console.error('Error uploading image to Supabase storage:', error);
           alert('이미지 업로드 중 에러가 발생했습니다!');
           return;
         }
+
         newImageUrls.push(data.path);
       }
+
       imageUrls = newImageUrls;
     }
+
     if (post && editTitle && editBody) {
       const { error } = await supabase
         .from('posts')
@@ -82,11 +91,12 @@ const EditPost = () => {
           price,
           location,
           category,
-          conditionCategory,
-          exchangeCategory,
-          parcelCategory: parcelCategorySelected
+          condition: conditionCategory,
+          exchange: exchangeCategory,
+          parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함'
         })
         .eq('pid', post.pid);
+
       if (error) {
         console.error('Error editing post:', error);
         alert('에러가 발생했습니다!');
@@ -96,13 +106,16 @@ const EditPost = () => {
       }
     }
   };
+
   const handleImageChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
+
     if (selectedFiles) {
       const updatedSelectedImages = handleImageChange(selectedFiles);
       setSelectedImages(updatedSelectedImages);
     }
   };
+
   if (!post) {
     return (
       <div>
@@ -112,14 +125,26 @@ const EditPost = () => {
     );
   }
 
+  const priceChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.replace(/[^0-9]/g, '');
+    setPrice(inputValue);
+  };
+
+  const priceWithCommas = (price: string): string => {
+    const numberOfPrice = Number(price);
+    return numberOfPrice.toLocaleString();
+  };
+
   return (
     <div>
       <input type="text" placeholder="Title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
       <br />
-      <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} />
+      <input type="text" placeholder="Price" value={priceWithCommas(price)} onChange={priceChangeHandler} />
+
       <br />
       <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
       <br />
+
       <div>
         {categories.map((categoryOption) => (
           <CategoryRadio
@@ -153,10 +178,7 @@ const EditPost = () => {
           />
         ))}
       </div>
-      <div>
-        <input type="checkbox" value="판매 완료" checked={iscompleted} onChange={() => setIscompeted(!iscompleted)} />
-        <S.CheckboxLabel>판매 완료</S.CheckboxLabel>
-      </div>
+
       <div>
         <input
           type="checkbox"
@@ -166,7 +188,9 @@ const EditPost = () => {
         />
         <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
       </div>
+
       <br />
+
       <Editor value={editBody} onChange={(content) => setEditBody(content)} />
       <br />
       <br />
@@ -177,6 +201,7 @@ const EditPost = () => {
     </div>
   );
 };
+
 export default EditPost;
 
 //되라 죽는다
