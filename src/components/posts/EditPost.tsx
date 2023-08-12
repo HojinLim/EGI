@@ -23,6 +23,7 @@ const EditPost = () => {
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
   const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
+  const [iscompleted, setIscompeted] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -39,6 +40,7 @@ const EditPost = () => {
         setConditionCategory(posts.condition);
         setExchangeCategory(posts.exchange);
         setParcelCategorySelected(posts.parcel);
+        setIscompeted(posts.iscompleted === '판매 완료');
       }
     };
 
@@ -93,7 +95,8 @@ const EditPost = () => {
           category,
           condition: conditionCategory,
           exchange: exchangeCategory,
-          parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함'
+          parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
+          iscompleted: iscompleted ? '판매 완료' : '판매중'
         })
         .eq('pid', post.pid);
 
@@ -178,7 +181,10 @@ const EditPost = () => {
           />
         ))}
       </div>
-
+      <div>
+        <input type="checkbox" value="판매 완료" checked={iscompleted} onChange={() => setIscompeted(!iscompleted)} />
+        <S.CheckboxLabel>판매 완료</S.CheckboxLabel>
+      </div>
       <div>
         <input
           type="checkbox"
