@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { styled } from 'styled-components';
-import { Container } from './posts/Styled.Posts';
+import { Container } from './posts/Styled.GetPosts';
 import { getPostList, postType } from './ScrollDummy';
 
 const InfiniteScroll = (): JSX.Element => {

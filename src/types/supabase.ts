@@ -53,6 +53,7 @@ export interface Post {
   nickname: string;
   profileimg: File | string | null;
   iscompleted: string;
+  direct: string;
 }
 
 export interface JjimType {

@@ -20,6 +20,7 @@ export const signUpService = async (userData: UserType) => {
       const uploadData = await uploadProfileImage(profileImgFile);
       profileImgUrl = uploadData.path;
     }
+
     const userInsertData = {
       uid: data.user?.id,
       nickname: userData.nickname,
