@@ -1,4 +1,5 @@
 import React from 'react';
+import { styled } from 'styled-components';
 
 interface CategoryOption {
   value: string;
@@ -34,10 +35,20 @@ const CategorySelect = ({ value, options, onChange }: CategorySelectProps) => {
 };
 
 const CategoryRadio = ({ value, label, checked, onChange }: CategoryRadioProps) => (
-  <label>
-    <input type="radio" value={value} checked={checked} onChange={onChange} />
+  <ChoiceCategory>
+    <ChoiceCategoryInput type="radio" value={value} checked={checked} onChange={onChange} />
     {label}
-  </label>
+  </ChoiceCategory>
 );
 
 export { CategorySelect, CategoryRadio };
+
+export const BooleanCategory = styled.div``;
+
+export const ChoiceCategory = styled.label`
+  margin-right: 45px;
+`;
+
+export const ChoiceCategoryInput = styled.input`
+  margin-right: 5px;
+`;
