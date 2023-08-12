@@ -58,3 +58,9 @@ export interface JjimType {
   uid: string | null;
   pid: string;
 }
+
+export interface ProductInfo {
+  title: string;
+  price: string;
+  nickname: string;
+}

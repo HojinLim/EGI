@@ -10,8 +10,6 @@ import { categories, conditionCategories, exchangeCategories } from '../category
 import { CategoryRadio } from '../category/CategorySelect';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
-
 const EditPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -55,8 +53,7 @@ const EditPost = () => {
       !price.toString().trim() ||
       !category ||
       !conditionCategory ||
-      !exchangeCategory ||
-      !parcelCategorySelected
+      !exchangeCategory
     ) {
       alert('모든 폼을 입력해주세요.');
       return;
@@ -94,9 +91,9 @@ const EditPost = () => {
           price,
           location,
           category,
-          conditionCategory,
-          exchangeCategory,
-          parcelCategory: parcelCategorySelected
+          condition: conditionCategory,
+          exchange: exchangeCategory,
+          parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함'
         })
         .eq('pid', post.pid);
 
@@ -120,14 +117,30 @@ const EditPost = () => {
   };
 
   if (!post) {
-    return <div>Loading...<CircularProgress /></div>;
+    return (
+      <div>
+        Loading...
+        <CircularProgress />
+      </div>
+    );
   }
+
+  const priceChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.replace(/[^0-9]/g, '');
+    setPrice(inputValue);
+  };
+
+  const priceWithCommas = (price: string): string => {
+    const numberOfPrice = Number(price);
+    return numberOfPrice.toLocaleString();
+  };
 
   return (
     <div>
       <input type="text" placeholder="Title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
       <br />
-      <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} />
+      <input type="text" placeholder="Price" value={priceWithCommas(price)} onChange={priceChangeHandler} />
+
       <br />
       <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
       <br />
@@ -167,15 +180,13 @@ const EditPost = () => {
       </div>
 
       <div>
-        <S.RoundedCheckboxWrapper>
-          <S.CustomCheckbox
-            type="checkbox"
-            value="택배비 포함"
-            checked={parcelCategorySelected}
-            onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
-          />
-          <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
-        </S.RoundedCheckboxWrapper>
+        <input
+          type="checkbox"
+          value="택배비 포함"
+          checked={parcelCategorySelected}
+          onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
+        />
+        <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
       </div>
 
       <br />

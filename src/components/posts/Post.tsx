@@ -40,8 +40,16 @@ const Post = () => {
   }, []);
 
   const handleAddPost = async () => {
-    if (!newTitle.trim() || !newBody.trim() || !newPrice.trim() || !newLocation.trim()) {
-      alert('제목, 본문, 가격, 지역을 모두 입력해주세요.');
+    if (
+      !newTitle.trim() ||
+      !newBody.trim() ||
+      !newLocation.trim() ||
+      !newPrice.toString().trim() ||
+      !category ||
+      !conditionCategory ||
+      !exchangeCategory
+    ) {
+      alert('모든 폼을 입력해주세요.');
       return;
     }
 

@@ -5,23 +5,24 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { jotaiUserDataAtom } from '../components/common/Header';
 
-import Comments from '../components/comments/Comments';
-import * as S from '../components/posts/Styled.Posts';
+import { RequestPayParams } from 'iamport-typings';
+import { jotaiUserDataAtom } from '../components/common/Header';
 import { Post } from '../types/supabase';
 import { supabase } from '../services/supabase/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJjimCount, toggleJjim } from '../services/supabase/jjim';
 import { useAtom } from 'jotai';
 import CircularProgress from '@mui/material/CircularProgress';
-
-// 작성자 딱지 > post의 uid props로 넘기기.
+import Payment from '../components/payment/payment';
+import Comments from '../components/comments/Comments';
+import * as S from '../components/posts/Styled.Posts';
 
 const Detail = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
   const [jotaiUserData] = useAtom(jotaiUserDataAtom);
 
   const { id } = useParams() as { id: string };
@@ -58,6 +59,27 @@ const Detail = () => {
     fetchPost();
   }, [id]);
 
+  if (!post) {
+    return (
+      <div>
+        Loading...
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  const handlePayment = (paymentInfo: RequestPayParams) => {
+    // 파라미터 타입 명시
+    const IMP = window.IMP;
+    IMP?.request_pay(paymentInfo, function (response) {
+      if (response?.success) {
+        alert('결제가 완료되었습니다.');
+      } else {
+        alert('결제에 실패하였습니다.');
+      }
+    });
+  };
+
   const handleEdit = () => {
     navigate(`/editpost/${post?.pid}`);
   };
@@ -73,31 +95,6 @@ const Detail = () => {
     }
   };
 
-  let timeAgo = '';
-  if (post) {
-    timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
-  }
-
-  if (!post) {
-    return (
-      <div>
-        Loading...
-        <CircularProgress />
-      </div>
-    );
-  }
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const user = await supabase.auth.user();
-  //     if (user) {
-  //       setUserId(user.id);
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, []);
-
   const handleJjim = () => {
     if (!jotaiUserData) {
       alert('로그인 후 사용 가능합니다.');
@@ -110,6 +107,20 @@ const Detail = () => {
     };
     toggleJjimMutation.mutate(data);
   };
+
+  let timeAgo = '';
+  if (post) {
+    timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
+  }
+
+  const openPaymentModal = () => {
+    setPaymentModalVisible(true);
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModalVisible(false);
+  };
+
   return (
     <S.Container>
       <S.MainContainer>
@@ -137,6 +148,22 @@ const Detail = () => {
           <S.PostInfo>배송비 {post.parcel}</S.PostInfo>
           <S.PostInfo>교환여부 {post.exchange}</S.PostInfo>
           <button onClick={handleJjim}>찜 {jjimData?.length}</button>
+
+          {/* 여기가 페이먼트 가져오는 부분입니다! */}
+          {/* 여기가 추가된 버튼입니다! */}
+
+          <button onClick={openPaymentModal}>결제하기</button>
+
+          {/* 모달 */}
+          {paymentModalVisible && (
+            <S.ModalWrapper>
+              <S.ModalContent>
+                <button onClick={closePaymentModal}>모달 닫기</button>
+                <Payment handlePayment={handlePayment} post={post} />
+              </S.ModalContent>
+            </S.ModalWrapper>
+          )}
+
           {jotaiUserData?.uid === post.uid && (
             <S.EditDeleteButtons>
               <S.StyledButton onClick={handleEdit}>수정하기</S.StyledButton>
