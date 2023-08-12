@@ -13,7 +13,7 @@ export const ProfileImg = styled.img`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  border: 2px solid black;
+  border: 2px solid #0a398d;
 `;
 
 export const ProfileInfo = styled.div`
@@ -23,6 +23,7 @@ export const ProfileInfo = styled.div`
 export const NickNameBox = styled.div`
   display: flex;
   font-weight: bold;
+  color: #0a398d;
 
   justify-content: center;
   align-items: center;
@@ -31,7 +32,7 @@ export const NickNameBox = styled.div`
 
 export const EditNickName = styled.p`
   /* font-size: 30px; */
-
+  color: #0a398d;
   font-weight: bold;
 `;
 
@@ -39,6 +40,7 @@ export const InputNickName = styled.input`
   width: 150px;
   height: 20px;
   font-weight: bold;
+  color: #0a398d;
 
   margin-left: 5px;
 
@@ -48,10 +50,11 @@ export const InputNickName = styled.input`
 export const NickName = styled.p`
   font-size: 30px;
   font-weight: bold;
+  /* color: #0a398d; */
 `;
 export const Email = styled.p`
-  font-size: 13px;
-  margin: 8px 8px 8px 0;
+  font-size: 14px;
+  margin: 8px 8px 8px 3px;
   color: #8f8f8f;
 `;
 
@@ -61,10 +64,12 @@ export const EditBtn = styled.button`
   width: 100px;
   height: 35px;
 
-  border: 2px solid black;
+  border: 2px solid #0a398d;
   background-color: transparent;
   border-radius: 10px;
 
+  color: #0a398d;
+  font-weight: bold;
   font-size: 16px;
   padding: 5px;
 
@@ -73,6 +78,7 @@ export const EditBtn = styled.button`
 
 export const EditProfile = styled.div`
   margin-bottom: 70px;
+  color: #0a398d;
 `;
 
 export const EditProfileLabel = styled.label`
@@ -85,10 +91,13 @@ export const EditProfileLabel = styled.label`
   padding: 5px;
   width: 90px;
   height: 22px;
+
   font-size: 16px;
+  font-weight: bold;
+  color: #0a398d;
 
   background-color: #ffffff;
-  border: 2px solid #000000;
+  border: 2px solid #0a398d;
   border-radius: 10px;
   cursor: pointer;
 

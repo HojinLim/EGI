@@ -25,8 +25,6 @@ const Post = () => {
   const [category, setCategory] = useState('');
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
-
-  // const [parcelCategory, setParcelCategory] = useState('');
   const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
   const [uid, setUid] = useState('');
   const [jotaiUserData] = useAtom(jotaiUserDataAtom);
@@ -80,7 +78,8 @@ const Post = () => {
         condition: conditionCategory,
         exchange: exchangeCategory,
         parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
-        uid
+        uid,
+        iscompleted: '판매중'
       }
     ]);
 

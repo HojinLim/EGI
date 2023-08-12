@@ -7,7 +7,6 @@ import Google from '../../../image/Google.png';
 import * as S from './Styled.SosialLogin';
 
 export const sosialUserAtom = atom<User | null>(null);
-
 const SosialLogin = () => {
   const [user, setUser] = useAtom(sosialUserAtom);
 

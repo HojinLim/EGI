@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { supabase } from '../services/supabase/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { handleImageChange } from '../components/posts/HandleImage';
-import UserPosts from '../components/mypage/UserPosts';
+import UserPosts, { myPostLegthAtom } from '../components/mypage/UserPosts';
 import * as S from '../pages/Styled.Mypage';
 import * as L from '../components/common/Styled.Loading';
 import { userAtom, userEmailAtom } from '../components/user/login/Login';
@@ -19,6 +19,7 @@ const Mypage = () => {
   const [jotaiUserData, setJotaiUserData] = useAtom(jotaiUserDataAtom);
   const [isEditing, setIsEditing] = useState(false);
   const [socialUser] = useAtom(sosialUserAtom);
+  const [myPostLegth] = useAtom(myPostLegthAtom);
 
   // 생성한 토큰 가져와서 새로고침 방지
   useEffect(() => {
@@ -107,11 +108,11 @@ const Mypage = () => {
   };
 
   const handleEditClickOpen = () => {
-    if (!socialUser?.identities || jotaiUserData) {
+    if (!socialUser?.identities || (undefined && jotaiUserData)) {
       setEditNickName(jotaiUserData?.nickname || '');
       setIsEditing(true);
     } else if (socialUser?.identities[0].provider !== 'email') {
-      // setIsEditing(false);
+      setIsEditing(false);
       alert('소셜 로그인 시 프로필 수정이 불가능합니다.');
     }
   };
@@ -122,6 +123,19 @@ const Mypage = () => {
 
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditNickName(event.target.value);
+  };
+
+  // 마이페이지 등급
+  const grade = () => {
+    if (myPostLegth >= 20) {
+      return 'VIP';
+    } else if (myPostLegth >= 15) {
+      return 'Gold';
+    } else if (myPostLegth >= 10) {
+      return 'Silver';
+    } else {
+      return 'Bonze';
+    }
   };
 
   return (
@@ -158,6 +172,7 @@ const Mypage = () => {
               )}
             </S.ProfileInfo>
           </S.ProfileBox>
+          <div>등급 :{grade()}</div>
           <S.EditProfile>
             {isEditing ? (
               <div>

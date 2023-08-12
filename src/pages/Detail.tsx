@@ -108,11 +108,6 @@ const Detail = () => {
     toggleJjimMutation.mutate(data);
   };
 
-  let timeAgo = '';
-  if (post) {
-    timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
-  }
-
   const openPaymentModal = () => {
     setPaymentModalVisible(true);
   };
@@ -120,6 +115,20 @@ const Detail = () => {
   const closePaymentModal = () => {
     setPaymentModalVisible(false);
   };
+
+  let timeAgo = '';
+  if (post) {
+    timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
+  }
+
+  if (!post) {
+    return (
+      <div>
+        Loading...
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <S.Container>

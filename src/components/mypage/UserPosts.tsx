@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { useNavigate } from 'react-router-dom';
+import noImg from '../../image/noimg.png';
 import * as S from './Styled.UserPosts';
+import { atom, useAtom } from 'jotai';
+
+export const myPostLegthAtom = atom<number>(0);
 
 const UserPosts = () => {
   const [postMode, setPostMode] = useState<string>('');
+  const [myPostLegth, setMyPostLength] = useAtom(myPostLegthAtom);
 
   const handlePost = (mode: string) => {
     setPostMode(mode);
@@ -67,6 +72,7 @@ const UserPosts = () => {
             }));
             setCurrentPage(1);
             setSelectedPosts(postsWithCompleteURLs);
+            setMyPostLength(postsWithCompleteURLs.length);
           }
         }
       }
@@ -98,6 +104,8 @@ const UserPosts = () => {
   const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
   const paginatedData = selectedPosts.slice(startIdx, endIdx);
 
+  console.log('paginatedData', myPostLegth);
+
   const handleClick = (data: Post) => {
     navigate(`/post/${data.pid}`);
   };
@@ -106,39 +114,44 @@ const UserPosts = () => {
     <div>
       <S.MyWrittenPost onClick={() => handlePost('내가 쓴 글')}>내가 쓴 글</S.MyWrittenPost>
       <S.MyZzimPost onClick={() => handlePost('찜 목록')}>찜 목록</S.MyZzimPost>
-      <div style={{ width: '1100px', height: '600px', border: '2px solid black' }}>
-        <div>
-          <S.Card>
-            {paginatedData.map((data) => (
-              <S.StyledCard key={data.pid} onClick={() => handleClick(data)}>
-                <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${data.profileimg}`} alt="Profile" />
+      <S.CardContainer>
+        {paginatedData.map((data) => (
+          <S.CardBox key={data.pid} onClick={() => handleClick(data)}>
+            {/* <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${data.profileimg}`} alt="Profile" /> */}
+            <S.Card>
+              {data.image_urls[0] == '' ? (
+                <S.NonImg src={noImg} alt="Profile" />
+              ) : (
+                <S.PostImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${data.image_urls}`} alt="Profile" />
+              )}
+              <div>
                 <p>{data.nickname}</p>
                 <p>제목: {data.title}</p>
                 <p>카테고리: {data.category}</p>
                 <p>가격: {data.price}</p>
-              </S.StyledCard>
-            ))}
-          </S.Card>
-        </div>
-      </div>
-      <div>
-        <S.StyledButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
-          ⬅
-        </S.StyledButton>
+              </div>
+            </S.Card>
+          </S.CardBox>
+        ))}
+      </S.CardContainer>
+      <S.PageButtonBox>
+        <S.PageButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
+          {'<'}
+        </S.PageButton>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-          <S.StyledButton
+          <S.PageButton
             key={pageNumber}
             onClick={() => handlePageClick(pageNumber)}
             selected={pageNumber === currentPage}
             disabled={currentPage === pageNumber}
           >
             {pageNumber}
-          </S.StyledButton>
+          </S.PageButton>
         ))}
-        <S.StyledButton onClick={handleNextPage} disabled={currentPage === totalPages} selected={false}>
-          ➡
-        </S.StyledButton>
-      </div>
+        <S.PageButton onClick={handleNextPage} disabled={currentPage === totalPages} selected={false}>
+          {'>'}
+        </S.PageButton>
+      </S.PageButtonBox>
     </div>
   );
 };
