@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { atom, useAtom } from 'jotai';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Login, { userAtom, userEmailAtom } from '../user/login/Login';
+import { sosialUserAtom } from '../user/social/SosialLogin';
 import { getUserInfo, sigOutService } from '../../services/supabase/auth';
-import icon from '../../image/icon.png';
-import * as S from './Styled.Header';
-
-import type { UserType, UserTypes } from '../../types/supabase';
 
 import { supabase } from '../../services/supabase/supabase';
-import { sosialUserAtom } from '../user/social/SosialLogin';
 import { useNavigate } from 'react-router';
+
+import { Dropdown } from 'antd';
+import { Link } from 'react-router-dom';
+
+import icon from '../../image/icon.png';
+import * as S from './Styled.Header';
 import * as SL from '../common/Styled.Loading';
+
+import type { UserType, UserTypes } from '../../types/supabase';
+import type { MenuProps } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
 export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
 
@@ -19,7 +25,6 @@ const Header = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loginModal, setLoginModal] = useState(false);
-  const [showLogoutButton, setShowLogoutButton] = useState(false);
 
   const [user, setUser] = useAtom(userAtom);
   const [userEmail, setUserEmail] = useAtom(userEmailAtom);
@@ -131,10 +136,29 @@ const Header = () => {
     setLoginModal(true);
   };
 
-  // 드롭박스 토글 버튼
-  const toggleLogoutButton = () => {
-    setShowLogoutButton((prevState) => !prevState);
-  };
+  // 안트 디자인 드롭박스
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <Link to="/post">
+          <div>상품 등록하기</div>
+        </Link>
+      )
+    },
+    {
+      key: '2',
+      label: (
+        <Link to="/mypage">
+          <div>마이페이지</div>
+        </Link>
+      )
+    },
+    {
+      key: '3',
+      label: <div onClick={signOutHandler}>로그아웃</div>
+    }
+  ];
 
   if (isLoading) {
     return <SL.LoadingOverlay />;
@@ -164,14 +188,9 @@ const Header = () => {
               </div>
               <S.ButtonWrapper>
                 <S.ButtonBox>
-                  <S.ToggleButton onClick={toggleLogoutButton}>▼</S.ToggleButton>
-                  {showLogoutButton && (
-                    <>
-                      <S.LogOutButton onClick={signOutHandler}>로그아웃</S.LogOutButton>
-                      <S.LinkButton to="/mypage">마이페이지</S.LinkButton>
-                      <S.PostLinkButton to="/post">글작성</S.PostLinkButton>
-                    </>
-                  )}
+                  <Dropdown menu={{ items }} placement="bottomRight" arrow={{ pointAtCenter: true }}>
+                    <DownOutlined />
+                  </Dropdown>
                 </S.ButtonBox>
               </S.ButtonWrapper>
             </S.ProfileWrapper>

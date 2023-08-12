@@ -7,11 +7,14 @@ import * as S from './Styled.UserPosts';
 import { atom, useAtom } from 'jotai';
 
 export const myPostLegthAtom = atom<number>(0);
+export const myIscompletedhAtom = atom<Array<{ iscompleted: string; uid: string }>>([]);
 
 const UserPosts = () => {
   const [postMode, setPostMode] = useState<string>('');
   const [myPostLegth, setMyPostLength] = useAtom(myPostLegthAtom);
+  const [myIscompleted, setMyIscomplted] = useAtom(myIscompletedhAtom);
 
+  console.log('myIscompleted', myIscompleted);
   const handlePost = (mode: string) => {
     setPostMode(mode);
   };
@@ -73,6 +76,7 @@ const UserPosts = () => {
             setCurrentPage(1);
             setSelectedPosts(postsWithCompleteURLs);
             setMyPostLength(postsWithCompleteURLs.length);
+            setMyIscomplted(postsWithCompleteURLs);
           }
         }
       }
@@ -105,6 +109,7 @@ const UserPosts = () => {
   const paginatedData = selectedPosts.slice(startIdx, endIdx);
 
   console.log('paginatedData', myPostLegth);
+  console.log('selectedPosts', selectedPosts);
 
   const handleClick = (data: Post) => {
     navigate(`/post/${data.pid}`);
@@ -124,12 +129,24 @@ const UserPosts = () => {
               ) : (
                 <S.PostImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${data.image_urls}`} alt="Profile" />
               )}
-              <div>
-                <p>{data.nickname}</p>
-                <p>제목: {data.title}</p>
-                <p>카테고리: {data.category}</p>
-                <p>가격: {data.price}</p>
-              </div>
+              <S.CardInfo>
+                <S.CardTop>
+                  <S.CategoryBox>
+                    <S.Category>{data.category}</S.Category>
+                  </S.CategoryBox>
+                  <S.CoditionBox>
+                    <S.CoditionIscompleted>{data.iscompleted}</S.CoditionIscompleted>
+                    <S.CoditionProduct condition={data.condition}>{data.condition}</S.CoditionProduct>
+                  </S.CoditionBox>
+                </S.CardTop>
+                <S.CardMiddle>
+                  <S.Title>{data.title}</S.Title>
+                </S.CardMiddle>
+                <S.CardBottom>
+                  <S.Nickname>{data.nickname}</S.Nickname>
+                  <S.Price>{data.price?.toLocaleString('en-NZ')} 원</S.Price>
+                </S.CardBottom>
+              </S.CardInfo>
             </S.Card>
           </S.CardBox>
         ))}

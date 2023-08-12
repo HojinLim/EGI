@@ -4,10 +4,10 @@ import reset from 'styled-reset';
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
-  body{
+  body {
     max-width: 1500px;
     min-width: 800px;
-    margin: 0 auto
+    margin: 0 auto;
   }
 
   h1 {
