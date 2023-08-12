@@ -64,6 +64,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["quill-image-resize", "npm:3.0.9"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:18.2.0"],\
+            ["react-intersection-observer", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:9.5.2"],\
             ["react-query", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:3.39.3"],\
             ["react-quill", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:2.0.0"],\
             ["react-responsive-carousel", "npm:3.2.23"],\
@@ -9979,6 +9980,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["quill-image-resize", "npm:3.0.9"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:18.2.0"],\
+            ["react-intersection-observer", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:9.5.2"],\
             ["react-query", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:3.39.3"],\
             ["react-quill", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:2.0.0"],\
             ["react-responsive-carousel", "npm:3.2.23"],\
@@ -21021,6 +21023,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-error-overlay-npm-6.0.11-021cdeaa92-ce7b44c38f.zip/node_modules/react-error-overlay/",\
           "packageDependencies": [\
             ["react-error-overlay", "npm:6.0.11"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-intersection-observer", [\
+        ["npm:9.5.2", {\
+          "packageLocation": "./.yarn/cache/react-intersection-observer-npm-9.5.2-2c006290a0-cdbe405449.zip/node_modules/react-intersection-observer/",\
+          "packageDependencies": [\
+            ["react-intersection-observer", "npm:9.5.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:9.5.2", {\
+          "packageLocation": "./.yarn/__virtual__/react-intersection-observer-virtual-a031c775dc/0/cache/react-intersection-observer-npm-9.5.2-2c006290a0-cdbe405449.zip/node_modules/react-intersection-observer/",\
+          "packageDependencies": [\
+            ["react-intersection-observer", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:9.5.2"],\
+            ["@types/react", "npm:18.2.18"],\
+            ["react", "npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\
