@@ -17,7 +17,12 @@ export const exchangeCategories = [
   { value: '교환가능', label: '교환가능' }
 ];
 
-export const parcelCategories = [
-  { value: '택배비 포함', label: '택배비 포함' },
-  { value: '택배비 미포함', label: '택배비 미포함' }
-];
+// export const parcelCategories = [
+//   { value: '택배비 포함', label: '택배비 포함' },
+//   { value: '택배비 미포함', label: '택배비 미포함' }
+// ];
+
+// export const iscompletedCategories = [
+//   { value: '판매 완료', label: '판매 완료' },
+//   { value: '판매 중', label: '판매 중' }
+// ];

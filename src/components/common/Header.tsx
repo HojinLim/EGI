@@ -109,7 +109,12 @@ const Header = () => {
     const {
       data: { user }
     } = await supabase.auth.getUser();
-    setSocialUser(user);
+
+    if (!user?.identities) {
+      return;
+    } else if (user?.identities[0].provider == 'github' || user?.identities[0].provider == 'google') {
+      setSocialUser(user);
+    }
   };
 
   // window.addEventListener('hashchange' =>브라우저의 URL 해시(예: # 뒤의 일부)가 변경될 때 발생!

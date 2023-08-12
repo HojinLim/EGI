@@ -10,8 +10,6 @@ import { categories, conditionCategories, exchangeCategories } from '../category
 import { CategoryRadio } from '../category/CategorySelect';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
-
 const EditPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -25,7 +23,7 @@ const EditPost = () => {
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
   const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
-
+  const [editIscomplted, setEditIscomplted] = useState(false);
   useEffect(() => {
     const fetchPost = async () => {
       const { data: posts, error } = await supabase.from('posts').select('*').eq('pid', id).single();
@@ -41,6 +39,7 @@ const EditPost = () => {
         setConditionCategory(posts.condition);
         setExchangeCategory(posts.exchange);
         setParcelCategorySelected(posts.parcel);
+        setEditIscomplted(posts.iscompleted);
       }
     };
 
@@ -96,7 +95,8 @@ const EditPost = () => {
           category,
           conditionCategory,
           exchangeCategory,
-          parcelCategory: parcelCategorySelected
+          parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
+          iscompleted: editIscomplted ? '판매 완료' : '판매중'
         })
         .eq('pid', post.pid);
 
@@ -120,7 +120,12 @@ const EditPost = () => {
   };
 
   if (!post) {
-    return <div>Loading...<CircularProgress /></div>;
+    return (
+      <div>
+        Loading...
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (
@@ -167,15 +172,26 @@ const EditPost = () => {
       </div>
 
       <div>
-        <S.RoundedCheckboxWrapper>
-          <S.CustomCheckbox
+        <div>
+          <input
+            type="checkbox"
+            value="판매 완료"
+            checked={editIscomplted}
+            onChange={() => setEditIscomplted(!editIscomplted)}
+          />
+          <S.CheckboxLabel>판매 완료</S.CheckboxLabel>
+        </div>
+      </div>
+      <div>
+        <div>
+          <input
             type="checkbox"
             value="택배비 포함"
             checked={parcelCategorySelected}
             onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
           />
           <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
-        </S.RoundedCheckboxWrapper>
+        </div>
       </div>
 
       <br />
