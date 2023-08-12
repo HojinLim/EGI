@@ -60,6 +60,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:9.0.0"],\
             ["eslint-config-react-app", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:7.0.1"],\
             ["eslint-plugin-react", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:7.33.1"],\
+            ["iamport-typings", "npm:1.3.1"],\
             ["jotai", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:2.3.0"],\
             ["quill-image-resize", "npm:3.0.9"],\
             ["react", "npm:18.2.0"],\
@@ -9975,6 +9976,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:9.0.0"],\
             ["eslint-config-react-app", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:7.0.1"],\
             ["eslint-plugin-react", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:7.33.1"],\
+            ["iamport-typings", "npm:1.3.1"],\
             ["jotai", "virtual:34069774f764f6c076c76cefb79f9c00ee35c2ecc2faeec6f1f046eac9e499da19f7441a38c80f3dc82287abf91ba64b7783b2e2d997751e40d1ad563ff4f78d#npm:2.3.0"],\
             ["quill-image-resize", "npm:3.0.9"],\
             ["react", "npm:18.2.0"],\
@@ -13994,6 +13996,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["humanize-ms", "npm:1.2.1"],\
             ["ms", "npm:2.1.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["iamport-typings", [\
+        ["npm:1.3.1", {\
+          "packageLocation": "./.yarn/cache/iamport-typings-npm-1.3.1-a6105db0cf-cad2d23cf0.zip/node_modules/iamport-typings/",\
+          "packageDependencies": [\
+            ["iamport-typings", "npm:1.3.1"]\
           ],\
           "linkType": "HARD"\
         }]\
