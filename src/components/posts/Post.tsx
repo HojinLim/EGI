@@ -3,11 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Editor from '../editor/Editor';
 
-import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
+import * as S from './Styled.Posts';
+import { categories, conditionCategories, exchangeCategories } from '../category/Category';
 import { handleImageChange } from './HandleImage';
 import { supabase } from '../../services/supabase/supabase';
-import CategorySelect from '../category/CategorySelect';
+import { CategoryRadio } from '../category/CategorySelect';
+
 import { Link } from 'react-router-dom';
+import { jotaiUserDataAtom } from '../common/Header';
+import { useAtom } from 'jotai';
 
 const Post = () => {
   // const [user] = useAtom(userAtom); // userAtom의 값을 가져옴
@@ -21,9 +25,11 @@ const Post = () => {
   const [category, setCategory] = useState('');
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
-  const [parcelCategory, setParcelCategory] = useState('');
-  const [uid, setUid] = useState('');
 
+  // const [parcelCategory, setParcelCategory] = useState('');
+  const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
+  const [uid, setUid] = useState('');
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
   useEffect(() => {
     // userDataAtom의 값을 로컬 스토리지에서 가져오기
     const userData = localStorage.getItem('jotaiUserData');
@@ -56,14 +62,16 @@ const Post = () => {
     const { error: insertError } = await supabase.from('posts').insert([
       {
         title: newTitle,
+        nickname: jotaiUserData?.nickname,
         body: newBody,
+        profileimg: jotaiUserData?.profileimg,
         image_urls: imageUrls,
         price: newPrice,
         location: newLocation,
         category: category,
         condition: conditionCategory,
         exchange: exchangeCategory,
-        parcel: parcelCategory,
+        parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
         uid
       }
     ]);
@@ -93,13 +101,25 @@ const Post = () => {
     }
   };
 
+  const priceChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.replace(/[^0-9]/g, '');
+    setNewPrice(inputValue);
+  };
+
+  const priceWithCommas = (price: string): string => {
+    const numberOfPrice = Number(price);
+    return numberOfPrice.toLocaleString();
+  };
+
   return (
     <div>
       <div>
         <Link to={'/'}>HOME</Link>
         <input type="text" placeholder="Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
         <br />
-        <input type="number" placeholder="Price" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} />
+
+        <input type="text" placeholder="Price" value={priceWithCommas(newPrice)} onChange={priceChangeHandler} />
+
         <br />
         <input
           type="text"
@@ -109,26 +129,49 @@ const Post = () => {
         />
         <br />
 
-        <CategorySelect
-          value={category}
-          options={categories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={conditionCategory}
-          options={conditionCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConditionCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={exchangeCategory}
-          options={exchangeCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExchangeCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={parcelCategory}
-          options={parcelCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setParcelCategory(e.target.value)}
-        />
+        <div>
+          {categories.map((categoryOption) => (
+            <CategoryRadio
+              key={categoryOption.value}
+              value={categoryOption.value}
+              label={categoryOption.label}
+              checked={categoryOption.value === category}
+              onChange={() => setCategory(categoryOption.value)}
+            />
+          ))}
+        </div>
+        <div>
+          {conditionCategories.map((conditionCategoryOption) => (
+            <CategoryRadio
+              key={conditionCategoryOption.value}
+              value={conditionCategoryOption.value}
+              label={conditionCategoryOption.label}
+              checked={conditionCategoryOption.value === conditionCategory}
+              onChange={() => setConditionCategory(conditionCategoryOption.value)}
+            />
+          ))}
+        </div>
+        <div>
+          {exchangeCategories.map((exchangeCategoryOption) => (
+            <CategoryRadio
+              key={exchangeCategoryOption.value}
+              value={exchangeCategoryOption.value}
+              label={exchangeCategoryOption.label}
+              checked={exchangeCategoryOption.value === exchangeCategory}
+              onChange={() => setExchangeCategory(exchangeCategoryOption.value)}
+            />
+          ))}
+        </div>
+
+        <div>
+          <input
+            type="checkbox"
+            value="택배비 포함"
+            checked={parcelCategorySelected}
+            onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
+          />
+          <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
+        </div>
 
         <br />
         <Editor value={newBody} onChange={(content) => setNewBody(content)} />

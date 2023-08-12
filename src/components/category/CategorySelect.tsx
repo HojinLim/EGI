@@ -11,6 +11,13 @@ interface CategorySelectProps {
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
+interface CategoryRadioProps {
+  value: string;
+  label: string;
+  checked: boolean;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 const CategorySelect = ({ value, options, onChange }: CategorySelectProps) => {
   return (
     <select value={value} onChange={onChange}>
@@ -26,4 +33,11 @@ const CategorySelect = ({ value, options, onChange }: CategorySelectProps) => {
   );
 };
 
-export default CategorySelect;
+const CategoryRadio = ({ value, label, checked, onChange }: CategoryRadioProps) => (
+  <label>
+    <input type="radio" value={value} checked={checked} onChange={onChange} />
+    {label}
+  </label>
+);
+
+export { CategorySelect, CategoryRadio };

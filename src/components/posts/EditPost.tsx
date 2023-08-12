@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
 
+import * as S from './Styled.Posts';
 import { handleImageChange } from './HandleImage';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
-import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
-import CategorySelect from '../category/CategorySelect';
+import { categories, conditionCategories, exchangeCategories } from '../category/Category';
+import { CategoryRadio } from '../category/CategorySelect';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 const EditPost = () => {
@@ -21,7 +24,7 @@ const EditPost = () => {
   const [category, setCategory] = useState('');
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
-  const [parcelCategory, setParcelCategory] = useState('');
+  const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -37,7 +40,7 @@ const EditPost = () => {
         setCategory(posts.category);
         setConditionCategory(posts.condition);
         setExchangeCategory(posts.exchange);
-        setParcelCategory(posts.parcel);
+        setParcelCategorySelected(posts.parcel);
       }
     };
 
@@ -53,7 +56,7 @@ const EditPost = () => {
       !category ||
       !conditionCategory ||
       !exchangeCategory ||
-      !parcelCategory
+      !parcelCategorySelected
     ) {
       alert('모든 폼을 입력해주세요.');
       return;
@@ -93,7 +96,7 @@ const EditPost = () => {
           category,
           conditionCategory,
           exchangeCategory,
-          parcelCategory
+          parcelCategory: parcelCategorySelected
         })
         .eq('pid', post.pid);
 
@@ -117,7 +120,7 @@ const EditPost = () => {
   };
 
   if (!post) {
-    return <div>Loading...</div>;
+    return <div>Loading...<CircularProgress /></div>;
   }
 
   return (
@@ -129,26 +132,51 @@ const EditPost = () => {
       <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
       <br />
 
-      <CategorySelect
-        value={category}
-        options={categories}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategory(e.target.value)}
-      />
-      <CategorySelect
-        value={conditionCategory}
-        options={conditionCategories}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConditionCategory(e.target.value)}
-      />
-      <CategorySelect
-        value={exchangeCategory}
-        options={exchangeCategories}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExchangeCategory(e.target.value)}
-      />
-      <CategorySelect
-        value={parcelCategory}
-        options={parcelCategories}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setParcelCategory(e.target.value)}
-      />
+      <div>
+        {categories.map((categoryOption) => (
+          <CategoryRadio
+            key={categoryOption.value}
+            value={categoryOption.value}
+            label={categoryOption.label}
+            checked={categoryOption.value === category}
+            onChange={() => setCategory(categoryOption.value)}
+          />
+        ))}
+      </div>
+      <div>
+        {conditionCategories.map((conditionCategoryOption) => (
+          <CategoryRadio
+            key={conditionCategoryOption.value}
+            value={conditionCategoryOption.value}
+            label={conditionCategoryOption.label}
+            checked={conditionCategoryOption.value === conditionCategory}
+            onChange={() => setConditionCategory(conditionCategoryOption.value)}
+          />
+        ))}
+      </div>
+      <div>
+        {exchangeCategories.map((exchangeCategoryOption) => (
+          <CategoryRadio
+            key={exchangeCategoryOption.value}
+            value={exchangeCategoryOption.value}
+            label={exchangeCategoryOption.label}
+            checked={exchangeCategoryOption.value === exchangeCategory}
+            onChange={() => setExchangeCategory(exchangeCategoryOption.value)}
+          />
+        ))}
+      </div>
+
+      <div>
+        <S.RoundedCheckboxWrapper>
+          <S.CustomCheckbox
+            type="checkbox"
+            value="택배비 포함"
+            checked={parcelCategorySelected}
+            onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
+          />
+          <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
+        </S.RoundedCheckboxWrapper>
+      </div>
 
       <br />
 
