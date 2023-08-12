@@ -153,3 +153,9 @@ export const ModalContent = styled.div`
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
+
+export const EndMassage = styled.div`
+  text-align: center;
+  padding: 10px;
+  color: gray;
+`;
