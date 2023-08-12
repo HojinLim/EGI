@@ -60,9 +60,9 @@ const CategoryFilter = () => {
             <h3>{post.title}</h3>
 
             <div>
-              {post.image_urls.map((url, index) => (
-                <img key={index} src={url} alt={`Image ${index}`} />
-              ))}
+              {post.image_urls.length > 0 && (
+                <img src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${post.image_urls[0]} `} alt={post.title} />
+              )}
             </div>
           </div>
         ))}
