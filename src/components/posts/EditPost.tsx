@@ -8,6 +8,7 @@ import { supabase } from '../../services/supabase/supabase';
 import { categories, conditionCategories, exchangeCategories } from '../category/Category';
 import { CategoryRadio } from '../category/CategorySelect';
 import CircularProgress from '@mui/material/CircularProgress';
+
 const EditPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -81,10 +82,9 @@ const EditPost = () => {
           price,
           location,
           category,
-          condition: conditionCategory,
-          exchange: exchangeCategory,
-          parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
-          iscompleted: iscompleted ? '판매 완료' : '판매중'
+          conditionCategory,
+          exchangeCategory,
+          parcelCategory: parcelCategorySelected
         })
         .eq('pid', post.pid);
       if (error) {
@@ -111,19 +111,12 @@ const EditPost = () => {
       </div>
     );
   }
-  const priceChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value.replace(/[^0-9]/g, '');
-    setPrice(inputValue);
-  };
-  const priceWithCommas = (price: string): string => {
-    const numberOfPrice = Number(price);
-    return numberOfPrice.toLocaleString();
-  };
+
   return (
     <div>
       <input type="text" placeholder="Title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
       <br />
-      <input type="text" placeholder="Price" value={priceWithCommas(price)} onChange={priceChangeHandler} />
+      <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} />
       <br />
       <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
       <br />
