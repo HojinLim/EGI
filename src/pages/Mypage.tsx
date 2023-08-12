@@ -139,7 +139,7 @@ const Mypage = () => {
     }
   };
 
-  // 판매완료 개수
+  // 판매완료 개수 체크
   const completed = () => {
     if (!myIscompleted) {
       return 0; // 빈 배열이면 완료된 항목이 없으므로 0을 반환
