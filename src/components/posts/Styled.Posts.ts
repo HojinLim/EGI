@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 export const PostContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 `;
 
@@ -158,4 +158,20 @@ export const EndMassage = styled.div`
   text-align: center;
   padding: 10px;
   color: gray;
+`;
+
+export const CategoryButton = styled.button`
+  margin: 2px;
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 100px;
+  cursor: pointer;
+`;
+
+export const CategoryButtonContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
 `;

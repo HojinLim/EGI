@@ -12,6 +12,7 @@ import { supabase } from '../../services/supabase/supabase';
 import { sosialUserAtom } from '../user/social/SosialLogin';
 import { useNavigate } from 'react-router';
 import * as SL from '../common/Styled.Loading';
+import Search from './Search';
 
 export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
 
@@ -148,6 +149,8 @@ const Header = () => {
     <>
       <S.HeaderContainer>
         <S.Logo src={icon} onClick={() => navigate('/')} />
+
+        <Search />
         <div>
           {jotaiUserData ? (
             <S.ProfileWrapper>
