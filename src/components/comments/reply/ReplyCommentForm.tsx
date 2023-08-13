@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import useCommentMutation from '../../hooks/useCommentMutation';
-import * as S from './Styled.Comments';
-import { jotaiUserDataAtom } from '../common/Header';
+import useCommentMutation from '../../../hooks/useCommentMutation';
+import * as S from '../comment/Styled.Comments';
+import { jotaiUserDataAtom } from '../../common/Header';
 import { useAtom } from 'jotai';
 
 interface ReplyCommentFormProps {

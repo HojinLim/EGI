@@ -1,6 +1,5 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import Radio from '@mui/material/Radio';
 
 interface CategoryOption {
   value: string;
@@ -37,7 +36,7 @@ const CategorySelect = ({ value, options, onChange }: CategorySelectProps) => {
 
 const CategoryRadio = ({ value, label, checked, onChange }: CategoryRadioProps) => (
   <ChoiceCategory>
-    <ChoiceCategoryInput  value={value} checked={checked} onChange={onChange} />
+    <ChoiceCategoryInput type="radio" value={value} checked={checked} onChange={onChange} />
     {label}
   </ChoiceCategory>
 );
@@ -50,6 +49,6 @@ export const ChoiceCategory = styled.label`
   margin-right: 45px;
 `;
 
-export const ChoiceCategoryInput = styled(Radio)`
+export const ChoiceCategoryInput = styled.input`
   margin-right: 5px;
 `;

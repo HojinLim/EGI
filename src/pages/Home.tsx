@@ -1,13 +1,13 @@
 import React from 'react';
 
-import GetPost from '../components/posts/GetPost';
+import Main from '../components/main/Main';
 import Banner from '../components/common/Banner';
 
 const Home = () => {
   return (
     <div>
       <Banner />
-      <GetPost />
+      <Main />
     </div>
   );
 };

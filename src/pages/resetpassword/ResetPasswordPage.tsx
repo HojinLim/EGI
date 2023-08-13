@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { supabase } from '../services/supabase/supabase';
-import * as S from '../pages/Styled.ResetPasswordPage';
+import { supabase } from '../../services/supabase/supabase';
+import * as S from './Styled.ResetPasswordPage';
 
 const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');

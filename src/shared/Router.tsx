@@ -2,11 +2,11 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from '../pages/Home';
-import Mypage from '../pages/Mypage';
+import Mypage from '../components/mypage/MyProfile';
 import Detail from '../pages/Detail';
 import PostPage from '../pages/PostPage';
 import EditPage from '../pages/EditPage';
-import ResetPasswordPage from '../pages/ResetPasswordPage';
+import ResetPasswordPage from '../pages/resetpassword/ResetPasswordPage';
 import Header from '../components/common/Header';
 import GlobalStyle from '../GlobalStyle';
 
