@@ -43,8 +43,9 @@
 
 <br/>
 ![image](https://github.com/HojinLim/team_one/assets/69897998/f4b61884-e632-4af1-87ad-45cc4445fb08)
-<br/>
-![image](https://github.com/HojinLim/team_one/assets/69897998/762000dc-f831-4a43-8717-c8173efcb171)
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/5525fcd0-8bf3-4204-a385-80ead9972938)
+
 
 <br/>
 <br/>
