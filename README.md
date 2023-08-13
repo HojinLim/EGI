@@ -31,14 +31,14 @@
 
 ### :bouncing_ball_man: 화면 구성
 
-## Main Page
+##  Main Page
 
 <br/>
 
 ![image](https://github.com/HojinLim/team_one/assets/69897998/c285061e-dad1-49dc-9242-7890bd59fa51)
 
 
-## Detail Page
+##  Detail Page
 ![image](https://github.com/HojinLim/team_one/assets/69897998/50f8ab2c-a3c5-41e6-89b3-c63dc4959963)
 
 <br/>
@@ -50,21 +50,21 @@
 <br/>
 
 
-## Post Page
+##  Post Page
 
 ![image](https://github.com/HojinLim/team_one/assets/69897998/7ef4dafd-8b4c-4ed7-94af-330995cc098b)
 
 
-## My Page
+##  My Page
 
 ![image](https://github.com/HojinLim/team_one/assets/69897998/7f920ec7-9929-4004-b0b3-d11e415fdc28)
 
-## Payment Page
+##  Payment Page
 
 ![image](https://github.com/HojinLim/team_one/assets/69897998/44162c12-1bf9-4eb9-893b-3b033ae22775)
 
 
-## Share Page
+##  Share Page
 
 ![image](https://github.com/HojinLim/team_one/assets/69897998/87838a89-1344-43e7-b0f0-d762a0a43440)
 
