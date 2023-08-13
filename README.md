@@ -56,9 +56,15 @@
 ![image](https://github.com/HojinLim/team_one/assets/69897998/7ef4dafd-8b4c-4ed7-94af-330995cc098b)
 
 
-## 00 Page
+## My Page
 
-사진
+![image](https://github.com/HojinLim/team_one/assets/69897998/7f920ec7-9929-4004-b0b3-d11e415fdc28)
+
+## Payment Page
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/44162c12-1bf9-4eb9-893b-3b033ae22775)
+
+
 
 ---
 
