@@ -16,7 +16,8 @@ import { useAtom } from 'jotai';
 import CircularProgress from '@mui/material/CircularProgress';
 import Payment from '../components/payment/payment';
 import Comments from '../components/comments/Comments';
-import * as S from '../components/posts/Styled.Posts';
+import * as S from '../components/posts/Styled.GetPosts';
+import Share from '../components/common/Share';
 
 const Detail = () => {
   const queryClient = useQueryClient();
@@ -156,6 +157,7 @@ const Detail = () => {
           <S.PostInfo>상품상태 {post.condition}</S.PostInfo>
           <S.PostInfo>배송비 {post.parcel}</S.PostInfo>
           <S.PostInfo>교환여부 {post.exchange}</S.PostInfo>
+          <Share />
           <button onClick={handleJjim}>찜 {jjimData?.length}</button>
 
           {/* 여기가 페이먼트 가져오는 부분입니다! */}

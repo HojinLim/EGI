@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
 
-import * as S from './Styled.Posts';
+import * as S from './Styled.GetPosts';
 import { handleImageChange } from './HandleImage';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
-import { categories, conditionCategories, exchangeCategories } from '../category/Category';
+import { categories, conditionCategories, directCategories, exchangeCategories } from '../category/Category';
 import { CategoryRadio } from '../category/CategorySelect';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -24,6 +24,7 @@ const EditPost = () => {
   const [exchangeCategory, setExchangeCategory] = useState('');
   const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
   const [iscompleted, setIscompeted] = useState(false);
+  const [direct, setDirect] = useState('');
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -41,6 +42,7 @@ const EditPost = () => {
         setExchangeCategory(posts.exchange);
         setParcelCategorySelected(posts.parcel);
         setIscompeted(posts.iscompleted === '판매 완료');
+        setDirect(posts.direct);
       }
     };
 
@@ -55,7 +57,8 @@ const EditPost = () => {
       !price.toString().trim() ||
       !category ||
       !conditionCategory ||
-      !exchangeCategory
+      !exchangeCategory ||
+      !direct
     ) {
       alert('모든 폼을 입력해주세요.');
       return;
@@ -95,6 +98,7 @@ const EditPost = () => {
           category,
           condition: conditionCategory,
           exchange: exchangeCategory,
+          direct: direct,
           parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
           iscompleted: iscompleted ? '판매 완료' : '판매중'
         })
@@ -141,25 +145,9 @@ const EditPost = () => {
   return (
     <div>
       <input type="text" placeholder="Title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
-      <br />
-      <input type="text" placeholder="Price" value={priceWithCommas(price)} onChange={priceChangeHandler} />
-
-      <br />
       <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
-      <br />
-
       <div>
-        {categories.map((categoryOption) => (
-          <CategoryRadio
-            key={categoryOption.value}
-            value={categoryOption.value}
-            label={categoryOption.label}
-            checked={categoryOption.value === category}
-            onChange={() => setCategory(categoryOption.value)}
-          />
-        ))}
-      </div>
-      <div>
+        상태
         {conditionCategories.map((conditionCategoryOption) => (
           <CategoryRadio
             key={conditionCategoryOption.value}
@@ -170,6 +158,7 @@ const EditPost = () => {
           />
         ))}
       </div>
+
       <div>
         {exchangeCategories.map((exchangeCategoryOption) => (
           <CategoryRadio
@@ -182,9 +171,18 @@ const EditPost = () => {
         ))}
       </div>
       <div>
-        <input type="checkbox" value="판매 완료" checked={iscompleted} onChange={() => setIscompeted(!iscompleted)} />
-        <S.CheckboxLabel>판매 완료</S.CheckboxLabel>
+        {directCategories.map((directOption) => (
+          <CategoryRadio
+            key={directOption.value}
+            value={directOption.value}
+            label={directOption.label}
+            checked={directOption.value === direct}
+            onChange={() => setDirect(directOption.value)}
+          />
+        ))}
       </div>
+
+      <input type="text" placeholder="Price" value={priceWithCommas(price)} onChange={priceChangeHandler} />
       <div>
         <input
           type="checkbox"
@@ -194,14 +192,25 @@ const EditPost = () => {
         />
         <S.CheckboxLabel>택배비 포함</S.CheckboxLabel>
       </div>
-
-      <br />
+      <div>
+        카테고리
+        {categories.map((categoryOption) => (
+          <CategoryRadio
+            key={categoryOption.value}
+            value={categoryOption.value}
+            label={categoryOption.label}
+            checked={categoryOption.value === category}
+            onChange={() => setCategory(categoryOption.value)}
+          />
+        ))}
+      </div>
+      <div>
+        <input type="checkbox" value="판매 완료" checked={iscompleted} onChange={() => setIscompeted(!iscompleted)} />
+        <S.CheckboxLabel>판매 완료</S.CheckboxLabel>
+      </div>
 
       <Editor value={editBody} onChange={(content) => setEditBody(content)} />
-      <br />
-      <br />
-      <br />
-      <br />
+
       <input type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
       <button onClick={handleEditPost}>수정하기</button>
     </div>
@@ -209,5 +218,3 @@ const EditPost = () => {
 };
 
 export default EditPost;
-
-//되라 죽는다

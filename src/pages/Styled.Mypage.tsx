@@ -3,7 +3,19 @@ import { styled } from 'styled-components';
 
 export const MypageContainer = styled.div`
   display: flex;
-  margin: 100px 0 50px 200px;
+  margin: 100px 0 40px 200px;
+`;
+
+export const MypageWrapper = styled.div`
+  display: flex;
+
+  flex-direction: column;
+`;
+
+export const MypageWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
 `;
 
 export const ProfileBox = styled.div`
@@ -107,4 +119,57 @@ export const EditProfileLabel = styled.label`
 
 export const EditProfileInput = styled.input`
   display: none;
+`;
+
+export const EtcInfoBox = styled.div`
+  width: 290px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-bottom: 20px; */
+
+  margin: 0 50px 20px 0;
+`;
+
+export const GradeBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-right: 70px;
+  border-right: 1px solid black;
+  height: 80px;
+`;
+
+export const GradeFc = styled.p`
+  font-size: 21px;
+  font-weight: bold;
+`;
+
+export const GradeText = styled.p`
+  font-size: 13px;
+  margin-top: 5px;
+  color: #8f8f8f;
+`;
+
+export const CompleteBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: 70px;
+  margin-top: 4px;
+  height: 80px;
+`;
+
+export const CompleteText = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+export const CompleteNum = styled.p`
+  font-size: 15px;
+
+  color: #8f8f8f;
 `;

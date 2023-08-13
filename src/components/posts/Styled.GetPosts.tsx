@@ -161,17 +161,17 @@ export const EndMassage = styled.div`
 `;
 
 export const CategoryButton = styled.button`
-  margin: 0;
-  padding: 6px;
+  margin: 2px;
+  padding: 8px 16px;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
+  height: 100px;
   cursor: pointer;
 `;
 
 export const CategoryButtonContainer = styled.div`
-  display: flex;
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-content: center;
-  gap: 2px;
 `;

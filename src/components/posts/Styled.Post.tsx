@@ -27,12 +27,6 @@ export const Image = styled.img`
   height: 100px;
 `;
 
-export const Container = styled.div`
-  margin: 0 auto;
-  overflow: hidden;
-  margin-top: 50px;
-`;
-
 export const MainContainer = styled.div`
   display: flex;
 `;
@@ -161,17 +155,43 @@ export const EndMassage = styled.div`
 `;
 
 export const CategoryButton = styled.button`
-  margin: 0;
-  padding: 6px;
+  margin: 2px;
+  padding: 8px 16px;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
+  height: 100px;
   cursor: pointer;
 `;
 
 export const CategoryButtonContainer = styled.div`
-  display: flex;
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-content: center;
-  gap: 2px;
+`;
+
+export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  margin-top: 40px;
+`;
+
+export const Title = styled.div`
+  font-size: 25px;
+  padding: 40px;
+`;
+
+export const TopLine = styled.div`
+  width: 1000px;
+
+  border-top: 1px solid black;
+`;
+
+export const Line = styled.div`
+  width: 1000px;
+
+  border-top: 1px solid black;
 `;

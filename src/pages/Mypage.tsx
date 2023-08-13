@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { supabase } from '../services/supabase/supabase';
 import { useQueryClient } from '@tanstack/react-query';
 import { handleImageChange } from '../components/posts/HandleImage';
-import UserPosts, { myPostLegthAtom } from '../components/mypage/UserPosts';
+import UserPosts, { myIscompletedhAtom, myPostLegthAtom } from '../components/mypage/UserPosts';
 import * as S from '../pages/Styled.Mypage';
 import * as L from '../components/common/Styled.Loading';
 import { userAtom, userEmailAtom } from '../components/user/login/Login';
@@ -20,6 +20,7 @@ const Mypage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [socialUser] = useAtom(sosialUserAtom);
   const [myPostLegth] = useAtom(myPostLegthAtom);
+  const [myIscompleted] = useAtom(myIscompletedhAtom);
 
   // 생성한 토큰 가져와서 새로고침 방지
   useEffect(() => {
@@ -31,7 +32,7 @@ const Mypage = () => {
       queryClient.invalidateQueries(['users', userEmail]);
     }
   }, []);
-
+  console.log('myIscompleted', myIscompleted);
   // 프로필 수정 => 저장
   const handleEdit = async () => {
     let profileimg: string | null = null;
@@ -138,58 +139,86 @@ const Mypage = () => {
     }
   };
 
+  // 판매완료 개수
+  const completed = () => {
+    if (!myIscompleted) {
+      return 0; // 빈 배열이면 완료된 항목이 없으므로 0을 반환
+    } else {
+      const userUid = jotaiUserData?.uid;
+
+      // uid가 jotaiUserData의 uid와 일치하고 iscomplted가 true인 객체만 필터링
+      const completedItems = myIscompleted.filter((item) => {
+        return item.uid == userUid && item.iscompleted == '판매 완료';
+      });
+
+      return completedItems.length;
+    }
+  };
+
   return (
     <S.MypageContainer>
       {user || jotaiUserData ? (
-        <div>
-          <S.ProfileBox>
-            <S.ProfileImg
-              src={
-                jotaiUserData?.profileimg
-                  ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
-                  : '-'
-              }
-              alt={`프로필 이미지 - ${user?.uid}`}
-            />
-            <S.ProfileInfo>
-              {isEditing ? (
-                <S.NickNameBox>
-                  <S.EditNickName>닉네임 :</S.EditNickName>
-                  <S.InputNickName type="text" value={editnickname} onChange={handleNicknameChange} />
-                </S.NickNameBox>
-              ) : (
-                <S.NickName>{jotaiUserData ? jotaiUserData.nickname : ''}</S.NickName>
-              )}
-              <S.Email>{jotaiUserData ? jotaiUserData.email : ''}</S.Email>
+        <S.MypageWrapper>
+          <S.MypageWrap>
+            <S.ProfileBox>
+              <S.ProfileImg
+                src={
+                  jotaiUserData?.profileimg
+                    ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
+                    : '-'
+                }
+                alt={`프로필 이미지 - ${user?.uid}`}
+              />
+              <S.ProfileInfo>
+                {isEditing ? (
+                  <S.NickNameBox>
+                    <S.EditNickName>닉네임 :</S.EditNickName>
+                    <S.InputNickName type="text" value={editnickname} onChange={handleNicknameChange} />
+                  </S.NickNameBox>
+                ) : (
+                  <S.NickName>{jotaiUserData ? jotaiUserData.nickname : ''}</S.NickName>
+                )}
+                <S.Email>{jotaiUserData ? jotaiUserData.email : ''}</S.Email>
 
+                {isEditing ? (
+                  <div>
+                    <S.EditBtn onClick={handleEdit}>저장하기</S.EditBtn>
+                    <S.EditBtn onClick={handleEditClickClose}>취소하기</S.EditBtn>
+                  </div>
+                ) : (
+                  <S.EditBtn onClick={handleEditClickOpen}>프로필 수정</S.EditBtn>
+                )}
+              </S.ProfileInfo>
+            </S.ProfileBox>
+            <S.EditProfile>
               {isEditing ? (
                 <div>
-                  <S.EditBtn onClick={handleEdit}>저장하기</S.EditBtn>
-                  <S.EditBtn onClick={handleEditClickClose}>취소하기</S.EditBtn>
+                  <div>
+                    <S.EditProfileLabel htmlFor="file-input">파일선택</S.EditProfileLabel>
+                    <S.EditProfileInput
+                      id="file-input"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChangeWrapper}
+                    />
+                  </div>
                 </div>
-              ) : (
-                <S.EditBtn onClick={handleEditClickOpen}>프로필 수정</S.EditBtn>
-              )}
-            </S.ProfileInfo>
-          </S.ProfileBox>
-          <div>등급 :{grade()}</div>
-          <S.EditProfile>
-            {isEditing ? (
-              <div>
-                <div>
-                  <S.EditProfileLabel htmlFor="file-input">파일선택</S.EditProfileLabel>
-                  <S.EditProfileInput
-                    id="file-input"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChangeWrapper}
-                  />
-                </div>
-              </div>
-            ) : null}
-          </S.EditProfile>
+              ) : null}
+            </S.EditProfile>
+            <S.EtcInfoBox>
+              <S.GradeBox>
+                <S.GradeFc>{grade()}</S.GradeFc> <S.GradeText>회원 등급</S.GradeText>
+              </S.GradeBox>
+              <S.CompleteBox>
+                <S.CompleteText>판매 완료</S.CompleteText>{' '}
+                <S.CompleteNum>
+                  {completed()} / {myPostLegth}
+                </S.CompleteNum>
+              </S.CompleteBox>
+            </S.EtcInfoBox>
+          </S.MypageWrap>
           <UserPosts />
-        </div>
+        </S.MypageWrapper>
       ) : (
         <div>
           <L.LoadingOverlay />

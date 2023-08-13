@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAtom } from 'jotai';
 
-import * as S from './Styled.Posts';
+import * as S from './Styled.GetPosts';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { filterdcategories } from '../category/Category';
