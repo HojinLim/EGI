@@ -119,7 +119,7 @@ export const CoditionBox = styled.div`
   display: flex;
 `;
 export const CoditionIscompleted = styled.div`
-  width: 60px;
+  width: 70px;
 
   padding: 6px;
   text-align: center;
@@ -133,7 +133,7 @@ export const CoditionIscompleted = styled.div`
   margin-right: 15px;
 `;
 export const CoditionProduct = styled.div<ConditionProps>`
-  width: 60px;
+  width: 70px;
 
   padding: 5px;
   text-align: center;

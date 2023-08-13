@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAtom } from 'jotai';
 
 import * as S from './Styled.GetPosts';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
-import { categories } from '../category/Category';
+import { filterdcategories } from '../category/Category';
+import { searchKeywordAtom } from '../common/Search';
+import { getIconComponet } from './MuiBtn';
+
+// MUI- Material Icons
+import Button from '@mui/material/Button';
 
 export const GetPost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [searchKeyword] = useAtom(searchKeywordAtom);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -23,11 +30,10 @@ export const GetPost = () => {
         }));
 
         setPosts(postsWithCompleteURLs);
-
         setFilteredPosts(postsWithCompleteURLs);
       }
     };
-
+    console.log('과연 서버사이드?');
     fetchPosts();
   }, []);
 
@@ -40,15 +46,49 @@ export const GetPost = () => {
     }
   };
 
-  const categoryButtons = categories.map((category) => (
-    <button key={category.value} value={category.value} onClick={() => handleCategoryClick(category.value)}>
-      {category.label}
-    </button>
-  ));
+  useEffect(() => {
+    const handleSearch = () => {
+      if (searchKeyword.trim() === '' || searchKeyword === '') {
+        setFilteredPosts(posts);
+      } else {
+        const keywordLower = searchKeyword.toLowerCase();
+        const filtered = posts.filter((post) => post.title.toLowerCase().includes(keywordLower));
+        setFilteredPosts(filtered);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        handleSearch();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [searchKeyword]);
+
+  const categoryButtons = filterdcategories.map((category) => {
+    const IconComponent = getIconComponet(category.value); // 이 부분에 오타 수정
+    return (
+      <Button
+        key={category.value}
+        value={category.value}
+        onClick={() => handleCategoryClick(category.value)}
+        variant="outlined"
+        startIcon={<IconComponent />}
+      >
+        {category.label}
+      </Button>
+    );
+  });
 
   return (
     <>
-      <div>{categoryButtons}</div>
+      <S.ButtonGrid>{categoryButtons}</S.ButtonGrid>
+
       <S.PostContainer>
         {filteredPosts.map((post) => (
           <NavLink to={`/post/${post.pid}`} key={post.pid} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -66,6 +106,7 @@ export const GetPost = () => {
           </NavLink>
         ))}
       </S.PostContainer>
+      <S.EndMessage>더 이상의 게시물이 없습니다.</S.EndMessage>
     </>
   );
 };

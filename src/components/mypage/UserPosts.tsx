@@ -127,7 +127,7 @@ const UserPosts = () => {
               {data.image_urls[0] == '' ? (
                 <S.NonImg src={noImg} alt="Profile" />
               ) : (
-                <S.PostImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${data.image_urls}`} alt="Profile" />
+                <S.PostImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${data.image_urls[0]}`} alt="Profile" />
               )}
               <S.CardInfo>
                 <S.CardTop>

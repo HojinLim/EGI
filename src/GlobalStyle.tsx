@@ -4,10 +4,16 @@ import reset from 'styled-reset';
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
+  *{
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
   body {
     max-width: 1500px;
     min-width: 800px;
     margin: 0 auto;
+
+   
   }
 
   h1 {
