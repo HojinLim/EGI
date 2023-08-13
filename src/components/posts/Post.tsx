@@ -191,7 +191,6 @@ const Post = () => {
             <label>원</label>
             <S.ParcelBox>
               <S.ParcelInput
-                type="checkbox"
                 value="택배비 포함"
                 checked={parcelCategorySelected}
                 onChange={() => setParcelCategorySelected(!parcelCategorySelected)}

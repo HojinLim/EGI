@@ -209,7 +209,6 @@ const EditPost = () => {
             <label>원</label>
             <S.ParcelBox>
               <S.ParcelInput
-                type="checkbox"
                 value="택배비 포함"
                 checked={parcelCategorySelected}
                 onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
@@ -235,7 +234,7 @@ const EditPost = () => {
         <S.IscompletedBox>
           <S.IscompletedCheck>판매 여부</S.IscompletedCheck>
           <S.IscompletedInput
-            type="checkbox"
+       
             value="판매 완료"
             checked={iscompleted}
             onChange={() => setIscompeted(!iscompleted)}
