@@ -70,12 +70,13 @@
 
 ![image](https://github.com/HojinLim/team_one/assets/69897998/96fd3b50-912e-4858-b1c4-e1b0bbaf8272)
 
-
+<br/>
 
 ### :adhesive_bandage: 도전 해볼만 과제
 
 * [ ] 채팅 기능
 
+<br/>
 
 ## :sunglasses:주요 파일
 
