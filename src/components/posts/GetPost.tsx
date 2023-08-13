@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAtom } from 'jotai';
 
 import * as S from './Styled.GetPosts';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
-import { categories } from '../category/Category';
+import { filterdcategories } from '../category/Category';
+import { searchKeywordAtom } from '../common/Search';
+import { getIconComponet } from './MuiBtn';
 
 // MUI- Material Icons
 import Button from '@mui/material/Button';
-import WatchIcon from '@mui/icons-material/Watch';
-import LaptopIcon from '@mui/icons-material/Laptop';
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import DesktopMacIcon from '@mui/icons-material/DesktopMac';
-import MonitorIcon from '@mui/icons-material/Monitor';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
-import CableIcon from '@mui/icons-material/Cable';
 
 export const GetPost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [searchKeyword] = useAtom(searchKeywordAtom);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -34,11 +30,10 @@ export const GetPost = () => {
         }));
 
         setPosts(postsWithCompleteURLs);
-
         setFilteredPosts(postsWithCompleteURLs);
       }
     };
-
+    console.log('과연 서버사이드?');
     fetchPosts();
   }, []);
 
@@ -50,29 +45,32 @@ export const GetPost = () => {
       setFilteredPosts(filteredPosts);
     }
   };
-  // category 값에 따른 MUI 아이콘을 가져옵니다.
-  const getIconComponet = (value: string) => {
-    switch (value) {
-      case '컴퓨터':
-        return DesktopMacIcon;
-      case '노트북':
-        return LaptopIcon;
-      case '모니터':
-        return MonitorIcon;
-      case '핸드폰':
-        return PhoneAndroidIcon;
-      case '웨어러블': //
-        return WatchIcon;
-      case '콘솔':
-        return VideogameAssetIcon;
-      case '주변기기':
-        return CableIcon;
-      default:
-        return QuestionMarkIcon;
-    }
-  };
 
-  const categoryButtons = categories.map((category) => {
+  useEffect(() => {
+    const handleSearch = () => {
+      if (searchKeyword.trim() === '' || searchKeyword === '') {
+        setFilteredPosts(posts);
+      } else {
+        const keywordLower = searchKeyword.toLowerCase();
+        const filtered = posts.filter((post) => post.title.toLowerCase().includes(keywordLower));
+        setFilteredPosts(filtered);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        handleSearch();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [searchKeyword]);
+
+  const categoryButtons = filterdcategories.map((category) => {
     const IconComponent = getIconComponet(category.value); // 이 부분에 오타 수정
     return (
       <Button
@@ -90,6 +88,7 @@ export const GetPost = () => {
   return (
     <>
       <S.ButtonGrid>{categoryButtons}</S.ButtonGrid>
+
       <S.PostContainer>
         {filteredPosts.map((post) => (
           <NavLink to={`/post/${post.pid}`} key={post.pid} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -107,12 +106,9 @@ export const GetPost = () => {
           </NavLink>
         ))}
       </S.PostContainer>
+      <S.EndMessage>더 이상의 게시물이 없습니다.</S.EndMessage>
     </>
   );
 };
 
 export default GetPost;
-
-
-
-

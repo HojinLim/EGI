@@ -27,6 +27,7 @@ const Post = () => {
   const [direct, setDirect] = useState('');
   const [uid, setUid] = useState('');
   const [jotaiUserData] = useAtom(jotaiUserDataAtom);
+
   useEffect(() => {
     // userDataAtom의 값을 로컬 스토리지에서 가져오기
     const userData = localStorage.getItem('jotaiUserData');

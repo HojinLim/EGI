@@ -18,6 +18,7 @@ import Payment from '../components/payment/payment';
 import Comments from '../components/comments/Comments';
 import * as S from '../components/posts/Styled.GetPosts';
 import Share from '../components/common/Share';
+// import Chat from '../components/chat/Chat';
 
 const Detail = () => {
   const queryClient = useQueryClient();
@@ -30,6 +31,11 @@ const Detail = () => {
   const [post, setPost] = useState<Post | null>(null);
 
   const { data: jjimData } = useQuery(['jjim'], () => fetchJjimCount(id));
+  // const [isChatOpen, setIsChatOpen] = useState(false);
+
+  // const toggleChat = () => {
+  //   setIsChatOpen(!isChatOpen);
+  // };
 
   const toggleJjimMutation = useMutation(toggleJjim, {
     onSuccess: () => {
@@ -148,7 +154,7 @@ const Detail = () => {
         <S.ContentsContainer>
           <div>{post.nickname}</div>
           <S.PostTitle>{post.title}</S.PostTitle>
-          <S.Price>{post.price}원</S.Price>
+          <S.Price>{post.price?.toLocaleString('en-NZ')}원</S.Price>
           <S.PostInfo>
             {post.category} ⚪ {timeAgo}
           </S.PostInfo>
@@ -178,7 +184,9 @@ const Detail = () => {
           {jotaiUserData?.uid === post.uid && (
             <S.EditDeleteButtons>
               <S.StyledButton onClick={handleEdit}>수정하기</S.StyledButton>
-              <S.StyledButton onClick={handleDelete}>삭제하기</S.StyledButton>
+              <S.StyledButton onClick={handleDelete}>삭제하기</S.StyledButton>.
+              {/* <button onClick={toggleChat}>채팅하기</button>
+              {isChatOpen && <Chat postId={post.pid.toString()} />} */}
             </S.EditDeleteButtons>
           )}
         </S.ContentsContainer>
