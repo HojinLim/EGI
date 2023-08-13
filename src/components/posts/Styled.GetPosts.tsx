@@ -159,3 +159,10 @@ export const EndMassage = styled.div`
   padding: 10px;
   color: gray;
 `;
+
+export const ButtonGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
+  grid-gap: 10px;
+  margin: 20px;
+`;
