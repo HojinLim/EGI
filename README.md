@@ -40,6 +40,7 @@
 
 
 ## Post Page
+![image](https://github.com/HojinLim/team_one/assets/69897998/50f8ab2c-a3c5-41e6-89b3-c63dc4959963)
 
 <br/>
 ![image](https://github.com/HojinLim/team_one/assets/69897998/64408950-9b26-4d7e-b6f9-62b7961a0496)
