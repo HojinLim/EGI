@@ -75,7 +75,7 @@ const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) =>
             />
           </S.ProfileBox>
           <S.TextBox>
-            <div>{jotaiUserData?.nickname}</div>
+            <S.Name>{jotaiUserData?.nickname}</S.Name>
             <S.Text value={replyCommentText} onChange={handleCommentInputChange} onKeyDown={handleKeyDown} />
             <S.ButtonBox>
               <S.Button onClick={handleAddBtnClick}>

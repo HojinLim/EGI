@@ -114,7 +114,7 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
             <S.ProfileImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`} alt="Profile" />
           </S.ProfileBox>
           <S.TextBox>
-            <div>{comment.nickname}</div>
+            <S.Name>{comment.nickname}</S.Name>
             <S.Body>{renderCommentBody}</S.Body>
           </S.TextBox>
         </S.ProfileContainer>

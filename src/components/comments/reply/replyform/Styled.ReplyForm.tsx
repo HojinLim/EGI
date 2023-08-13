@@ -35,6 +35,11 @@ export const TextBox = styled.div`
   padding: 5px;
 `;
 
+export const Name = styled.div`
+  font-weight: bold;
+  color: #0a3a8d;
+`;
+
 export const Text = styled.textarea`
   margin-top: 10px;
 

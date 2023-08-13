@@ -1,15 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import * as S from './Styled.Reply';
-import CommentPanel from '../comment/commentbody/CommentPanel';
+import CommentPanel from '../../comment/commentbody/CommentPanel';
 import { useQuery } from '@tanstack/react-query';
-import { fetchReplyComments } from '../../../services/supabase/replyComments';
-import useCommentMutation from '../../../hooks/useCommentMutation';
-import { jotaiUserDataAtom } from '../../common/header/Header';
+import { fetchReplyComments } from '../../../../services/supabase/replyComments';
+import useCommentMutation from '../../../../hooks/useCommentMutation';
+import { jotaiUserDataAtom } from '../../../common/header/Header';
 import { useAtom } from 'jotai';
 // import baseProfile from '../../image/baseprofile.jpeg';
-import * as SL from '../../common/Styled.Loading';
+import * as SL from '../../../common/Styled.Loading';
 
-import type { ReplyCommentType } from '../../../types/supabase';
+import type { ReplyCommentType } from '../../../../types/supabase';
 interface ReplyCommentsProps {
   cid: number;
   pid: string;
@@ -117,7 +117,7 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
               {isUpdating && updateReplyId == comment.rid ? (
                 <S.TextBox>
                   {' '}
-                  <div>{comment.nickname}</div>
+                  <S.Name>{comment.nickname}</S.Name>
                   <S.ReplyEditText
                     value={updateReply}
                     onChange={handleUpdateReplyInputChange}
@@ -126,7 +126,7 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
                 </S.TextBox>
               ) : (
                 <S.TextBox>
-                  <div>{comment.nickname}</div>
+                  <S.Name>{comment.nickname}</S.Name>
                   <S.Body>{comment.body}</S.Body>
                 </S.TextBox>
               )}

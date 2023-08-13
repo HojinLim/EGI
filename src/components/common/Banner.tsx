@@ -13,14 +13,12 @@ const imageData = [
   //   alt: 'image1',
   //   src: bannerimage1
   // },
-  {
-    alt: 'image2',
-    src: bannerimage2
-  },
+
   {
     alt: 'image3',
     src: bannerimage3
   },
+
   {
     alt: 'image4',
     src: bannerimage4
@@ -32,6 +30,10 @@ const imageData = [
   {
     alt: 'image6',
     src: bannerimage6
+  },
+  {
+    alt: 'image2',
+    src: bannerimage2
   }
 ];
 

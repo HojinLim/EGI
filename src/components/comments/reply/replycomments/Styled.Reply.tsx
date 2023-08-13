@@ -44,7 +44,10 @@ export const Body = styled.div`
 
   width: 1080px;
 `;
-
+export const Name = styled.div`
+  font-weight: bold;
+  color: #0a3a8d;
+`;
 export const ReplyEditText = styled.textarea`
   width: 951px;
   height: 80px;

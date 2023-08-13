@@ -4,7 +4,7 @@ import useCommentMutation from '../../../../hooks/useCommentMutation';
 import * as S from './Styled.Form';
 import { jotaiUserDataAtom } from '../../../common/header/Header';
 import { useAtom } from 'jotai';
-
+import baseprofile from '../../../../image/baseprofile.jpeg';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { MailFilled } from '@ant-design/icons';
@@ -71,13 +71,17 @@ const CommentForm = ({ pid }: CommentFormProps) => {
         )}
         <S.Wrapper>
           <S.ProfileBox>
-            <S.ProfileImg
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
-              alt="Profile"
-            />
+            {jotaiUserData ? (
+              <S.ProfileImg
+                src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
+                alt="Profile"
+              />
+            ) : (
+              <S.ProfileImg src={baseprofile} alt="Profile" />
+            )}
           </S.ProfileBox>
           <S.TextBox>
-            <div>{jotaiUserData?.nickname}</div>
+            <S.Name>{jotaiUserData?.nickname}</S.Name>
             <S.Text value={commentText} onChange={handleCommentInputChange} />
             <S.ButtonBox>
               <S.Button onClick={handleAddBtnClick}>

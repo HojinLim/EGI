@@ -3,7 +3,7 @@ import * as S from './Styled.Comments';
 import { fetchComments } from '../../../../services/supabase/comments';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import ReplyComments from '../../reply/ReplyComments';
+import ReplyComments from '../../reply/replycomments/ReplyComments';
 import CommentForm from '../commentform/CommentForm';
 import CommentItem from './CommentItem';
 
