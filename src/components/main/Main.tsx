@@ -123,8 +123,6 @@ export const Main = () => {
   const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
   const paginatedData = filteredPosts.slice(startIdx, endIdx);
 
-  console.log('paginatedData', paginatedData);
-
   return (
     <>
       <S.ButtonGrid>{categoryButtons}</S.ButtonGrid>

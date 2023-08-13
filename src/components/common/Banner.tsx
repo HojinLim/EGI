@@ -45,9 +45,9 @@ const Banner = () => {
   const renderSlides = imageData.map((image) => (
     <div key={image.src}>
       {image.src ? (
-        <img src={image.src} alt={image.alt} style={{ width: '1200px', height: '300px' }} />
+        <img src={image.src} alt={image.alt} style={{ width: '1500px', height: '500px' }} />
       ) : (
-        <img src={image.src} alt={image.alt} style={{ width: '1200px', height: '300px' }} />
+        <img src={image.src} alt={image.alt} style={{ width: '1500px', height: '500px' }} />
       )}
     </div>
   ));
