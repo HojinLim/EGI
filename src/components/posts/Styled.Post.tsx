@@ -68,7 +68,6 @@ export const PostTitle = styled.h1`
 
 export const Price = styled.h1`
   font-size: 20px;
-  color: green;
   margin-bottom: 10px;
 `;
 

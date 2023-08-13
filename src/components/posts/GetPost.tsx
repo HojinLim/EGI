@@ -52,7 +52,10 @@ export const GetPost = () => {
         setFilteredPosts(posts);
       } else {
         const keywordLower = searchKeyword.toLowerCase();
-        const filtered = posts.filter((post) => post.title.toLowerCase().includes(keywordLower));
+        const filtered = posts.filter(
+          (post) =>
+            post.title.toLowerCase().includes(keywordLower) || post.location.toLowerCase().includes(keywordLower)
+        );
         setFilteredPosts(filtered);
       }
     };
