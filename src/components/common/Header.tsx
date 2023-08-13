@@ -22,6 +22,7 @@ import type { MenuProps } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 export const jotaiUserDataAtom = atom<Omit<UserTypes, 'password'> | null>(null);
+export const usersAtom = atom<Array<{ nickname: string; email: string }>>([]);
 
 const Header = () => {
   const navigate = useNavigate();
