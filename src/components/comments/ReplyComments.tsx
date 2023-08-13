@@ -98,16 +98,14 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
     <>
       {filteredComments?.map((comment) => (
         <S.CommentItem key={comment.rid} margin={'40px'}>
-          {comment?.profileimg ? (
+          <S.CommentProfileImgBox>
             <S.CommentProfileImg
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg || baseProfile}`}
               alt="Profile"
             />
-          ) : (
-            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
-          )}
-          <S.CommentTextBox>
             <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
+          </S.CommentProfileImgBox>
+          <S.CommentTextBox>
             {isUpdating && updateReplyId == comment.rid ? (
               <S.CommentInput
                 type="text"

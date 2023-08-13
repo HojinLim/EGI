@@ -56,6 +56,7 @@ const CommentForm = ({ pid }: CommentFormProps) => {
             }
             alt="Profile"
           />
+          {jotaiUserData?.nickname}
         </S.CommentProfileImgBox>
         <S.CommentInput type="text" value={commentText} onChange={handleCommentInputChange} />
         <S.CommentPanel>
