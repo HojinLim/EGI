@@ -19,7 +19,7 @@ export const MainTitle = styled.div`
 
 export const TopLine = styled.div`
   width: 1000px;
-
+  margin-right: 20px;
   border-top: 1px solid black;
 `;
 
@@ -169,7 +169,7 @@ export const FileInput = styled.input`
 export const WriterBtn = styled.button`
   position: absolute;
   top: 115%;
-  right: 0%;
+  right: 2.3%;
 
   padding: 15px 25px;
 

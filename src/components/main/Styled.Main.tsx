@@ -181,15 +181,20 @@ export const CategoryButton = styled.button`
 `;
 
 export const CategoryButtonContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
 `;
 export const ButtonGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
-  grid-gap: 10px;
+  grid-gap: 20px;
+  width: 1200px;
   margin: 20px;
+  margin-left: 150px;
+  margin-top: 80px;
+  margin-bottom: 80px;
 `;
 
 export const ImageContainer = styled.div`
@@ -203,7 +208,12 @@ export const CardCategory = styled.div`
   font-weight: bold;
 `;
 
-export const CardTitle = styled.div``;
+export const CardTitle = styled.div`
+  /* white-space: nowrap; */
+  overflow: hidden;
+  height: 17px;
+  text-overflow: ellipsis;
+`;
 export const CardLocation = styled.div``;
 export const CardPrice = styled.div`
   display: flex;
@@ -212,7 +222,6 @@ export const CardPrice = styled.div`
 `;
 export const CardCondition = styled.div`
   display: flex;
-  margin-right: 10px;
   justify-content: space-between;
   align-items: center;
 `;
