@@ -1,13 +1,13 @@
 import React, { Dispatch, useMemo, useState } from 'react';
 import * as S from './Styled.Comments';
 import CommentPanel from './CommentPanel';
-import ReplyCommentForm from './ReplyCommentForm';
-import baseProfile from '../../image/baseprofile.jpeg';
-import useCommentMutation from '../../hooks/useCommentMutation';
+import ReplyCommentForm from '../reply/ReplyCommentForm';
+// import baseProfile from '../../image/baseprofile.jpeg';
+import useCommentMutation from '../../../hooks/useCommentMutation';
 import { SetStateAction, useAtom } from 'jotai';
-import { jotaiUserDataAtom } from '../common/Header';
+import { jotaiUserDataAtom } from '../../common/Header';
 
-import type { CommentType } from '../../types/supabase';
+import type { CommentType } from '../../../types/supabase';
 interface CommentItemProps {
   pid: string;
   comment: CommentType;
@@ -111,7 +111,7 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
       <S.CommentItem>
         <S.CommentProfileImgBox>
           <S.CommentProfileImg
-            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg || baseProfile}`}
+            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`}
             alt="Profile"
           />
           <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>

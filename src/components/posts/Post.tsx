@@ -5,7 +5,7 @@ import Editor from '../editor/Editor';
 
 import * as S from './Styled.Post';
 import { categories, conditionCategories, directCategories, exchangeCategories } from '../category/Category';
-import { handleImageChange } from './HandleImage';
+import { handleImageChange } from '../../hooks/useHandleImage';
 import { supabase } from '../../services/supabase/supabase';
 import { CategoryRadio } from '../category/CategorySelect';
 
@@ -27,7 +27,6 @@ const Post = () => {
   const [direct, setDirect] = useState('');
   const [uid, setUid] = useState('');
   const [jotaiUserData] = useAtom(jotaiUserDataAtom);
-
   useEffect(() => {
     // userDataAtom의 값을 로컬 스토리지에서 가져오기
     const userData = localStorage.getItem('jotaiUserData');
@@ -140,6 +139,19 @@ const Post = () => {
           />
         </S.LocalBox>
         <S.Line></S.Line>
+        <S.CategoryBox>
+          <S.Category>카테고리</S.Category>
+          {categories.map((categoryOption) => (
+            <CategoryRadio
+              key={categoryOption.value}
+              value={categoryOption.value}
+              label={categoryOption.label}
+              checked={categoryOption.value === category}
+              onChange={() => setCategory(categoryOption.value)}
+            />
+          ))}
+        </S.CategoryBox>
+        <S.Line></S.Line>
         <S.ConditonBox>
           <S.Conditon>상태</S.Conditon>
           {conditionCategories.map((conditionCategoryOption) => (
@@ -201,18 +213,7 @@ const Post = () => {
           </S.PriceWrapper>
         </S.PriceBox>
         <S.Line></S.Line>
-        <S.CategoryBox>
-          <S.Category>카테고리</S.Category>
-          {categories.map((categoryOption) => (
-            <CategoryRadio
-              key={categoryOption.value}
-              value={categoryOption.value}
-              label={categoryOption.label}
-              checked={categoryOption.value === category}
-              onChange={() => setCategory(categoryOption.value)}
-            />
-          ))}
-        </S.CategoryBox>
+
         <S.Line></S.Line>
         <S.EditorBox>
           <Editor value={newBody} onChange={(content) => setNewBody(content)} />

@@ -10,19 +10,14 @@ export const CommentsPanel = styled.div`
   display: flex;
   justify-content: space-between;
   width: 99vw;
-  /* max-width: 1200px; */
 `;
 
 export const CommentsHr = styled.hr`
   border: 1px solid #ccc;
   margin: 20px 0px 0px 0px;
-  /* max-width: 1200px; */
 `;
 
-export const CommentList = styled.ul`
-  /* list-style-type: none; 기본 목록 스타일 제거 */
-  /* width: 1200px; */
-`;
+export const CommentList = styled.ul``;
 
 interface StyledReplyProps {
   margin?: string;
@@ -44,7 +39,6 @@ export const CommentProfileImgBox = styled.div`
   width: 5%;
   width: 80px;
   height: 100px;
-  /* border: black solid 1px; */
 `;
 
 export const CommentTextBox = styled.div`

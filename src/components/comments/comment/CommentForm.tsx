@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import useCommentMutation from '../../hooks/useCommentMutation';
-import baseProfile from '../../image/baseprofile.jpeg';
+import useCommentMutation from '../../../hooks/useCommentMutation';
+// import baseProfile from '../../image/baseprofile.jpeg';
 import * as S from './Styled.Comments';
-import { jotaiUserDataAtom } from '../common/Header';
+import { jotaiUserDataAtom } from '../../common/Header';
 import { useAtom } from 'jotai';
 
 import Alert from '@mui/material/Alert';
@@ -67,7 +67,7 @@ const CommentForm = ({ pid }: CommentFormProps) => {
       )}
       <S.CommentProfileImgBox>
         <S.CommentProfileImg
-          src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}` || baseProfile}
+          src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
           alt="Profile"
         />
         <div>{jotaiUserData?.nickname}</div>

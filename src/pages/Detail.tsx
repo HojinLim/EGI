@@ -15,8 +15,8 @@ import { fetchJjimCount, toggleJjim } from '../services/supabase/jjim';
 import { useAtom } from 'jotai';
 import CircularProgress from '@mui/material/CircularProgress';
 import Payment from '../components/payment/payment';
-import Comments from '../components/comments/Comments';
-import * as S from '../components/posts/Styled.GetPosts';
+import Comments from '../components/comments/comment/Comments';
+import * as S from '../components/main/Styled.Main';
 import Share from '../components/common/Share';
 // import Chat from '../components/chat/Chat';
 

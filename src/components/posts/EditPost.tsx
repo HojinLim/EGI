@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '../editor/Editor';
 import * as S from '../posts/Styled.Post';
 // import * as S from './Styled.GetPosts';
-import { handleImageChange } from './HandleImage';
+import { handleImageChange } from '../../hooks/useHandleImage';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { categories, conditionCategories, directCategories, exchangeCategories } from '../category/Category';
@@ -209,7 +209,6 @@ const EditPost = () => {
             <label>원</label>
             <S.ParcelBox>
               <S.ParcelInput
-                type="checkbox"
                 value="택배비 포함"
                 checked={parcelCategorySelected}
                 onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
@@ -234,12 +233,7 @@ const EditPost = () => {
         <S.Line></S.Line>
         <S.IscompletedBox>
           <S.IscompletedCheck>판매 여부</S.IscompletedCheck>
-          <S.IscompletedInput
-            type="checkbox"
-            value="판매 완료"
-            checked={iscompleted}
-            onChange={() => setIscompeted(!iscompleted)}
-          />
+          <S.IscompletedInput value="판매 완료" checked={iscompleted} onChange={() => setIscompeted(!iscompleted)} />
           <S.Iscompleted>판매 완료</S.Iscompleted>
         </S.IscompletedBox>
         <S.Line></S.Line>

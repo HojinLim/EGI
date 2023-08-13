@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAtom } from 'jotai';
 
-import * as S from './Styled.GetPosts';
+import * as S from './Styled.Main';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { filterdcategories } from '../category/Category';
@@ -12,7 +12,7 @@ import { getIconComponet } from './MuiBtn';
 // MUI- Material Icons
 import Button from '@mui/material/Button';
 
-export const GetPost = () => {
+export const Main = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [searchKeyword] = useAtom(searchKeywordAtom);
@@ -74,6 +74,7 @@ export const GetPost = () => {
     const IconComponent = getIconComponet(category.value); // 이 부분에 오타 수정
     return (
       <Button
+        style={{ padding: '20px', fontSize: '18px', border: '2px solid #0056b3' }}
         key={category.value}
         value={category.value}
         onClick={() => handleCategoryClick(category.value)}
@@ -111,4 +112,4 @@ export const GetPost = () => {
   );
 };
 
-export default GetPost;
+export default Main;

@@ -1,15 +1,15 @@
 import React, { useMemo, useState } from 'react';
-import * as S from './Styled.Comments';
-import CommentPanel from './CommentPanel';
+import * as S from '../comment/Styled.Comments';
+import CommentPanel from '../comment/CommentPanel';
 import { useQuery } from '@tanstack/react-query';
-import { fetchReplyComments } from '../../services/supabase/replyComments';
-import useCommentMutation from '../../hooks/useCommentMutation';
-import { jotaiUserDataAtom } from '../common/Header';
+import { fetchReplyComments } from '../../../services/supabase/replyComments';
+import useCommentMutation from '../../../hooks/useCommentMutation';
+import { jotaiUserDataAtom } from '../../common/Header';
 import { useAtom } from 'jotai';
-import baseProfile from '../../image/baseprofile.jpeg';
-import * as SL from '../common/Styled.Loading';
+// import baseProfile from '../../image/baseprofile.jpeg';
+import * as SL from '../../common/Styled.Loading';
 
-import type { ReplyCommentType } from '../../types/supabase';
+import type { ReplyCommentType } from '../../../types/supabase';
 interface ReplyCommentsProps {
   cid: number;
   pid: string;
@@ -106,7 +106,7 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
         <S.CommentItem key={comment.rid} margin={'20px 20px 10px 40px'} width={'1300px'}>
           <S.CommentProfileImgBox>
             <S.CommentProfileImg
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg || baseProfile}`}
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`}
               alt="Profile"
             />
             <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
