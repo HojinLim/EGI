@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Editor from '../editor/Editor';
+import Editor from './editor/Editor';
 
 import * as S from './Styled.Post';
 import { categories, conditionCategories, directCategories, exchangeCategories } from '../category/Category';
