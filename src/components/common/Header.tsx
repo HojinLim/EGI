@@ -15,6 +15,7 @@ import icon from '../../image/icon.png';
 import * as S from './Styled.Header';
 import * as SL from '../common/Styled.Loading';
 import Search from './Search';
+import { useLocation } from 'react-router-dom';
 
 import type { UserType, UserTypes } from '../../types/supabase';
 import type { MenuProps } from 'antd';
@@ -26,6 +27,7 @@ const Header = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loginModal, setLoginModal] = useState(false);
+  const location = useLocation();
 
   const [user, setUser] = useAtom(userAtom);
   const [userEmail, setUserEmail] = useAtom(userEmailAtom);
@@ -174,7 +176,7 @@ const Header = () => {
       <S.HeaderContainer>
         <S.Logo src={icon} onClick={() => navigate('/')} />
 
-        <Search />
+        {location.pathname === '/' && <Search />}
         <div>
           {jotaiUserData ? (
             <S.ProfileWrapper>

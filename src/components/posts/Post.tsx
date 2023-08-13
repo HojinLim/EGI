@@ -11,10 +11,9 @@ import { CategoryRadio } from '../category/CategorySelect';
 
 import { jotaiUserDataAtom } from '../common/Header';
 import { useAtom } from 'jotai';
+import { PictureOutlined } from '@ant-design/icons';
 
 const Post = () => {
-  // const [user] = useAtom(userAtom); // userAtom의 값을 가져옴
-
   const navigate = useNavigate();
   const [newTitle, setNewTitle] = useState('');
   const [newBody, setNewBody] = useState('');
@@ -123,22 +122,26 @@ const Post = () => {
 
   return (
     <S.Container>
-      <S.Title>상품 등록</S.Title>
+      <S.MainTitle>상품 등록</S.MainTitle>
       <S.TopLine></S.TopLine>
-      <div>
-        <label>제목</label>
-        <input type="text" placeholder="Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+      <S.Wrapper>
+        <S.TitleBox>
+          <S.Title>제목</S.Title>
+          <S.TitleInput type="text" placeholder="" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+        </S.TitleBox>
         <S.Line></S.Line>
-        <label>거래 지역</label>
-        <input
-          type="text"
-          placeholder="Location"
-          value={newLocation}
-          onChange={(e) => setNewLocation(e.target.value)}
-        />
+        <S.LocalBox>
+          <S.Local>거래 지역</S.Local>
+          <S.LocalInput
+            type="text"
+            placeholder=""
+            value={newLocation}
+            onChange={(e) => setNewLocation(e.target.value)}
+          />
+        </S.LocalBox>
         <S.Line></S.Line>
-        <div>
-          <label>상태</label>
+        <S.ConditonBox>
+          <S.Conditon>상태</S.Conditon>
           {conditionCategories.map((conditionCategoryOption) => (
             <CategoryRadio
               key={conditionCategoryOption.value}
@@ -148,10 +151,10 @@ const Post = () => {
               onChange={() => setConditionCategory(conditionCategoryOption.value)}
             />
           ))}
-        </div>
+        </S.ConditonBox>
         <S.Line></S.Line>
-        <div>
-          <label> 교환 여부</label>
+        <S.ExChangeBox>
+          <S.ExChange> 교환 여부</S.ExChange>
           {exchangeCategories.map((exchangeCategoryOption) => (
             <CategoryRadio
               key={exchangeCategoryOption.value}
@@ -161,10 +164,10 @@ const Post = () => {
               onChange={() => setExchangeCategory(exchangeCategoryOption.value)}
             />
           ))}
-        </div>
+        </S.ExChangeBox>
         <S.Line></S.Line>
-        <div>
-          <label> 직거래 여부</label>
+        <S.DirectBox>
+          <S.Direct> 직거래 여부</S.Direct>
           {directCategories.map((directOption) => (
             <CategoryRadio
               key={directOption.value}
@@ -174,27 +177,32 @@ const Post = () => {
               onChange={() => setDirect(directOption.value)}
             />
           ))}
-        </div>
+        </S.DirectBox>
         <S.Line></S.Line>
-        <label>가격</label>
-        <div>
-          <div>
-            <input type="text" placeholder="Price" value={priceWithCommas(newPrice)} onChange={priceChangeHandler} />
-            <input
-              type="checkbox"
-              value="택배비 포함"
-              checked={parcelCategorySelected}
-              onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
+        <S.PriceBox>
+          <S.Price>가격</S.Price>
+          <S.PriceWrapper>
+            <S.PriceInput
+              type="text"
+              placeholder="Price"
+              value={priceWithCommas(newPrice)}
+              onChange={priceChangeHandler}
             />
             <label>원</label>
-          </div>
-
-          <div>택배비 포함</div>
-        </div>
-
+            <S.ParcelBox>
+              <S.ParcelInput
+                type="checkbox"
+                value="택배비 포함"
+                checked={parcelCategorySelected}
+                onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
+              />{' '}
+              <label>택배비 포함</label>
+            </S.ParcelBox>
+          </S.PriceWrapper>
+        </S.PriceBox>
         <S.Line></S.Line>
-        <div>
-          <label>카테고리</label>
+        <S.CategoryBox>
+          <S.Category>카테고리</S.Category>
           {categories.map((categoryOption) => (
             <CategoryRadio
               key={categoryOption.value}
@@ -204,14 +212,17 @@ const Post = () => {
               onChange={() => setCategory(categoryOption.value)}
             />
           ))}
-        </div>
+        </S.CategoryBox>
         <S.Line></S.Line>
-
-        <Editor value={newBody} onChange={(content) => setNewBody(content)} />
-
-        <input type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
-        <button onClick={handleAddPost}>글 작성하기</button>
-      </div>
+        <S.EditorBox>
+          <Editor value={newBody} onChange={(content) => setNewBody(content)} />
+          <S.FileLabel htmlFor="file-input">
+            <PictureOutlined />
+          </S.FileLabel>
+          <S.FileInput id="file-input" type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
+          <S.WriterBtn onClick={handleAddPost}>등록하기</S.WriterBtn>
+        </S.EditorBox>
+      </S.Wrapper>
     </S.Container>
   );
 };

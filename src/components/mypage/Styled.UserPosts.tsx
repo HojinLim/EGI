@@ -25,6 +25,10 @@ export const MyWrittenPost = styled.button`
   background-color: transparent;
 
   cursor: pointer;
+
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const MyZzimPost = styled.button`
@@ -42,6 +46,10 @@ export const MyZzimPost = styled.button`
   background-color: transparent;
 
   cursor: pointer;
+
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const CardContainer = styled.div`
@@ -111,7 +119,7 @@ export const CoditionBox = styled.div`
   display: flex;
 `;
 export const CoditionIscompleted = styled.div`
-  width: 60px;
+  width: 70px;
 
   padding: 6px;
   text-align: center;
@@ -125,7 +133,7 @@ export const CoditionIscompleted = styled.div`
   margin-right: 15px;
 `;
 export const CoditionProduct = styled.div<ConditionProps>`
-  width: 60px;
+  width: 70px;
 
   padding: 5px;
   text-align: center;

@@ -139,7 +139,7 @@ const Mypage = () => {
     }
   };
 
-  // 판매완료 개수
+  // 판매완료 개수 체크
   const completed = () => {
     if (!myIscompleted) {
       return 0; // 빈 배열이면 완료된 항목이 없으므로 0을 반환
@@ -160,62 +160,66 @@ const Mypage = () => {
       {user || jotaiUserData ? (
         <S.MypageWrapper>
           <S.MypageWrap>
-            <S.ProfileBox>
-              <S.ProfileImg
-                src={
-                  jotaiUserData?.profileimg
-                    ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
-                    : '-'
-                }
-                alt={`프로필 이미지 - ${user?.uid}`}
-              />
-              <S.ProfileInfo>
-                {isEditing ? (
-                  <S.NickNameBox>
-                    <S.EditNickName>닉네임 :</S.EditNickName>
-                    <S.InputNickName type="text" value={editnickname} onChange={handleNicknameChange} />
-                  </S.NickNameBox>
-                ) : (
-                  <S.NickName>{jotaiUserData ? jotaiUserData.nickname : ''}</S.NickName>
-                )}
-                <S.Email>{jotaiUserData ? jotaiUserData.email : ''}</S.Email>
+            <S.ProfileTable>
+              <S.ProfileBox>
+                <S.ProfileImg
+                  src={
+                    jotaiUserData?.profileimg
+                      ? `${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`
+                      : '-'
+                  }
+                  alt={`프로필 이미지 - ${user?.uid}`}
+                />
+                <S.ProfileInfo>
+                  {isEditing ? (
+                    <S.NickNameBox>
+                      <S.EditNickName>닉네임 :</S.EditNickName>
+                      <S.InputNickName type="text" value={editnickname} onChange={handleNicknameChange} />
+                    </S.NickNameBox>
+                  ) : (
+                    <S.NickName>{jotaiUserData ? jotaiUserData.nickname : ''}</S.NickName>
+                  )}
+                  <S.Email>{jotaiUserData ? jotaiUserData.email : ''}</S.Email>
 
+                  {isEditing ? (
+                    <div>
+                      <S.EditBtn onClick={handleEdit}>저장하기</S.EditBtn>
+                      <S.EditBtn onClick={handleEditClickClose}>취소하기</S.EditBtn>
+                    </div>
+                  ) : (
+                    <S.EditBtn onClick={handleEditClickOpen}>프로필 수정</S.EditBtn>
+                  )}
+                </S.ProfileInfo>
+              </S.ProfileBox>
+              <S.EditProfile>
                 {isEditing ? (
                   <div>
-                    <S.EditBtn onClick={handleEdit}>저장하기</S.EditBtn>
-                    <S.EditBtn onClick={handleEditClickClose}>취소하기</S.EditBtn>
+                    <div>
+                      <S.EditProfileLabel htmlFor="file-input">파일선택</S.EditProfileLabel>
+                      <S.EditProfileInput
+                        id="file-input"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChangeWrapper}
+                      />
+                    </div>
                   </div>
-                ) : (
-                  <S.EditBtn onClick={handleEditClickOpen}>프로필 수정</S.EditBtn>
-                )}
-              </S.ProfileInfo>
-            </S.ProfileBox>
-            <S.EditProfile>
-              {isEditing ? (
-                <div>
-                  <div>
-                    <S.EditProfileLabel htmlFor="file-input">파일선택</S.EditProfileLabel>
-                    <S.EditProfileInput
-                      id="file-input"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChangeWrapper}
-                    />
-                  </div>
-                </div>
-              ) : null}
-            </S.EditProfile>
-            <S.EtcInfoBox>
-              <S.GradeBox>
-                <S.GradeFc>{grade()}</S.GradeFc> <S.GradeText>회원 등급</S.GradeText>
-              </S.GradeBox>
-              <S.CompleteBox>
-                <S.CompleteText>판매 완료</S.CompleteText>{' '}
-                <S.CompleteNum>
-                  {completed()} / {myPostLegth}
-                </S.CompleteNum>
-              </S.CompleteBox>
-            </S.EtcInfoBox>
+                ) : null}
+              </S.EditProfile>
+            </S.ProfileTable>
+            <div>
+              <S.EtcInfoBox>
+                <S.GradeBox>
+                  <S.GradeFc>{grade()}</S.GradeFc> <S.GradeText>회원 등급</S.GradeText>
+                </S.GradeBox>
+                <S.CompleteBox>
+                  <S.CompleteText>판매 완료</S.CompleteText>{' '}
+                  <S.CompleteNum>
+                    {completed()} / {myPostLegth}
+                  </S.CompleteNum>
+                </S.CompleteBox>
+              </S.EtcInfoBox>
+            </div>
           </S.MypageWrap>
           <UserPosts />
         </S.MypageWrapper>
