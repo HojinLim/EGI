@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Editor from '../editor/Editor';
+import Editor from './editor/Editor';
 import * as S from '../posts/Styled.Post';
 // import * as S from './Styled.GetPosts';
 import { handleImageChange } from '../../hooks/useHandleImage';
@@ -158,6 +158,19 @@ const EditPost = () => {
           <S.LocalInput type="text" placeholder="" value={location} onChange={(e) => setLocation(e.target.value)} />
         </S.LocalBox>
         <S.Line></S.Line>
+        <S.CategoryBox>
+          <S.Category>카테고리</S.Category>
+          {categories.map((categoryOption) => (
+            <CategoryRadio
+              key={categoryOption.value}
+              value={categoryOption.value}
+              label={categoryOption.label}
+              checked={categoryOption.value === category}
+              onChange={() => setCategory(categoryOption.value)}
+            />
+          ))}
+        </S.CategoryBox>
+        <S.Line></S.Line>
         <S.ConditonBox>
           <S.Conditon>상태</S.Conditon>
           {conditionCategories.map((conditionCategoryOption) => (
@@ -209,6 +222,7 @@ const EditPost = () => {
             <label>원</label>
             <S.ParcelBox>
               <S.ParcelInput
+                type="checkBox"
                 value="택배비 포함"
                 checked={parcelCategorySelected}
                 onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
@@ -218,22 +232,14 @@ const EditPost = () => {
           </S.PriceWrapper>
         </S.PriceBox>
         <S.Line></S.Line>
-        <S.CategoryBox>
-          <S.Category>카테고리</S.Category>
-          {categories.map((categoryOption) => (
-            <CategoryRadio
-              key={categoryOption.value}
-              value={categoryOption.value}
-              label={categoryOption.label}
-              checked={categoryOption.value === category}
-              onChange={() => setCategory(categoryOption.value)}
-            />
-          ))}
-        </S.CategoryBox>
-        <S.Line></S.Line>
         <S.IscompletedBox>
           <S.IscompletedCheck>판매 여부</S.IscompletedCheck>
-          <S.IscompletedInput value="판매 완료" checked={iscompleted} onChange={() => setIscompeted(!iscompleted)} />
+          <S.IscompletedInput
+            type="checkBox"
+            value="판매 완료"
+            checked={iscompleted}
+            onChange={() => setIscompeted(!iscompleted)}
+          />
           <S.Iscompleted>판매 완료</S.Iscompleted>
         </S.IscompletedBox>
         <S.Line></S.Line>
