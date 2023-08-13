@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAtom } from 'jotai';
+import { atom } from 'jotai';
 
 import * as S from './Styled.Main';
 import * as CONDITION from '../mypage/Styled.UserPosts';
@@ -12,10 +13,13 @@ import { searchKeywordAtom } from '../common/Search';
 import { getIconComponet } from './MuiBtn';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAllJjim } from '../../services/supabase/jjim';
+
 // MUI- Material Icons
 
 import Button from '@mui/material/Button';
 import { LikeFilled } from '@ant-design/icons';
+
+export const usersAtom = atom<Array<{ nickname: string; email: string }>>([]);
 
 export const Main = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -150,7 +154,7 @@ export const Main = () => {
               </S.CardTitle>
 
               <S.CardLocation>{post.location}</S.CardLocation>
-              <S.CardPrice>{post.price?.toLocaleString('en-NZ')}원</S.CardPrice>
+              <S.CardPrice>₩ {post.price?.toLocaleString('en-NZ')}원</S.CardPrice>
 
               <S.CardCondition>
                 <div>

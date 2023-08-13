@@ -65,6 +65,11 @@ const MyProfile = () => {
       }
     }
 
+    if (editnickname.length > 6) {
+      alert('닉네임은 최대 6글자 입니다.');
+      return;
+    }
+
     if (editnickname) {
       const { error } = await supabase
         .from('users')
