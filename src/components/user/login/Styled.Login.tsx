@@ -29,8 +29,15 @@ export const Wrapper = styled.div`
 
 export const CloseBtn = styled.button`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 15px;
+  top: 5px;
+
+  border: 2px solid #ffffff;
+
+  background-color: transparent;
+
+  color: #0a3a8d;
+  font-size: 25px;
 `;
 
 export const Title = styled.p`
@@ -80,12 +87,20 @@ export const LoginBtn = styled.button`
   width: 130px;
   height: 40px;
 
-  border: 1px solid #dddddd;
+  border: 2px solid #0a3a8d;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
 
   margin-top: 20px;
+
+  background-color: transparent;
+
+  color: #0a3a8d;
+
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const ModalBox = styled.div`

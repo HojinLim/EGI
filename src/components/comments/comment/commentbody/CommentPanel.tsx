@@ -1,3 +1,4 @@
+import { CheckOutlined, CloseOutlined, DeleteFilled, EditFilled } from '@ant-design/icons';
 import React from 'react';
 import * as S from './Styled.Comments';
 
@@ -19,23 +20,23 @@ const CommentPanel = ({
   return (
     <>
       {commenting ? (
-        <S.CommentPanel>
-          <S.Button width="50px" height="30px" onClick={handleUpdateBtnClick}>
-            완료
+        <S.ButtonBox>
+          <S.Button onClick={handleUpdateBtnClick}>
+            <CheckOutlined />
           </S.Button>
-          <S.Button width="50px" height="30px" onClick={handleUpdateCommentCancel}>
-            취소
+          <S.Button onClick={handleUpdateCommentCancel}>
+            <CloseOutlined />
           </S.Button>
-        </S.CommentPanel>
+        </S.ButtonBox>
       ) : (
-        <S.CommentPanel>
-          <S.Button width="50px" height="30px" onClick={handleUpdateCommentBtnClick}>
-            수정
+        <S.ButtonBox>
+          <S.Button onClick={handleUpdateCommentBtnClick}>
+            <EditFilled />
           </S.Button>
-          <S.Button width="50px" height="30px" onClick={handleDeleteCommentBtnClick}>
-            삭제
+          <S.Button onClick={handleDeleteCommentBtnClick}>
+            <DeleteFilled />
           </S.Button>
-        </S.CommentPanel>
+        </S.ButtonBox>
       )}
     </>
   );

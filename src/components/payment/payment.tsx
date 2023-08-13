@@ -4,8 +4,11 @@ import { Post } from '../../types/supabase';
 import { useAtom } from 'jotai';
 import { useQueryClient } from '@tanstack/react-query';
 import { userEmailAtom } from '../user/login/Login';
-import { jotaiUserDataAtom } from '../common/Header';
-
+import { jotaiUserDataAtom } from '../common/header/Header';
+import { styled } from 'styled-components';
+import kakao from '../../image/kakaopay.png';
+import toss from '../../image/Inicis.png';
+import inicis from '../../image/tosspay.png';
 interface PaymentProps {
   handlePayment: (paymentInfo: RequestPayParams) => void;
   post: Post;
@@ -60,12 +63,52 @@ const Payment: React.FC<PaymentProps> = ({ handlePayment, post }) => {
   };
 
   return (
-    <div>
-      <button onClick={() => handlePaymentClick('kakaopay', post)}>카카오페이 결제</button>
-      <button onClick={() => handlePaymentClick('inicis', post)}>이니시스 결제</button>
-      <button onClick={() => handlePaymentClick('tosspay', post)}>토스페이 결제</button>
-    </div>
+    <BtnBox>
+      <Btn1 onClick={() => handlePaymentClick('kakaopay', post)}>
+        <Img src={kakao} />
+      </Btn1>
+      <Btn onClick={() => handlePaymentClick('inicis', post)}>
+        <Img src={inicis} />
+      </Btn>
+      <Btn onClick={() => handlePaymentClick('tosspay', post)}>
+        <Img src={toss} />
+      </Btn>
+    </BtnBox>
   );
 };
 
 export default Payment;
+
+const BtnBox = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  /* margin: 0 auto; */
+
+  /* width: 10px; */
+
+  margin: 0 120px 50px 120px;
+`;
+
+const Btn = styled.button`
+  margin-top: 30px;
+  width: 170px;
+  height: 60px;
+
+  background-color: transparent;
+  border: none;
+`;
+
+const Btn1 = styled.button`
+  margin-top: 30px;
+  width: 170px;
+  height: 100px;
+
+  background-color: transparent;
+  border: none;
+`;
+
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
+`;

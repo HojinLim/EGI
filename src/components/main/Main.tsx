@@ -6,7 +6,7 @@ import * as S from './Styled.Main';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { filterdcategories } from '../category/Category';
-import { searchKeywordAtom } from '../common/Search';
+import { searchKeywordAtom } from '../common/search/Search';
 import { getIconComponet } from './MuiBtn';
 
 // MUI- Material Icons
@@ -74,7 +74,7 @@ export const Main = () => {
     const IconComponent = getIconComponet(category.value); // 이 부분에 오타 수정
     return (
       <Button
-        style={{ padding: '20px', fontSize: '18px', border: '2px solid #0056b3' }}
+        style={{ padding: '20px', fontSize: '18px', border: '2px solid #0a3a8d;' }}
         key={category.value}
         value={category.value}
         onClick={() => handleCategoryClick(category.value)}

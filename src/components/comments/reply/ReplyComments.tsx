@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import * as S from '../comment/Styled.Comments';
-import CommentPanel from '../comment/CommentPanel';
+import * as S from './Styled.Reply';
+import CommentPanel from '../comment/commentbody/CommentPanel';
 import { useQuery } from '@tanstack/react-query';
 import { fetchReplyComments } from '../../../services/supabase/replyComments';
 import useCommentMutation from '../../../hooks/useCommentMutation';
-import { jotaiUserDataAtom } from '../../common/Header';
+import { jotaiUserDataAtom } from '../../common/header/Header';
 import { useAtom } from 'jotai';
 // import baseProfile from '../../image/baseprofile.jpeg';
 import * as SL from '../../common/Styled.Loading';
@@ -101,45 +101,52 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   const filteredComments = replyComments?.filter((comment) => comment.cid === cid);
 
   return (
-    <>
+    <S.Container>
       {filteredComments?.map((comment) => (
-        <S.CommentItem key={comment.rid} margin={'20px 20px 10px 40px'} width={'1300px'}>
-          <S.CommentProfileImgBox>
-            <S.CommentProfileImg
-              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`}
-              alt="Profile"
-            />
-            <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
-          </S.CommentProfileImgBox>
-          <S.CommentTextBox>
+        <S.Wrapper key={comment.rid}>
+          <S.ProfileContainer>
+            <S.ProfileBox>
+              <S.ProfileImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`} alt="Profile" />
+            </S.ProfileBox>
+
             {isUpdating && updateReplyId == comment.rid ? (
-              <S.CommentInput value={updateReply} onChange={handleUpdateReplyInputChange} onKeyDown={handleKeyDown} />
-            ) : (
-              <S.CommentBody>{comment.body}</S.CommentBody>
-            )}
-          </S.CommentTextBox>
-          <S.CommentPanel>
-            {jotaiUserData?.uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
-              isUpdating && updateReplyId == comment.rid ? (
-                <CommentPanel
-                  commenting={true}
-                  handleUpdateBtnClick={handleUpdateBtnClick}
-                  handleUpdateCommentCancel={handleUpdateCommentCancel}
+              <S.TextBox>
+                {' '}
+                <div>{comment.nickname}</div>
+                <S.ReplyEditText
+                  value={updateReply}
+                  onChange={handleUpdateReplyInputChange}
+                  onKeyDown={handleKeyDown}
                 />
-              ) : (
-                <CommentPanel
-                  commenting={false}
-                  handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.rid, comment.body)}
-                  handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.rid)}
-                />
-              )
+              </S.TextBox>
             ) : (
-              <div style={{ width: '105px' }} />
+              <S.TextBox>
+                <div>{comment.nickname}</div>
+                <S.Body>{comment.body}</S.Body>
+              </S.TextBox>
             )}
-          </S.CommentPanel>
-        </S.CommentItem>
+          </S.ProfileContainer>
+          {jotaiUserData?.uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
+            isUpdating && updateReplyId == comment.rid ? (
+              <CommentPanel
+                commenting={true}
+                handleUpdateBtnClick={handleUpdateBtnClick}
+                handleUpdateCommentCancel={handleUpdateCommentCancel}
+              />
+            ) : (
+              <CommentPanel
+                commenting={false}
+                handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.rid, comment.body)}
+                handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.rid)}
+              />
+            )
+          ) : (
+            <div />
+          )}
+        </S.Wrapper>
       ))}
-    </>
+      <S.Line></S.Line>
+    </S.Container>
   );
 };
 

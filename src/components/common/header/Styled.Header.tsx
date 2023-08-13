@@ -82,12 +82,17 @@ export const LogOutButton = styled.button`
 export const LoginButton = styled.button`
   background-color: transparent;
 
-  border: 1px solid #dddddd;
+  border: 2px solid #0a3a8d;
   border-radius: 5px;
   padding: 10px 15px;
 
   width: 100px;
   height: 50px;
+  cursor: pointer;
+  color: #0a3a8d;
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const Line = styled.div`

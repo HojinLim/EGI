@@ -144,7 +144,7 @@ const UserPosts = () => {
                 </S.CardMiddle>
                 <S.CardBottom>
                   <S.Nickname>{data.nickname}</S.Nickname>
-                  <S.Price>{data.price?.toLocaleString('en-NZ')} 원</S.Price>
+                  <S.Price>₩ {data.price?.toLocaleString('en-NZ')} 원</S.Price>
                 </S.CardBottom>
               </S.CardInfo>
             </S.Card>

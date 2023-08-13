@@ -39,8 +39,15 @@ export const Wapper = styled.form`
 
 export const CloseBtn = styled.button`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 15px;
+  top: 5px;
+
+  border: 2px solid #ffffff;
+
+  background-color: transparent;
+
+  color: #0a3a8d;
+  font-size: 25px;
 `;
 
 export const InputWrapper = styled.div`
@@ -78,9 +85,21 @@ export const CheckEmailBtn = styled.button`
   height: 32px;
 
   border-radius: 6px;
-  border: 1px solid black;
+  border: 2px solid #0a3a8d;
   margin-left: 15px;
   padding: 10px;
+
+  background-color: transparent;
+
+  color: #0a3a8d;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const PasswordBox = styled.div`
@@ -144,24 +163,38 @@ export const ProfileImgnameBox = styled.div`
   display: flex;
   align-items: center;
   margin-left: 5px;
+  margin-right: 355px;
 `;
 
 export const ProfileImgLabel = styled.div`
   flex: 0 0 120px;
 `;
 
+export const Label = styled.label`
+  font-size: 25px;
+  margin-left: 1px;
+`;
+
 export const ProfileImgInput = styled.input`
-  border: 1px solid black;
-  width: 260px;
-  border-radius: 6px;
-  margin-right: 118px;
+  /* border: 1px solid black; */
+  /* width: 260px; */
+  /* border-radius: 6px; */
+  display: none;
 `;
 
 export const SignUpBtn = styled.button`
   margin-top: 30px;
-  border: 1px solid black;
+  border: 2px solid #0a3a8d;
   border-radius: 6px;
 
   width: 120px;
   height: 32px;
+
+  background-color: transparent;
+
+  color: #0a3a8d;
+  cursor: pointer;
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;

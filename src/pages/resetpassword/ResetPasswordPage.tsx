@@ -33,7 +33,7 @@ const ResetPasswordPage = () => {
 
   return (
     <S.Container>
-      <S.HomeBtn onClick={backToTheHome}>🏠</S.HomeBtn>
+      <S.HomeBtn onClick={backToTheHome}>X</S.HomeBtn>
       <S.Wrapper>
         <h2>비밀번호 재설정</h2>
         <S.Wrapper>

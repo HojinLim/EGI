@@ -9,7 +9,7 @@ import { handleImageChange } from '../../hooks/useHandleImage';
 import { supabase } from '../../services/supabase/supabase';
 import { CategoryRadio } from '../category/CategorySelect';
 
-import { jotaiUserDataAtom } from '../common/Header';
+import { jotaiUserDataAtom } from '../common/header/Header';
 import { useAtom } from 'jotai';
 import { PictureOutlined } from '@ant-design/icons';
 

@@ -7,17 +7,18 @@ import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 import { RequestPayParams } from 'iamport-typings';
-import { jotaiUserDataAtom } from '../components/common/Header';
-import { Post } from '../types/supabase';
-import { supabase } from '../services/supabase/supabase';
+import { jotaiUserDataAtom } from '../../components/common/header/Header';
+import { Post } from '../../types/supabase';
+import { supabase } from '../../services/supabase/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchJjimCount, toggleJjim } from '../services/supabase/jjim';
+import { fetchJjimCount, toggleJjim } from '../../services/supabase/jjim';
 import { useAtom } from 'jotai';
 import CircularProgress from '@mui/material/CircularProgress';
-import Payment from '../components/payment/payment';
-import Comments from '../components/comments/comment/Comments';
-import * as S from '../components/main/Styled.Main';
-import Share from '../components/common/Share';
+import Payment from '../../components/payment/payment';
+import Comments from '../../components/comments/comment/commentbody/Comments';
+import * as S from './Styled.Detail';
+import Share from '../../components/common/Share';
+import { AlertFilled, DeleteFilled, EditFilled, LikeFilled } from '@ant-design/icons';
 // import Chat from '../components/chat/Chat';
 
 const Detail = () => {
@@ -124,6 +125,10 @@ const Detail = () => {
   };
 
   let timeAgo = '';
+
+  const declaration = () => {
+    alert('신고는 112');
+  };
   if (post) {
     timeAgo = formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ko });
   }
@@ -139,58 +144,92 @@ const Detail = () => {
 
   return (
     <S.Container>
-      <S.MainContainer>
-        <S.CarouselContainer>
+      <S.Wrapper>
+        <S.CarouselBox>
           <Carousel>
             {post.image_urls.map((imageUrl, index) => (
               <div key={index}>
-                <div style={{ border: 'black solid 1px' }}>
-                  <S.Image src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`} alt={`Image ${index}`} />
-                </div>
+                <S.PostImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${imageUrl}`} alt={`Image ${index}`} />
               </div>
             ))}
           </Carousel>
-        </S.CarouselContainer>
-        <S.ContentsContainer>
-          <div>{post.nickname}</div>
-          <S.PostTitle>{post.title}</S.PostTitle>
-          <S.Price>{post.price?.toLocaleString('en-NZ')}원</S.Price>
-          <S.PostInfo>
-            {post.category} ⚪ {timeAgo}
-          </S.PostInfo>
-          <S.PostBody dangerouslySetInnerHTML={{ __html: post.body }} />
-          <S.PostInfo>거래지역 {post.location}</S.PostInfo>
-          <S.PostInfo>상품상태 {post.condition}</S.PostInfo>
-          <S.PostInfo>배송비 {post.parcel}</S.PostInfo>
-          <S.PostInfo>교환여부 {post.exchange}</S.PostInfo>
-          <Share />
-          <button onClick={handleJjim}>찜 {jjimData?.length}</button>
+        </S.CarouselBox>
+        <S.PostBox>
+          <S.TopBox>
+            <S.ProfileBox>
+              <S.ProfileImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${post.profileimg}`} alt="Profile" />
+              <S.Nickname>{post.nickname}</S.Nickname>
+            </S.ProfileBox>
+            <S.FeatBtnBox>
+              {jotaiUserData?.uid === post.uid && (
+                <S.FeatBtns>
+                  <S.FeatBtn onClick={handleEdit}>
+                    <EditFilled />
+                  </S.FeatBtn>
+                  <S.FeatBtn onClick={handleDelete}>
+                    <DeleteFilled />
+                  </S.FeatBtn>
 
-          {/* 여기가 페이먼트 가져오는 부분입니다! */}
-          {/* 여기가 추가된 버튼입니다! */}
-
-          <button onClick={openPaymentModal}>결제하기</button>
-
-          {/* 모달 */}
-          {paymentModalVisible && (
-            <S.ModalWrapper>
-              <S.ModalContent>
-                <button onClick={closePaymentModal}>모달 닫기</button>
-                <Payment handlePayment={handlePayment} post={post} />
-              </S.ModalContent>
-            </S.ModalWrapper>
-          )}
-
-          {jotaiUserData?.uid === post.uid && (
-            <S.EditDeleteButtons>
-              <S.StyledButton onClick={handleEdit}>수정하기</S.StyledButton>
-              <S.StyledButton onClick={handleDelete}>삭제하기</S.StyledButton>.
-              {/* <button onClick={toggleChat}>채팅하기</button>
+                  {/* <button onClick={toggleChat}>채팅하기</button>
               {isChatOpen && <Chat postId={post.pid.toString()} />} */}
-            </S.EditDeleteButtons>
-          )}
-        </S.ContentsContainer>
-      </S.MainContainer>
+                </S.FeatBtns>
+              )}
+            </S.FeatBtnBox>
+          </S.TopBox>
+          <S.TitleBox>
+            <S.Title>{post.title}</S.Title>
+          </S.TitleBox>
+          <S.CategoryBox>
+            <S.Category>{post.category}</S.Category>
+            <S.Time> ∙ {timeAgo}</S.Time>
+          </S.CategoryBox>
+          <S.Body dangerouslySetInnerHTML={{ __html: post.body }} />
+          <S.Line></S.Line>
+          <S.ShareBox>
+            <Share />
+            <S.DeclarationBtn onClick={() => declaration()}>
+              <AlertFilled />
+            </S.DeclarationBtn>
+          </S.ShareBox>
+          <S.DetailInfoBox>
+            <S.DetailInfo>
+              <S.ConditionBox>
+                ∙ 상품상태 <S.Condition>{post.condition}</S.Condition>
+              </S.ConditionBox>
+              <S.ExchangeBox>
+                ∙ 교환여부 <S.Exchange>{post.exchange}</S.Exchange>
+              </S.ExchangeBox>
+              <S.ParcelBox>
+                ∙ 택배비 <S.Parcel>{post.parcel}</S.Parcel>
+              </S.ParcelBox>
+              <S.DirectBox>
+                ∙ 직거래 <S.Direct>{post.direct}</S.Direct>
+              </S.DirectBox>
+              <S.LocationBox>
+                ∙ 거래지역 <S.Location>{post.location}</S.Location>
+              </S.LocationBox>
+            </S.DetailInfo>
+            <S.Price>₩ {post.price?.toLocaleString('en-NZ')}원</S.Price>
+          </S.DetailInfoBox>
+          <S.BtnBox>
+            <S.Btn onClick={handleJjim}>
+              <LikeFilled /> {jjimData?.length}
+            </S.Btn>
+            <S.Btn onClick={openPaymentModal}>결제하기</S.Btn>
+            <S.ModalContainer>
+              {paymentModalVisible && (
+                <S.ModalWrapper>
+                  {' '}
+                  <S.CloseBtn onClick={closePaymentModal}>x</S.CloseBtn>
+                  <S.ModalContent>
+                    <Payment handlePayment={handlePayment} post={post} />
+                  </S.ModalContent>
+                </S.ModalWrapper>
+              )}
+            </S.ModalContainer>
+          </S.BtnBox>
+        </S.PostBox>
+      </S.Wrapper>
       <Comments />
     </S.Container>
   );

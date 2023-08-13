@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import useCommentMutation from '../../../hooks/useCommentMutation';
+import useCommentMutation from '../../../../hooks/useCommentMutation';
 // import baseProfile from '../../image/baseprofile.jpeg';
-import * as S from './Styled.Comments';
-import { jotaiUserDataAtom } from '../../common/Header';
+import * as S from './Styled.Form';
+import { jotaiUserDataAtom } from '../../../common/header/Header';
 import { useAtom } from 'jotai';
 
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import { MailFilled } from '@ant-design/icons';
 
 interface CommentFormProps {
   pid: string;
@@ -59,27 +60,34 @@ const CommentForm = ({ pid }: CommentFormProps) => {
   };
 
   return (
-    <S.CommentItem width={'1300px'} margin={'15px 0px 0px 0px'}>
-      {showAlert && (
-        <Stack sx={{ width: '100%', position: 'fixed', top: 500, zIndex: 100 }}>
-          <Alert severity="error">댓글을 작성해 주세요.</Alert>
-        </Stack>
-      )}
-      <S.CommentProfileImgBox>
-        <S.CommentProfileImg
-          src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
-          alt="Profile"
-        />
-        <div>{jotaiUserData?.nickname}</div>
-      </S.CommentProfileImgBox>
-
-      <S.CommentInput value={commentText} onChange={handleCommentInputChange} />
-      <S.CommentPanel>
-        <S.Button width="50px" height="30px" onClick={handleAddBtnClick}>
-          등록
-        </S.Button>
-      </S.CommentPanel>
-    </S.CommentItem>
+    <>
+      {' '}
+      {/* <S.Line></S.Line> */}
+      <S.Container>
+        {showAlert && (
+          <Stack sx={{ width: '100%', position: 'fixed', top: 500, zIndex: 100 }}>
+            <Alert severity="error">댓글을 작성해 주세요.</Alert>
+          </Stack>
+        )}
+        <S.Wrapper>
+          <S.ProfileBox>
+            <S.ProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${jotaiUserData?.profileimg}`}
+              alt="Profile"
+            />
+          </S.ProfileBox>
+          <S.TextBox>
+            <div>{jotaiUserData?.nickname}</div>
+            <S.Text value={commentText} onChange={handleCommentInputChange} />
+            <S.ButtonBox>
+              <S.Button onClick={handleAddBtnClick}>
+                <MailFilled />
+              </S.Button>
+            </S.ButtonBox>
+          </S.TextBox>
+        </S.Wrapper>
+      </S.Container>
+    </>
   );
 };
 

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { atom, useAtom } from 'jotai';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import Login, { userAtom, userEmailAtom } from '../user/login/Login';
-import { sosialUserAtom } from '../user/social/SosialLogin';
-import { getUserInfo, sigOutService } from '../../services/supabase/auth';
+import Login, { userAtom, userEmailAtom } from '../../user/login/Login';
+import { sosialUserAtom } from '../../user/social/SosialLogin';
+import { getUserInfo, sigOutService } from '../../../services/supabase/auth';
 
-import { supabase } from '../../services/supabase/supabase';
+import { supabase } from '../../../services/supabase/supabase';
 import { useNavigate } from 'react-router';
 
 import { Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 
-import icon from '../../image/icon.png';
+import icon from '../../../image/icon.png';
 import * as S from './Styled.Header';
-import * as SL from '../common/Styled.Loading';
-import Search from './Search';
+import * as SL from '../Styled.Loading';
+import Search from '../search/Search';
 import { useLocation } from 'react-router-dom';
 
-import type { UserType, UserTypes } from '../../types/supabase';
+import type { UserType, UserTypes } from '../../../types/supabase';
 import type { MenuProps } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 

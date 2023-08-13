@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { jotaiUserDataAtom } from '../common/Header';
+import { jotaiUserDataAtom } from '../common/header/Header';
 import { useAtom } from 'jotai';
 import { supabase } from '../../services/supabase/supabase';
 import { useQueryClient } from '@tanstack/react-query';

@@ -22,8 +22,15 @@ export const Container = styled.div`
 
 export const HomeBtn = styled.button`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 15px;
+  top: 5px;
+
+  border: 2px solid #ffffff;
+
+  background-color: transparent;
+
+  color: #0a3a8d;
+  font-size: 25px;
 `;
 
 export const Wrapper = styled.div`
@@ -48,10 +55,18 @@ export const PasswordInput = styled.input`
 
 export const PwdUpdateBtn = styled.button`
   border-radius: 5px;
-  border-none;
+  border: 2px solid #0a3a8d;
   width: 170px;
   height: 30px;
   /* height: 35px; */
 
-  margin-top: 13px
+  background-color: transparent;
+
+  color: #0a3a8d;
+
+  margin-top: 13px;
+
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;

@@ -3,11 +3,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from '../pages/Home';
 import Mypage from '../components/mypage/MyProfile';
-import Detail from '../pages/Detail';
+import Detail from '../pages/detail/Detail';
 import PostPage from '../pages/PostPage';
 import EditPage from '../pages/EditPage';
 import ResetPasswordPage from '../pages/resetpassword/ResetPasswordPage';
-import Header from '../components/common/Header';
+import Header from '../components/common/header/Header';
 import GlobalStyle from '../GlobalStyle';
 
 const Router: React.FC = () => {

@@ -1,13 +1,14 @@
 import React, { Dispatch, useMemo, useState } from 'react';
 import * as S from './Styled.Comments';
 import CommentPanel from './CommentPanel';
-import ReplyCommentForm from '../reply/ReplyCommentForm';
+import ReplyCommentForm from '../../reply/replyform/ReplyCommentForm';
 // import baseProfile from '../../image/baseprofile.jpeg';
-import useCommentMutation from '../../../hooks/useCommentMutation';
+import useCommentMutation from '../../../../hooks/useCommentMutation';
 import { SetStateAction, useAtom } from 'jotai';
-import { jotaiUserDataAtom } from '../../common/Header';
+import { jotaiUserDataAtom } from '../../../common/header/Header';
 
-import type { CommentType } from '../../../types/supabase';
+import type { CommentType } from '../../../../types/supabase';
+// import { EnterOutlined } from '@ant-design/icons';
 interface CommentItemProps {
   pid: string;
   comment: CommentType;
@@ -83,14 +84,12 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
 
   const renderCommentBody = useMemo(() => {
     if (isUpdating && updateCommentId === comment.cid) {
-      return (
-        <S.CommentInput value={updateComment} onChange={handleUpdateCommentInputChange} onKeyDown={handleKeyDown} />
-      );
+      return <S.EditText value={updateComment} onChange={handleUpdateCommentInputChange} onKeyDown={handleKeyDown} />;
     } else {
       return (
         <>
-          <S.CommentBody>{comment.body}</S.CommentBody>
-          <S.Button onClick={handleReplyBtnClick}>답글달기</S.Button>
+          <S.Body>{comment.body}</S.Body>
+          <S.ReplyBtn onClick={handleReplyBtnClick}>↪</S.ReplyBtn>
         </>
       );
     }
@@ -107,16 +106,18 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
   console.log('comment', comment);
 
   return (
-    <>
-      <S.CommentItem>
-        <S.CommentProfileImgBox>
-          <S.CommentProfileImg
-            src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`}
-            alt="Profile"
-          />
-          <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
-        </S.CommentProfileImgBox>
-        <S.CommentTextBox>{renderCommentBody}</S.CommentTextBox>
+    <S.Container>
+      <S.Wrapper>
+        <S.ProfileContainer>
+          <S.ProfileBox>
+            <S.ProfileImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`} alt="Profile" />
+          </S.ProfileBox>
+          <S.TextBox>
+            <div>{comment.nickname}</div>
+            <S.Body>{renderCommentBody}</S.Body>
+          </S.TextBox>
+        </S.ProfileContainer>
+
         {jotaiUserData?.uid === comment.uid ? (
           isUpdating && updateCommentId === comment.cid ? (
             <CommentPanel
@@ -132,11 +133,12 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
             />
           )
         ) : (
-          <div style={{ width: '105px' }} />
+          <div />
         )}
-      </S.CommentItem>
+      </S.Wrapper>
+      <S.Line></S.Line>
       {isAddReply && <ReplyCommentForm pid={pid} cid={comment.cid} setIsAddReply={setIsAddReply} />}
-    </>
+    </S.Container>
   );
 };
 
