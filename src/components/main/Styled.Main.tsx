@@ -7,7 +7,7 @@ export const PostContainer = styled.div`
   align-items: center;
 `;
 export const PostItem = styled.div`
-  border: 1px solid #ddd;
+  border: 1px solid #0a398d;
   padding: 10px;
   height: 500px;
   display: flex;
