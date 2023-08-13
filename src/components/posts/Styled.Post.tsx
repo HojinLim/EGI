@@ -133,8 +133,7 @@ export const IscompletedCheck = styled.label`
 export const IscompletedInput = styled.input``;
 
 export const Iscompleted = styled.label`
-  font-size: 20px;
-  margin-right: 85px;
+  margin-left: 5px;
 `;
 
 export const EditorBox = styled.div`

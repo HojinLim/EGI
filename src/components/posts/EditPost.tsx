@@ -145,7 +145,7 @@ const EditPost = () => {
 
   return (
     <S.Container>
-      <S.MainTitle>상품 등록</S.MainTitle>
+      <S.MainTitle>상품 수정</S.MainTitle>
       <S.TopLine></S.TopLine>
       <S.Wrapper>
         <S.TitleBox>
