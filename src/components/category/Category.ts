@@ -1,5 +1,8 @@
 export const categories = [
-  { value: '컴퓨터', label: '컴퓨터' },
+  {
+    value: '컴퓨터',
+    label: '컴퓨터'
+  },
   { value: '노트북', label: '노트북' },
   { value: '콘솔', label: '콘솔' },
   { value: '핸드폰', label: '핸드폰' },
