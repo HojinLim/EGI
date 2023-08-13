@@ -154,7 +154,7 @@ export const ModalContent = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-export const EndMassage = styled.div`
+export const EndMessage = styled.div`
   text-align: center;
   padding: 10px;
   color: gray;
@@ -174,4 +174,10 @@ export const CategoryButtonContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-content: center;
+`;
+export const ButtonGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
+  grid-gap: 10px;
+  margin: 20px;
 `;

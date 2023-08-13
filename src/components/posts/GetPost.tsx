@@ -7,6 +7,10 @@ import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { filterdcategories } from '../category/Category';
 import { searchKeywordAtom } from '../common/Search';
+import { getIconComponet } from './MuiBtn';
+
+// MUI- Material Icons
+import Button from '@mui/material/Button';
 
 export const GetPost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -64,17 +68,26 @@ export const GetPost = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [searchKeyword, posts]);
+  }, [searchKeyword]);
 
-  const categoryButtons = filterdcategories.map((category) => (
-    <S.CategoryButton key={category.value} value={category.value} onClick={() => handleCategoryClick(category.value)}>
-      {category.label}
-    </S.CategoryButton>
-  ));
+  const categoryButtons = filterdcategories.map((category) => {
+    const IconComponent = getIconComponet(category.value); // 이 부분에 오타 수정
+    return (
+      <Button
+        key={category.value}
+        value={category.value}
+        onClick={() => handleCategoryClick(category.value)}
+        variant="outlined"
+        startIcon={<IconComponent />}
+      >
+        {category.label}
+      </Button>
+    );
+  });
 
   return (
     <>
-      <S.CategoryButtonContainer>{categoryButtons}</S.CategoryButtonContainer>
+      <S.ButtonGrid>{categoryButtons}</S.ButtonGrid>
 
       <S.PostContainer>
         {filteredPosts.map((post) => (
@@ -93,6 +106,7 @@ export const GetPost = () => {
           </NavLink>
         ))}
       </S.PostContainer>
+      <S.EndMessage>더 이상의 게시물이 없습니다.</S.EndMessage>
     </>
   );
 };

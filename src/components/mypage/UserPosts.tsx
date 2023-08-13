@@ -115,7 +115,6 @@ const UserPosts = () => {
     navigate(`/post/${data.pid}`);
   };
 
-  console.log(paginatedData);
   return (
     <div>
       <S.MyWrittenPost onClick={() => handlePost('내가 쓴 글')}>내가 쓴 글</S.MyWrittenPost>

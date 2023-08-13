@@ -9,5 +9,4 @@ export const Input = styled.input`
   width: 400px;
   align-content: center;
   text-align: center;
-  top: 0%;
 `;
