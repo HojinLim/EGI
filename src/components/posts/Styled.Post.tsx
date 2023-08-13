@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 
 export const PostContainer = styled.div`
   display: grid;
@@ -70,6 +71,8 @@ export const Price = styled.h1`
   font-size: 20px;
   color: green;
   margin-bottom: 10px;
+ 
+  margin-right: 79px;
 `;
 
 export const PostInfo = styled.p`
@@ -207,6 +210,7 @@ export const TitleInput = styled.input`
   width: 800px;
   height: 30px;
   border-radius: 5px;
+  padding: 5px 10px;
 `;
 
 export const LocalBox = styled.div`
@@ -222,6 +226,7 @@ export const LocalInput = styled.input`
   width: 800px;
   height: 30px;
   border-radius: 5px;
+  padding: 5px 10px;
 `;
 
 export const ConditonBox = styled.div`
@@ -254,6 +259,7 @@ export const Direct = styled.label`
 export const PriceBox = styled.div`
   padding: 50px 15px;
   display: flex;
+  
 `;
 
 // export const Price = styled.label`
@@ -270,13 +276,15 @@ export const PriceInput = styled.input`
   border-radius: 5px;
 
   text-align: right;
+  padding: 5px 10px;
 `;
 
 export const ParcelBox = styled.div`
   margin-top: 15px;
+  
 `;
 
-export const ParcelInput = styled.input``;
+export const ParcelInput = styled(Checkbox)``;
 
 export const Parcel = styled.label`
   font-size: 20px;
@@ -300,7 +308,7 @@ export const IscompletedCheck = styled.label`
   margin-right: 76px;
 `;
 
-export const IscompletedInput = styled.input``;
+export const IscompletedInput = styled(Checkbox)``;
 
 export const Iscompleted = styled.label`
   font-size: 20px;
