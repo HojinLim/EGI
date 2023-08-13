@@ -65,6 +65,12 @@
 ![image](https://github.com/HojinLim/team_one/assets/69897998/44162c12-1bf9-4eb9-893b-3b033ae22775)
 
 
+## Share Page
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/87838a89-1344-43e7-b0f0-d762a0a43440)
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/96fd3b50-912e-4858-b1c4-e1b0bbaf8272)
+
 
 ---
 
