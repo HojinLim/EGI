@@ -50,9 +50,19 @@ export interface Post {
   exchange: string;
   parcel: string;
   uid: string;
+  nickname: string;
+  profileimg: File | string | null;
+  iscompleted: string;
+  direct: string;
 }
 
 export interface JjimType {
   uid: string | null;
   pid: string;
+}
+
+export interface ProductInfo {
+  title: string;
+  price: string;
+  nickname: string;
 }

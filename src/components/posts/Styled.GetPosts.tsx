@@ -25,13 +25,12 @@ export const Image = styled.img`
 
   width: 100px;
   height: 100px;
-  
 `;
 
 export const Container = styled.div`
   margin: 0 auto;
   overflow: hidden;
-  margin-top : 50px;
+  margin-top: 50px;
 `;
 
 export const MainContainer = styled.div`
@@ -68,7 +67,6 @@ export const EditDeleteButtons = styled.div`
   }
 `;
 
-
 export const PostTitle = styled.h1`
   font-size: 24px;
   margin-bottom: 10px;
@@ -97,7 +95,7 @@ export const PostBody = styled.div`
 
 export const StyledButton = styled(Button)`
   && {
-    background-color: #007bff;
+    background-color: gray;
     color: white;
     font-size: 13px;
     padding: 10px 20px;
@@ -108,4 +106,63 @@ export const StyledButton = styled(Button)`
       background-color: #0056b3;
     }
   }
+`;
+
+export const RoundedCheckboxWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+`;
+
+export const CustomCheckbox = styled.input`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin-right: 8px;
+  outline: none;
+  cursor: pointer;
+
+  /* &:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  } */
+`;
+
+export const CheckboxLabel = styled.label`
+  cursor: pointer;
+`;
+
+export const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ModalContent = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+export const EndMassage = styled.div`
+  text-align: center;
+  padding: 10px;
+  color: gray;
+`;
+
+export const ButtonGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
+  grid-gap: 10px;
+  margin: 20px;
 `;

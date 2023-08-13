@@ -7,6 +7,7 @@ import useCommentMutation from '../../hooks/useCommentMutation';
 import { jotaiUserDataAtom } from '../common/Header';
 import { useAtom } from 'jotai';
 import baseProfile from '../../image/baseprofile.jpeg';
+import * as SL from '../common/Styled.Loading';
 
 import type { ReplyCommentType } from '../../types/supabase';
 interface ReplyCommentsProps {
@@ -35,11 +36,11 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
 
   const { data: replyComments, error, isLoading } = useQuery<ReplyCommentType[]>(defaultQueryOptions);
 
-  const handleUpdateReplyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpdateReplyInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUpdateReply(e.target.value);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       handleUpdateBtnClick();
     }
@@ -89,7 +90,12 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   }
 
   if (isLoading) {
-    return <div>로딩중입니다.</div>;
+    return (
+      <div>
+        로딩중입니다.
+        <SL.LoadingOverlay />
+      </div>
+    );
   }
 
   const filteredComments = replyComments?.filter((comment) => comment.cid === cid);
@@ -97,7 +103,7 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   return (
     <>
       {filteredComments?.map((comment) => (
-        <S.CommentItem key={comment.rid} margin={'40px'}>
+        <S.CommentItem key={comment.rid} margin={'20px 20px 10px 40px'} width={'1300px'}>
           <S.CommentProfileImgBox>
             <S.CommentProfileImg
               src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg || baseProfile}`}
@@ -107,12 +113,7 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
           </S.CommentProfileImgBox>
           <S.CommentTextBox>
             {isUpdating && updateReplyId == comment.rid ? (
-              <S.CommentInput
-                type="text"
-                value={updateReply}
-                onChange={handleUpdateReplyInputChange}
-                onKeyDown={handleKeyDown}
-              />
+              <S.CommentInput value={updateReply} onChange={handleUpdateReplyInputChange} onKeyDown={handleKeyDown} />
             ) : (
               <S.CommentBody>{comment.body}</S.CommentBody>
             )}

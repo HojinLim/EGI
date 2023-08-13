@@ -4,53 +4,47 @@ export const CommentsContainer = styled.div`
   margin-top: 50px;
   display: flex;
   flex-direction: column;
-
 `;
 
 export const CommentsPanel = styled.div`
   display: flex;
   justify-content: space-between;
   width: 99vw;
-  max-width: 1200px;
+  /* max-width: 1200px; */
 `;
 
 export const CommentsHr = styled.hr`
   border: 1px solid #ccc;
   margin: 20px 0px 0px 0px;
-  max-width: 1200px;
+  /* max-width: 1200px; */
 `;
 
 export const CommentList = styled.ul`
-  list-style-type: none; /* 기본 목록 스타일 제거 */
-  padding: 0; /* 기본 패딩 제거 */
-  margin: 0; /* 기본 마진 제거 */
-  width: 1200px;
+  /* list-style-type: none; 기본 목록 스타일 제거 */
+  /* width: 1200px; */
 `;
 
 interface StyledReplyProps {
   margin?: string;
+  width?: string;
 }
 
 export const CommentItem = styled.li<StyledReplyProps>`
   display: flex;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+  border: 1px solid #ccc;
   gap: 10px;
   min-height: 100px;
   padding: 5px 0;
-  max-width: 1200px;
-  width: 99vw;
   justify-content: space-between;
-  margin: ${(props) => props.margin};
+  margin: ${(props) => props.margin || '0'};
 `;
 
 export const CommentProfileImgBox = styled.div`
   margin: 10px 20px 0 20px;
   width: 5%;
   width: 80px;
-  height : 100px;
-  border: black solid 1px;
-  
+  height: 100px;
+  /* border: black solid 1px; */
 `;
 
 export const CommentTextBox = styled.div`
@@ -76,9 +70,14 @@ export const CommentPanel = styled.div`
   gap: 5px;
 `;
 
-export const CommentInput = styled.input`
+export const CommentInput = styled.textarea`
   width: 80%;
   height: 50%;
+  resize: none; /* 이 부분을 추가하여 textarea의 크기 조절을 막습니다. */
+  padding: 8px; /* padding을 추가하여 내용이 상하좌우로 여백을 가지도록 합니다. */
+  border: 1px solid #ccc; /* 테두리를 추가합니다. */
+  border-radius: 4px; /* 테두리를 둥글게 만듭니다. */
+  font-size: 14px; /* 폰트 크기를 조절합니다. */
 `;
 
 interface ButtonProp {
@@ -96,14 +95,6 @@ export const Button = styled.button<ButtonProp>`
 export const CommentAdd = styled.div`
   display: flex;
   align-items: center;
-`;
-
-export const CommentForm = styled.form<{ isCommenting?: boolean }>`
-  display: flex;
-  max-width: 1200px;
-  margin-top: 20px;
-  display: flex;
-  border-top: 1px solid black;
 `;
 
 export const CommentProfileImg = styled.img`

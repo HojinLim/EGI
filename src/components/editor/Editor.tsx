@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill, { Quill } from 'react-quill';
 import ImageResize from 'quill-image-resize';
+import { styled } from 'styled-components';
 
 Quill.register('modules/ImageResize', ImageResize);
 
@@ -24,8 +25,8 @@ const Editor: React.FC<EditorProps> = ({ value, onChange }) => {
           ['blockquote'],
           [{ list: 'ordered' }, { list: 'bullet' }],
           [{ color: [] }, { background: [] }],
-          [{ align: [] }, 'link'],
-          ['image', 'video']
+          [{ align: [] }, 'link']
+          // ['image', 'video'] 사이트의 취지와 안맞아서 주석처리
         ]
       },
       ImageResize: {
@@ -40,9 +41,9 @@ const Editor: React.FC<EditorProps> = ({ value, onChange }) => {
   }, [content, onChange]);
 
   return (
-    <div>
+    <EditorBox>
       <ReactQuill
-        style={{ width: '450px', height: '300px' }}
+        style={{ width: '1000px', height: '600px' }}
         placeholder="내용을 입력해주세요"
         theme="snow"
         ref={quillRef}
@@ -50,8 +51,12 @@ const Editor: React.FC<EditorProps> = ({ value, onChange }) => {
         onChange={setContent}
         modules={modules}
       />
-    </div>
+    </EditorBox>
   );
 };
 
 export default Editor;
+
+const EditorBox = styled.div`
+  margin: ;
+`;

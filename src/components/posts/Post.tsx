@@ -3,15 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Editor from '../editor/Editor';
 
-import { categories, conditionCategories, exchangeCategories, parcelCategories } from '../category/Category';
+import * as S from './Styled.Post';
+import { categories, conditionCategories, directCategories, exchangeCategories } from '../category/Category';
 import { handleImageChange } from './HandleImage';
 import { supabase } from '../../services/supabase/supabase';
-import CategorySelect from '../category/CategorySelect';
-import { Link } from 'react-router-dom';
+import { CategoryRadio } from '../category/CategorySelect';
+
+import { jotaiUserDataAtom } from '../common/Header';
+import { useAtom } from 'jotai';
+import { PictureOutlined } from '@ant-design/icons';
 
 const Post = () => {
-  // const [user] = useAtom(userAtom); // userAtom의 값을 가져옴
-
   const navigate = useNavigate();
   const [newTitle, setNewTitle] = useState('');
   const [newBody, setNewBody] = useState('');
@@ -21,9 +23,10 @@ const Post = () => {
   const [category, setCategory] = useState('');
   const [conditionCategory, setConditionCategory] = useState('');
   const [exchangeCategory, setExchangeCategory] = useState('');
-  const [parcelCategory, setParcelCategory] = useState('');
+  const [parcelCategorySelected, setParcelCategorySelected] = useState(false);
+  const [direct, setDirect] = useState('');
   const [uid, setUid] = useState('');
-
+  const [jotaiUserData] = useAtom(jotaiUserDataAtom);
   useEffect(() => {
     // userDataAtom의 값을 로컬 스토리지에서 가져오기
     const userData = localStorage.getItem('jotaiUserData');
@@ -34,8 +37,17 @@ const Post = () => {
   }, []);
 
   const handleAddPost = async () => {
-    if (!newTitle.trim() || !newBody.trim() || !newPrice.trim() || !newLocation.trim()) {
-      alert('제목, 본문, 가격, 지역을 모두 입력해주세요.');
+    if (
+      !newTitle.trim() ||
+      !newBody.trim() ||
+      !newLocation.trim() ||
+      !newPrice.toString().trim() ||
+      !category ||
+      !conditionCategory ||
+      !exchangeCategory ||
+      !direct
+    ) {
+      alert('모든 폼을 입력해주세요.');
       return;
     }
 
@@ -56,15 +68,19 @@ const Post = () => {
     const { error: insertError } = await supabase.from('posts').insert([
       {
         title: newTitle,
+        nickname: jotaiUserData?.nickname,
         body: newBody,
+        profileimg: jotaiUserData?.profileimg,
         image_urls: imageUrls,
         price: newPrice,
         location: newLocation,
         category: category,
         condition: conditionCategory,
         exchange: exchangeCategory,
-        parcel: parcelCategory,
-        uid
+        parcel: parcelCategorySelected ? '택배비 포함' : '택배비 미포함',
+        uid,
+        iscompleted: '판매중',
+        direct
       }
     ]);
 
@@ -93,53 +109,120 @@ const Post = () => {
     }
   };
 
+  const priceChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value.replace(/[^0-9]/g, '');
+    setNewPrice(inputValue);
+  };
+
+  const priceWithCommas = (price: string): string => {
+    const numberOfPrice = Number(price);
+    return numberOfPrice.toLocaleString();
+  };
+
   return (
-    <div>
-      <div>
-        <Link to={'/'}>HOME</Link>
-        <input type="text" placeholder="Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
-        <br />
-        <input type="number" placeholder="Price" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} />
-        <br />
-        <input
-          type="text"
-          placeholder="Location"
-          value={newLocation}
-          onChange={(e) => setNewLocation(e.target.value)}
-        />
-        <br />
-
-        <CategorySelect
-          value={category}
-          options={categories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={conditionCategory}
-          options={conditionCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConditionCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={exchangeCategory}
-          options={exchangeCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExchangeCategory(e.target.value)}
-        />
-        <CategorySelect
-          value={parcelCategory}
-          options={parcelCategories}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setParcelCategory(e.target.value)}
-        />
-
-        <br />
-        <Editor value={newBody} onChange={(content) => setNewBody(content)} />
-        <br />
-        <br />
-        <br />
-        <br />
-        <input type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
-        <button onClick={handleAddPost}>글 작성하기</button>
-      </div>
-    </div>
+    <S.Container>
+      <S.MainTitle>상품 등록</S.MainTitle>
+      <S.TopLine></S.TopLine>
+      <S.Wrapper>
+        <S.TitleBox>
+          <S.Title>제목</S.Title>
+          <S.TitleInput type="text" placeholder="" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
+        </S.TitleBox>
+        <S.Line></S.Line>
+        <S.LocalBox>
+          <S.Local>거래 지역</S.Local>
+          <S.LocalInput
+            type="text"
+            placeholder=""
+            value={newLocation}
+            onChange={(e) => setNewLocation(e.target.value)}
+          />
+        </S.LocalBox>
+        <S.Line></S.Line>
+        <S.ConditonBox>
+          <S.Conditon>상태</S.Conditon>
+          {conditionCategories.map((conditionCategoryOption) => (
+            <CategoryRadio
+              key={conditionCategoryOption.value}
+              value={conditionCategoryOption.value}
+              label={conditionCategoryOption.label}
+              checked={conditionCategoryOption.value === conditionCategory}
+              onChange={() => setConditionCategory(conditionCategoryOption.value)}
+            />
+          ))}
+        </S.ConditonBox>
+        <S.Line></S.Line>
+        <S.ExChangeBox>
+          <S.ExChange> 교환 여부</S.ExChange>
+          {exchangeCategories.map((exchangeCategoryOption) => (
+            <CategoryRadio
+              key={exchangeCategoryOption.value}
+              value={exchangeCategoryOption.value}
+              label={exchangeCategoryOption.label}
+              checked={exchangeCategoryOption.value === exchangeCategory}
+              onChange={() => setExchangeCategory(exchangeCategoryOption.value)}
+            />
+          ))}
+        </S.ExChangeBox>
+        <S.Line></S.Line>
+        <S.DirectBox>
+          <S.Direct> 직거래 여부</S.Direct>
+          {directCategories.map((directOption) => (
+            <CategoryRadio
+              key={directOption.value}
+              value={directOption.value}
+              label={directOption.label}
+              checked={directOption.value === direct}
+              onChange={() => setDirect(directOption.value)}
+            />
+          ))}
+        </S.DirectBox>
+        <S.Line></S.Line>
+        <S.PriceBox>
+          <S.Price>가격</S.Price>
+          <S.PriceWrapper>
+            <S.PriceInput
+              type="text"
+              placeholder="Price"
+              value={priceWithCommas(newPrice)}
+              onChange={priceChangeHandler}
+            />
+            <label>원</label>
+            <S.ParcelBox>
+              <S.ParcelInput
+                type="checkbox"
+                value="택배비 포함"
+                checked={parcelCategorySelected}
+                onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
+              />{' '}
+              <label>택배비 포함</label>
+            </S.ParcelBox>
+          </S.PriceWrapper>
+        </S.PriceBox>
+        <S.Line></S.Line>
+        <S.CategoryBox>
+          <S.Category>카테고리</S.Category>
+          {categories.map((categoryOption) => (
+            <CategoryRadio
+              key={categoryOption.value}
+              value={categoryOption.value}
+              label={categoryOption.label}
+              checked={categoryOption.value === category}
+              onChange={() => setCategory(categoryOption.value)}
+            />
+          ))}
+        </S.CategoryBox>
+        <S.Line></S.Line>
+        <S.EditorBox>
+          <Editor value={newBody} onChange={(content) => setNewBody(content)} />
+          <S.FileLabel htmlFor="file-input">
+            <PictureOutlined />
+          </S.FileLabel>
+          <S.FileInput id="file-input" type="file" accept="image/*" multiple onChange={handleImageChangeWrapper} />
+          <S.WriterBtn onClick={handleAddPost}>등록하기</S.WriterBtn>
+        </S.EditorBox>
+      </S.Wrapper>
+    </S.Container>
   );
 };
 

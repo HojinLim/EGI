@@ -4,21 +4,21 @@ import reset from 'styled-reset';
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
-  body{
-    max-width: 1200px;
+  *{
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  body {
+    max-width: 1500px;
     min-width: 800px;
-    margin: 0 auto
+    margin: 0 auto;
+
+   
   }
 
   h1 {
     font-weight: bold;
     font-size : 30px;
-  }
-
-  body{
-    max-width : 1200px;
-    max-height : 800px;
-    margin : 0 auto;
   }
 
   p {
