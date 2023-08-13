@@ -6,7 +6,7 @@ import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { categories } from '../category/Category';
 
-
+// MUI- Material Icons
 import Button from '@mui/material/Button';
 import WatchIcon from '@mui/icons-material/Watch';
 import LaptopIcon from '@mui/icons-material/Laptop';
