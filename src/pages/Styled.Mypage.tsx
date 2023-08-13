@@ -1,3 +1,4 @@
+// import { style } from '@mui/system';
 import { styled } from 'styled-components';
 
 export const MypageContainer = styled.div`
@@ -163,7 +164,6 @@ export const CompleteBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   padding-left: 70px;
   margin-top: 4px;
   height: 80px;

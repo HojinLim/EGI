@@ -6,6 +6,7 @@ import { getPostList, postType } from './ScrollDummy';
 const InfiniteScroll = (): JSX.Element => {
   const [page, setPage] = useState<number>(1);
   const [posts, setPosts] = useState<postType[]>(getPostList(1));
+
   //더미데이터의 정보값 가져오기
   const [postEnd, setPostEnd] = useState<boolean>(false);
 

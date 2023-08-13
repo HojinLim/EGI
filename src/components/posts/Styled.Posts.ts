@@ -154,30 +154,24 @@ export const ModalContent = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-export const EndMessage = styled.div`
+export const EndMassage = styled.div`
   text-align: center;
   padding: 10px;
   color: gray;
 `;
 
 export const CategoryButton = styled.button`
-  margin: 2px;
-  padding: 8px 16px;
+  margin: 0;
+  padding: 6px;
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
-  height: 100px;
   cursor: pointer;
 `;
 
 export const CategoryButtonContainer = styled.div`
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(4, 1fr);
   justify-content: center;
-`;
-export const ButtonGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
-  grid-gap: 10px;
-  margin: 20px;
+  gap: 2px;
 `;
