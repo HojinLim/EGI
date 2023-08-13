@@ -3,19 +3,30 @@ import { NavLink } from 'react-router-dom';
 import { useAtom } from 'jotai';
 
 import * as S from './Styled.Main';
+import * as CONDITION from '../mypage/Styled.UserPosts';
+import * as PAGINATION from '../mypage/Styled.UserPosts';
 import { Post } from '../../types/supabase';
 import { supabase } from '../../services/supabase/supabase';
 import { filterdcategories } from '../category/Category';
 import { searchKeywordAtom } from '../common/Search';
 import { getIconComponet } from './MuiBtn';
-
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllJjim } from '../../services/supabase/jjim';
 // MUI- Material Icons
+
 import Button from '@mui/material/Button';
+import { LikeFilled } from '@ant-design/icons';
 
 export const Main = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [searchKeyword] = useAtom(searchKeywordAtom);
+
+  const { data: jjimData } = useQuery(['jjim'], fetchAllJjim);
+
+  const jjimCount = (pid: number) => {
+    return jjimData?.filter((jjim) => jjim.pid == pid).length;
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -33,7 +44,7 @@ export const Main = () => {
         setFilteredPosts(postsWithCompleteURLs);
       }
     };
-    console.log('과연 서버사이드?');
+
     fetchPosts();
   }, []);
 
@@ -52,7 +63,10 @@ export const Main = () => {
         setFilteredPosts(posts);
       } else {
         const keywordLower = searchKeyword.toLowerCase();
-        const filtered = posts.filter((post) => post.title.toLowerCase().includes(keywordLower));
+        const filtered = posts.filter(
+          (post) =>
+            post.title.toLowerCase().includes(keywordLower) || post.location.toLowerCase().includes(keywordLower)
+        );
         setFilteredPosts(filtered);
       }
     };
@@ -86,28 +100,93 @@ export const Main = () => {
     );
   });
 
+  const pagePerObjects = 8;
+
+  const totalCount = filteredPosts.length;
+  const totalPages = Math.ceil(totalCount / pagePerObjects);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePreviousPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const startIdx = (currentPage - 1) * pagePerObjects;
+  const endIdx = Math.min(startIdx + pagePerObjects, totalCount);
+  const paginatedData = filteredPosts.slice(startIdx, endIdx);
+
+  console.log('paginatedData', paginatedData);
+
   return (
     <>
       <S.ButtonGrid>{categoryButtons}</S.ButtonGrid>
 
       <S.PostContainer>
-        {filteredPosts.map((post) => (
+        {paginatedData.map((post) => (
           <NavLink to={`/post/${post.pid}`} key={post.pid} style={{ textDecoration: 'none', color: 'inherit' }}>
             <S.PostItem>
-              <h2>{post.title}</h2>
-              <div>
+              <S.ImageContainer>
                 {post.image_urls.length > 0 && (
                   <S.Image
                     src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${post.image_urls[0]} `}
                     alt={post.title}
                   />
                 )}
-              </div>
+              </S.ImageContainer>
+
+              <S.CardCategory>
+                <div>{post.category}</div>
+                <div>{post.created_at.substr(0, 10)}</div>
+              </S.CardCategory>
+
+              <S.CardTitle>
+                <h2>{post.title}</h2>
+              </S.CardTitle>
+
+              <S.CardLocation>{post.location}</S.CardLocation>
+              <S.CardPrice>{post.price?.toLocaleString('en-NZ')}원</S.CardPrice>
+
+              <S.CardCondition>
+                <div>
+                  <LikeFilled style={{ color: '#0A3A8D', marginRight: '5px' }} />
+                  {jjimCount(post.pid)}
+                </div>
+                <CONDITION.CoditionBox>
+                  <CONDITION.CoditionIscompleted>{post.iscompleted}</CONDITION.CoditionIscompleted>
+                  <CONDITION.CoditionProduct condition={post.condition}>{post.condition}</CONDITION.CoditionProduct>
+                </CONDITION.CoditionBox>
+              </S.CardCondition>
             </S.PostItem>
           </NavLink>
         ))}
       </S.PostContainer>
-      <S.EndMessage>더 이상의 게시물이 없습니다.</S.EndMessage>
+
+      <PAGINATION.PageButtonBox>
+        <PAGINATION.PageButton onClick={handlePreviousPage} disabled={currentPage === 1} selected={false}>
+          {'<'}
+        </PAGINATION.PageButton>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+          <PAGINATION.PageButton
+            key={pageNumber}
+            onClick={() => handlePageClick(pageNumber)}
+            selected={pageNumber === currentPage}
+            disabled={currentPage === pageNumber}
+          >
+            {pageNumber}
+          </PAGINATION.PageButton>
+        ))}
+        <PAGINATION.PageButton onClick={handleNextPage} disabled={currentPage === totalPages} selected={false}>
+          {'>'}
+        </PAGINATION.PageButton>
+      </PAGINATION.PageButtonBox>
     </>
   );
 };

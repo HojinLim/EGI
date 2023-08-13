@@ -207,7 +207,7 @@ const Post = () => {
                 value="택배비 포함"
                 checked={parcelCategorySelected}
                 onChange={() => setParcelCategorySelected(!parcelCategorySelected)}
-              />{' '}
+              />
               <label>택배비 포함</label>
             </S.ParcelBox>
           </S.PriceWrapper>

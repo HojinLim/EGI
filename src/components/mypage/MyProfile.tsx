@@ -213,7 +213,7 @@ const MyProfile = () => {
                   <S.GradeFc>{grade()}</S.GradeFc> <S.GradeText>회원 등급</S.GradeText>
                 </S.GradeBox>
                 <S.CompleteBox>
-                  <S.CompleteText>판매 완료</S.CompleteText>{' '}
+                  <S.CompleteText>판매 완료</S.CompleteText>
                   <S.CompleteNum>
                     {completed()} / {myPostLegth}
                   </S.CompleteNum>
