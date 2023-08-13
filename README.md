@@ -39,10 +39,12 @@
 ![image](https://github.com/HojinLim/team_one/assets/69897998/c285061e-dad1-49dc-9242-7890bd59fa51)
 
 
-## 00 Page
+## Post Page
 
 <br/>
-사진
+![image](https://github.com/HojinLim/team_one/assets/69897998/f4b61884-e632-4af1-87ad-45cc4445fb08)
+<br/>
+![image](https://github.com/HojinLim/team_one/assets/69897998/762000dc-f831-4a43-8717-c8173efcb171)
 
 <br/>
 <br/>
