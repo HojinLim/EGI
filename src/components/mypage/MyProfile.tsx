@@ -65,6 +65,11 @@ const MyProfile = () => {
       }
     }
 
+    if (editnickname.length > 6) {
+      alert('닉네임은 최대 6글자 입니다.');
+      return;
+    }
+
     if (editnickname) {
       const { error } = await supabase
         .from('users')
@@ -213,7 +218,7 @@ const MyProfile = () => {
                   <S.GradeFc>{grade()}</S.GradeFc> <S.GradeText>회원 등급</S.GradeText>
                 </S.GradeBox>
                 <S.CompleteBox>
-                  <S.CompleteText>판매 완료</S.CompleteText>{' '}
+                  <S.CompleteText>판매 완료</S.CompleteText>
                   <S.CompleteNum>
                     {completed()} / {myPostLegth}
                   </S.CompleteNum>

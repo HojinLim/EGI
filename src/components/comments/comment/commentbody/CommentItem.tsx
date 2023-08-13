@@ -107,6 +107,7 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
 
   return (
     <S.Container>
+      {/* <S.Line></S.Line> */}
       <S.Wrapper>
         <S.ProfileContainer>
           <S.ProfileBox>
@@ -133,10 +134,14 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
             />
           )
         ) : (
+          // <CommentPanel
+          //   commenting={false}
+          //   handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.cid, comment.body)}
+          //   handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.cid)}
+          // />
           <div />
         )}
       </S.Wrapper>
-      <S.Line></S.Line>
       {isAddReply && <ReplyCommentForm pid={pid} cid={comment.cid} setIsAddReply={setIsAddReply} />}
     </S.Container>
   );

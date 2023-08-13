@@ -26,7 +26,7 @@ const Search = () => {
         value={searchKeyword as string}
         onChange={handleSearchInputChange}
         onKeyDown={handleSearchInputKeyDown}
-        placeholder="통합 검색"
+        placeholder="검색"
       />
     </div>
   );

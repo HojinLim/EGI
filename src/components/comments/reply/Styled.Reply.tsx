@@ -8,8 +8,8 @@ export const Container = styled.div`
   margin-left: 127px;
 `;
 export const Line = styled.div`
-  margin-top: 10px;
-  border-top: 1px solid #c2c2c274;
+  /* margin-top: 10px;
+  border-top: 1px solid #c2c2c274; */
 `;
 
 export const Wrapper = styled.div`

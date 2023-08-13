@@ -60,10 +60,9 @@ const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) =>
   return (
     <>
       {' '}
-      {/* <S.Line></S.Line> */}
       <S.Container>
         {showAlert && (
-          <Stack sx={{ width: '100%', position: 'fixed', top: 500, zIndex: 100 }}>
+          <Stack sx={{ width: '100%', position: 'fixed', top: 1000, zIndex: 100 }}>
             <Alert severity="error">댓글을 작성해 주세요.</Alert>
           </Stack>
         )}
@@ -86,7 +85,6 @@ const ReplyCommentForm = ({ pid, cid, setIsAddReply }: ReplyCommentFormProps) =>
           </S.TextBox>
         </S.Wrapper>
       </S.Container>
-      <S.Line></S.Line>
     </>
   );
 };

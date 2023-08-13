@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
+// import bannerimage1 from '../bannerimage/banner_main.jpg';
+import bannerimage2 from '../bannerimage/bannermain2.jpg';
+import bannerimage3 from '../bannerimage/banneriphone.jpg';
+import bannerimage4 from '../bannerimage/banner_samsung.png';
+import bannerimage5 from '../bannerimage/banner_other.png';
+import bannerimage6 from '../bannerimage/lck.png';
 
 const imageData = [
-  {
-    alt: 'image1',
-    url: 'https://picsum.photos/100/100/?random=1'
-  },
+  // {
+  //   alt: 'image1',
+  //   src: bannerimage1
+  // },
   {
     alt: 'image2',
-    url: 'https://picsum.photos/100/100/?random=2'
+    src: bannerimage2
   },
   {
     alt: 'image3',
-    url: 'https://picsum.photos/100/100/?random=3'
+    src: bannerimage3
   },
   {
     alt: 'image4',
-    url: 'https://picsum.photos/100/100/?random=4'
+    src: bannerimage4
   },
   {
     alt: 'image5',
-    url: 'https://picsum.photos/100/100/?random=5'
+    src: bannerimage5
+  },
+  {
+    alt: 'image6',
+    src: bannerimage6
   }
 ];
 
@@ -33,8 +43,12 @@ const Banner = () => {
   }
 
   const renderSlides = imageData.map((image) => (
-    <div key={image.alt}>
-      <img src={image.url} alt={image.alt} style={{ width: '1200px', height: '300px' }} />
+    <div key={image.src}>
+      {image.src ? (
+        <img src={image.src} alt={image.alt} style={{ width: '1500px', height: '500px' }} />
+      ) : (
+        <img src={image.src} alt={image.alt} style={{ width: '1500px', height: '500px' }} />
+      )}
     </div>
   ));
 

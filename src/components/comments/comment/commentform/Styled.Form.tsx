@@ -1,18 +1,12 @@
 import { styled } from 'styled-components';
 
 export const Container = styled.div`
-  /* border: 1px solid black; */
-
   height: 185px;
   display: flex;
 
+  margin-top: 50px;
   margin-bottom: 220px;
 `;
-
-// export const Line = styled.div`
-//   margin-top: 20px;
-//   border-top: 1px solid #c2c2c274;
-// `;
 
 export const Wrapper = styled.div`
   display: flex;

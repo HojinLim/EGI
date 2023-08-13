@@ -55,6 +55,7 @@ const Comments = () => {
             <React.Fragment key={comment.cid}>
               <CommentItem comment={comment} pid={pid} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
               <ReplyComments cid={comment.cid} pid={pid} />
+              <S.Line></S.Line>
             </React.Fragment>
           ))}
         </div>

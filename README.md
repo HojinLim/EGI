@@ -1,12 +1,9 @@
 ## :bicyclist: 프로젝트 소개
 
------.
-<br/>
-<br/>
-![image](https://github.com/HojinLim/team_one/assets/69897998/dd598582-9545-4687-aaee-42f8624807ff)
+# ELECTRO GET IT (전자기릿)
 
 <br/>
-<br/>
+
 
 ### :boxing_glove: 개발기간
 
@@ -32,77 +29,70 @@
 
 ### :bouncing_ball_man: 화면 구성
 
-## Main Page
+##  -Main Page
 
 <br/>
 
-사진
+![image](https://github.com/HojinLim/team_one/assets/69897998/c285061e-dad1-49dc-9242-7890bd59fa51)
 
-## 00 Page
+
+##  -Detail Page
+![image](https://github.com/HojinLim/team_one/assets/69897998/50f8ab2c-a3c5-41e6-89b3-c63dc4959963)
 
 <br/>
-사진
+
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/5525fcd0-8bf3-4204-a385-80ead9972938)
+
 
 <br/>
+
+
+##  -Post Page
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/7ef4dafd-8b4c-4ed7-94af-330995cc098b)
+
+
+##  -My Page
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/7f920ec7-9929-4004-b0b3-d11e415fdc28)
+
+##  -Payment Page
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/44162c12-1bf9-4eb9-893b-3b033ae22775)
+
+
+##  -Share Page
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/87838a89-1344-43e7-b0f0-d762a0a43440)
+
+![image](https://github.com/HojinLim/team_one/assets/69897998/96fd3b50-912e-4858-b1c4-e1b0bbaf8272)
+
 <br/>
-사진
 
-## 00 Page
+### :adhesive_bandage: 도전 해볼만 과제
 
-사진
+* [ ] 채팅 기능
 
-## 00 Page
-
-사진
-
----
-
-## :partying_face: 주요 기능
-
-### --
-
-#### --
-
-- 00
-
-### 결과 페이지
-
-- 00
-- 00
-- 00
-- 00
-
-### 00
-
-- 00
-
-### 00
-
-- 00
-
-### 미정
-
-- 미정
-
-### 미정
-
-- 미정
+<br/>
 
 ## :sunglasses:주요 파일
 
-#### - 미정..js: 00
+#### - Main.tsx: 메인 페이지. jotai 라이브러리 DB를 통해 데이터를 받아와서 게시글을 불러온다.
 
-#### - 미정..js: 미정.
+#### - MyProfile.tsx: 프로필 수정, 나의 등급, 판매 완료 개수를 확인 가능.
 
-#### - 미정..js: 미정.
+#### - Post.tsx: 거래글을 작성하는 기능. supabase에 거래 사진 업로드.
 
-#### - 미정..js: 미정.
+#### - EditPost.tsx: 포스트를 수정하고 supabase에 포스팅 정보를 업로드.
 
-#### - 미정..js: 미정.
+#### - payment.tsx: 카카오페이, 이니시스, 토스페이 결제 API를 불러옵니다.
 
-#### - 미정..jsx: 미정.
+#### - Login.tsx: 로그인 기능을 담당합니다.
 
-#### - 미정..jsx: 미정.
+#### - PasswordReset.tsx: 비밀번호 재설정을 하기위해 유저 이메일로 재설정 진행 절차를 전달합니다.
+
+#### - SignUp.tsx: 회원가입 절차 기능. supabase에 중복 유저 정보를 확인하고 없으면 새 유저를 추가합니다.
 
 <br/><br/>
 

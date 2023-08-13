@@ -65,7 +65,7 @@ const CommentForm = ({ pid }: CommentFormProps) => {
       {/* <S.Line></S.Line> */}
       <S.Container>
         {showAlert && (
-          <Stack sx={{ width: '100%', position: 'fixed', top: 500, zIndex: 100 }}>
+          <Stack sx={{ width: '100%', position: 'fixed', bottom: 0, zIndex: 100 }}>
             <Alert severity="error">댓글을 작성해 주세요.</Alert>
           </Stack>
         )}

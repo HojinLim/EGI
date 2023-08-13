@@ -7,8 +7,8 @@ import { userEmailAtom } from '../user/login/Login';
 import { jotaiUserDataAtom } from '../common/header/Header';
 import { styled } from 'styled-components';
 import kakao from '../../image/kakaopay.png';
-import toss from '../../image/Inicis.png';
-import inicis from '../../image/tosspay.png';
+import inicis from '../../image/Inicis.png';
+import toss from '../../image/tosspay.png';
 interface PaymentProps {
   handlePayment: (paymentInfo: RequestPayParams) => void;
   post: Post;
@@ -67,11 +67,11 @@ const Payment: React.FC<PaymentProps> = ({ handlePayment, post }) => {
       <Btn1 onClick={() => handlePaymentClick('kakaopay', post)}>
         <Img src={kakao} />
       </Btn1>
-      <Btn onClick={() => handlePaymentClick('inicis', post)}>
-        <Img src={inicis} />
-      </Btn>
       <Btn onClick={() => handlePaymentClick('tosspay', post)}>
         <Img src={toss} />
+      </Btn>
+      <Btn onClick={() => handlePaymentClick('inicis', post)}>
+        <Img src={inicis} />
       </Btn>
     </BtnBox>
   );
@@ -97,6 +97,7 @@ const Btn = styled.button`
 
   background-color: transparent;
   border: none;
+  cursor: pointer;
 `;
 
 const Btn1 = styled.button`
@@ -106,6 +107,7 @@ const Btn1 = styled.button`
 
   background-color: transparent;
   border: none;
+  cursor: pointer;
 `;
 
 const Img = styled.img`

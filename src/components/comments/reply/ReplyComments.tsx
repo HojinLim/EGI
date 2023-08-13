@@ -101,52 +101,58 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   const filteredComments = replyComments?.filter((comment) => comment.cid === cid);
 
   return (
-    <S.Container>
-      {filteredComments?.map((comment) => (
-        <S.Wrapper key={comment.rid}>
-          <S.ProfileContainer>
-            <S.ProfileBox>
-              <S.ProfileImg src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`} alt="Profile" />
-            </S.ProfileBox>
-
-            {isUpdating && updateReplyId == comment.rid ? (
-              <S.TextBox>
-                {' '}
-                <div>{comment.nickname}</div>
-                <S.ReplyEditText
-                  value={updateReply}
-                  onChange={handleUpdateReplyInputChange}
-                  onKeyDown={handleKeyDown}
+    <>
+      {' '}
+      <S.Container>
+        {filteredComments?.map((comment) => (
+          <S.Wrapper key={comment.rid}>
+            <S.ProfileContainer>
+              ↪
+              <S.ProfileBox>
+                <S.ProfileImg
+                  src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`}
+                  alt="Profile"
                 />
-              </S.TextBox>
+              </S.ProfileBox>
+              {isUpdating && updateReplyId == comment.rid ? (
+                <S.TextBox>
+                  {' '}
+                  <div>{comment.nickname}</div>
+                  <S.ReplyEditText
+                    value={updateReply}
+                    onChange={handleUpdateReplyInputChange}
+                    onKeyDown={handleKeyDown}
+                  />
+                </S.TextBox>
+              ) : (
+                <S.TextBox>
+                  <div>{comment.nickname}</div>
+                  <S.Body>{comment.body}</S.Body>
+                </S.TextBox>
+              )}
+            </S.ProfileContainer>
+            {jotaiUserData?.uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
+              isUpdating && updateReplyId == comment.rid ? (
+                <CommentPanel
+                  commenting={true}
+                  handleUpdateBtnClick={handleUpdateBtnClick}
+                  handleUpdateCommentCancel={handleUpdateCommentCancel}
+                />
+              ) : (
+                <CommentPanel
+                  commenting={false}
+                  handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.rid, comment.body)}
+                  handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.rid)}
+                />
+              )
             ) : (
-              <S.TextBox>
-                <div>{comment.nickname}</div>
-                <S.Body>{comment.body}</S.Body>
-              </S.TextBox>
+              <div />
             )}
-          </S.ProfileContainer>
-          {jotaiUserData?.uid === comment.uid ? ( // 해당 댓글의 작성자일 경우에만 수정 및 삭제 버튼을 표시
-            isUpdating && updateReplyId == comment.rid ? (
-              <CommentPanel
-                commenting={true}
-                handleUpdateBtnClick={handleUpdateBtnClick}
-                handleUpdateCommentCancel={handleUpdateCommentCancel}
-              />
-            ) : (
-              <CommentPanel
-                commenting={false}
-                handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.rid, comment.body)}
-                handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.rid)}
-              />
-            )
-          ) : (
-            <div />
-          )}
-        </S.Wrapper>
-      ))}
+          </S.Wrapper>
+        ))}
+      </S.Container>
       <S.Line></S.Line>
-    </S.Container>
+    </>
   );
 };
 
