@@ -36,7 +36,8 @@
 
 <br/>
 
-사진
+![image](https://github.com/HojinLim/team_one/assets/69897998/c285061e-dad1-49dc-9242-7890bd59fa51)
+
 
 ## 00 Page
 
