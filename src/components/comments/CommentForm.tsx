@@ -23,11 +23,11 @@ const CommentForm = ({ pid }: CommentFormProps) => {
     setCommentText(e.target.value);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
-      handleAddBtnClick();
-    }
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  //   if (e.key === 'Enter') {
+  //     handleAddBtnClick();
+  //   }
+  // };
 
   const handleAddBtnClick = () => {
     if (!jotaiUserData) {
@@ -61,7 +61,7 @@ const CommentForm = ({ pid }: CommentFormProps) => {
   return (
     <S.CommentItem width={'1300px'} margin={'15px 0px 0px 0px'}>
       {showAlert && (
-        <Stack sx={{ width: '100%', position: 'fixed', top: 0, zIndex: 100 }}>
+        <Stack sx={{ width: '100%', position: 'fixed', top: 500, zIndex: 100 }}>
           <Alert severity="error">댓글을 작성해 주세요.</Alert>
         </Stack>
       )}
@@ -73,7 +73,7 @@ const CommentForm = ({ pid }: CommentFormProps) => {
         <div>{jotaiUserData?.nickname}</div>
       </S.CommentProfileImgBox>
 
-      <S.CommentInput value={commentText} onChange={handleCommentInputChange} onKeyDown={handleKeyDown} />
+      <S.CommentInput value={commentText} onChange={handleCommentInputChange} />
       <S.CommentPanel>
         <S.Button width="50px" height="30px" onClick={handleAddBtnClick}>
           등록

@@ -135,7 +135,7 @@ const Mypage = () => {
     } else if (myPostLegth >= 10) {
       return 'Silver';
     } else {
-      return 'Bonze';
+      return 'Bronze';
     }
   };
 
