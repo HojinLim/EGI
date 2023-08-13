@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import * as S from './Styled.Comments';
-import { fetchComments } from '../../services/supabase/comments';
+import { fetchComments } from '../../../services/supabase/comments';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import ReplyComments from './ReplyComments';
+import ReplyComments from '../reply/ReplyComments';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
-import * as SL from '../common/Styled.Loading';
+import * as SL from '../../common/Styled.Loading';
 
 // 댓글, 대댓글 차이 두기 > 색상, 위치.
 // 작성자 딱지 > 좋은듯? > 포스트의 uid 값 가져와서 comment uid와 비교
@@ -15,7 +15,7 @@ import * as SL from '../common/Styled.Loading';
 // 대댓글 > 그냥 보이게 > 완료
 // 댓글 작성하기 버튼 삭제 > 폼 항상 보이기 > 완료
 
-import type { CommentType } from '../../types/supabase';
+import type { CommentType } from '../../../types/supabase';
 const Comments = () => {
   // login 완료되면 수정하기
 
@@ -38,7 +38,7 @@ const Comments = () => {
   }
 
   if (isLoading) {
-    return <SL.LoadingOverlay />
+    return <SL.LoadingOverlay />;
   }
 
   return (

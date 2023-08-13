@@ -18,6 +18,22 @@ export const fetchJjimCount = async (pid: string) => {
   }
 };
 
+export const fetchAllJjim = async () => {
+  try {
+    const { data, error } = await supabase.from('jjim').select('*');
+    if (error) {
+      console.log('Error fetching comments:', error);
+      alert('에러가 발생했습니다.' + error);
+      return [];
+    }
+    return data;
+  } catch (e) {
+    console.log(e);
+    alert('알 수 없는 오류가 발생했습니다.');
+    return [];
+  }
+};
+
 export const toggleJjim = async (data: JjimType) => {
   try {
     const { data: isJjim, error: isJjimError } = await supabase

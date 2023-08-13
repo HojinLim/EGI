@@ -5,13 +5,14 @@ export const PostContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+  align-items: center;
 `;
 
 export const PostItem = styled.div`
   border: 1px solid #ddd;
   padding: 10px;
-  width: 150px;
-  height: 300px;
+
+  height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -19,12 +20,10 @@ export const PostItem = styled.div`
 `;
 
 export const Image = styled.img`
-  /* max-width: 100%;
-  max-height: 100%; */
   object-fit: contain;
-
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  /* height: 80%; */
+  aspect-ratio: 1;
 `;
 
 export const Container = styled.div`
@@ -145,13 +144,24 @@ export const ModalWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 99;
 `;
 
 export const ModalContent = styled.div`
-  background-color: white;
+  background-color: skyblue;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+export const ModalCloseBtn = styled.button`
+  margin-bottom: 20px;
+  margin-left: 625px;
+  /* display: flex;
+  justify-content: flex-end; */
+  /* margin-left: auto; */
+  background-color: transparent;
+  border: none;
 `;
 
 export const EndMessage = styled.div`
@@ -180,4 +190,29 @@ export const ButtonGrid = styled.div`
   grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
   grid-gap: 10px;
   margin: 20px;
+`;
+
+export const ImageContainer = styled.div`
+  height: 350px;
+`;
+
+export const CardCategory = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+`;
+
+export const CardTitle = styled.div``;
+export const CardLocation = styled.div``;
+export const CardPrice = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  font-weight: bold;
+`;
+export const CardCondition = styled.div`
+  display: flex;
+  margin-right: 10px;
+  justify-content: space-between;
+  align-items: center;
 `;

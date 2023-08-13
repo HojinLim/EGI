@@ -1,15 +1,15 @@
 import React, { useMemo, useState } from 'react';
-import * as S from './Styled.Comments';
-import CommentPanel from './CommentPanel';
+import * as S from '../comment/Styled.Comments';
+import CommentPanel from '../comment/CommentPanel';
 import { useQuery } from '@tanstack/react-query';
-import { fetchReplyComments } from '../../services/supabase/replyComments';
-import useCommentMutation from '../../hooks/useCommentMutation';
-import { jotaiUserDataAtom } from '../common/Header';
+import { fetchReplyComments } from '../../../services/supabase/replyComments';
+import useCommentMutation from '../../../hooks/useCommentMutation';
+import { jotaiUserDataAtom } from '../../common/Header';
 import { useAtom } from 'jotai';
-import baseProfile from '../../image/baseprofile.jpeg';
-import * as SL from '../common/Styled.Loading';
+// import baseProfile from '../../image/baseprofile.jpeg';
+import * as SL from '../../common/Styled.Loading';
 
-import type { ReplyCommentType } from '../../types/supabase';
+import type { ReplyCommentType } from '../../../types/supabase';
 interface ReplyCommentsProps {
   cid: number;
   pid: string;
@@ -36,11 +36,11 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
 
   const { data: replyComments, error, isLoading } = useQuery<ReplyCommentType[]>(defaultQueryOptions);
 
-  const handleUpdateReplyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpdateReplyInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUpdateReply(e.target.value);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       handleUpdateBtnClick();
     }
@@ -103,26 +103,17 @@ const ReplyComments = ({ cid, pid }: ReplyCommentsProps) => {
   return (
     <>
       {filteredComments?.map((comment) => (
-        <S.CommentItem key={comment.rid} margin={'40px'}>
-          {comment?.profileimg ? (
-            <div>
-              <S.CommentProfileImg
-                src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment.profileimg}`}
-                alt="Profile"
-              />
-              <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
-            </div>
-          ) : (
-            <S.CommentProfileImg src={`${baseProfile}`} alt="Profile" />
-          )}
+        <S.CommentItem key={comment.rid} margin={'20px 20px 10px 40px'} width={'1300px'}>
+          <S.CommentProfileImgBox>
+            <S.CommentProfileImg
+              src={`${process.env.REACT_APP_SUPABASE_STORAGE_URL}${comment?.profileimg}`}
+              alt="Profile"
+            />
+            <S.CommentAuthor>{comment.nickname}</S.CommentAuthor>
+          </S.CommentProfileImgBox>
           <S.CommentTextBox>
             {isUpdating && updateReplyId == comment.rid ? (
-              <S.CommentInput
-                type="text"
-                value={updateReply}
-                onChange={handleUpdateReplyInputChange}
-                onKeyDown={handleKeyDown}
-              />
+              <S.CommentInput value={updateReply} onChange={handleUpdateReplyInputChange} onKeyDown={handleKeyDown} />
             ) : (
               <S.CommentBody>{comment.body}</S.CommentBody>
             )}
