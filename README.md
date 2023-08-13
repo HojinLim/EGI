@@ -4,8 +4,6 @@
 
 <br/>
 
-<br/>
-<br/>
 
 ### :boxing_glove: 개발기간
 
