@@ -49,9 +49,8 @@ export const ButtonBox = styled.div`
   position: relative;
 
   margin: 2px 0 0 15px;
-  &:hover {
-    background-color: #0a3a8d1f;
-  }
+
+  cursor: pointer;
 `;
 
 export const ToggleButton = styled.button`
@@ -60,6 +59,9 @@ export const ToggleButton = styled.button`
   font-size: 11px;
   cursor: pointer;
   margin-left: 20px;
+  &:hover {
+    background-color: #0a3a8d;
+  }
 `;
 
 export const LogOutButton = styled.button`

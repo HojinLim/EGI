@@ -4,7 +4,6 @@ import { atom, useAtom } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { checkEmailDuplication, signUpService } from '../../../services/supabase/auth';
 import * as S from './Styled.SignUp';
-import { supabase } from '../../../services/supabase/supabase';
 
 import type { UserType } from '../../../types/supabase';
 import { PictureOutlined } from '@ant-design/icons';
@@ -37,7 +36,6 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const [isEmailCheked, setIsEmailCheked] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-  const [users, setUsers] = useState<Array<{ email: string; nickname: string }>>([]);
 
   // 회원가입 뮤테이션
   const signUpMutation = useMutation(signUpService, {
@@ -48,23 +46,6 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   // 회원가입 핸들러
   const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const fetchPosts = async () => {
-      const { data, error } = await supabase.from('users').select('*');
-
-      if (error) {
-        console.error('Error fetching posts:', error);
-      } else {
-        const postsWithCompleteURLs = data.map((users) => ({
-          ...users
-        }));
-
-        setUsers(postsWithCompleteURLs);
-      }
-    };
-
-    fetchPosts();
-
     try {
       if (!selectedProfileImg) {
         return;
@@ -73,21 +54,6 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
       if (userData.password !== confirmedPassword) {
         alert('비밀번호가 일치하지 않습니다.');
         setPasswordsMatch(false);
-        return;
-      }
-
-      if (userData.nickname.length > 6) {
-        alert('닉네임은 최대 6글자 입니다.');
-        return;
-      }
-
-      if (users.some((user) => user.nickname === userData.nickname)) {
-        alert('이미 존재하는 닉네임입니다.');
-        return;
-      }
-
-      if (users.some((user) => user.email === userData.email)) {
-        alert('이미 존재하는 이메일입니다.');
         return;
       }
 
@@ -107,7 +73,6 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
     }
   };
 
-  console.log('users', users);
   // 회원가입 모달 닫기
   const closeSignUpModal = () => {
     setSignUpmodal(false);
