@@ -7,6 +7,7 @@ import * as S from './Styled.SignUp';
 
 import type { UserType } from '../../../types/supabase';
 import { PictureOutlined } from '@ant-design/icons';
+import { supabase } from '../../../services/supabase/supabase';
 
 type SignUpType = {
   setLoginModal: (isOpen: boolean) => void;
@@ -36,34 +37,57 @@ const SignUp = ({ setLoginModal, setSignUpmodal }: SignUpType) => {
   const [isEmailCheked, setIsEmailCheked] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-
+  const [users, setUsers] = useState<Array<{ email: string; nickname: string }>>([]);
   // 회원가입 뮤테이션
   const signUpMutation = useMutation(signUpService, {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     }
   });
-  // 회원가입 핸들러
   const signUpHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const fetchUsers = async () => {
+      const { data, error } = await supabase.from('users').select('*');
+      if (error) {
+        console.error('Error fetching posts:', error);
+      } else {
+        const postsWithCompleteURLs = data.map((users) => ({
+          ...users
+        }));
+        setUsers(postsWithCompleteURLs);
+      }
+    };
+    fetchUsers();
     try {
       if (!selectedProfileImg) {
+        alert('사진을 선택 해주세요!');
         return;
       }
-
       if (userData.password !== confirmedPassword) {
         alert('비밀번호가 일치하지 않습니다.');
         setPasswordsMatch(false);
         return;
       }
-
+      if (userData.nickname.length > 6) {
+        alert('닉네임은 최대 6글자 입니다.');
+        return;
+      }
+      if (users.some((user) => user.nickname === userData.nickname)) {
+        alert('이미 존재하는 닉네임입니다.');
+        return;
+      }
+      if (users.some((user) => user.email === userData.email)) {
+        alert('이미 존재하는 이메일입니다.');
+        return;
+      }
+      if (selectedProfileImg === null) {
+        alert('사진을 선택 해주세요!');
+      }
       const userDataWithImage = {
         ...userData,
         profileimg: selectedProfileImg
       };
-
       signUpMutation.mutate(userDataWithImage);
-
       alert('회원가입이 완료되었습니다!');
       setSignUpmodal(false);
       setLoginModal(true);
