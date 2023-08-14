@@ -66,7 +66,6 @@ export const FeatBtns = styled.div``;
 export const FeatBtn = styled.button`
   margin-left: 15px;
   cursor: pointer;
-  /* padding: 3px 15px; */
 
   background-color: transparent;
   border-radius: 5px;
