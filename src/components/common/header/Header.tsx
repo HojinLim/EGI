@@ -113,7 +113,7 @@ const Header = () => {
     }
   }, []);
 
-  // 현재 유저의 정보 가져오기!
+  // 현재 유저의 정보 가져오기!!
   const checkUser = async () => {
     const {
       data: { user }
