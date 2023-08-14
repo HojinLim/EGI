@@ -134,11 +134,6 @@ const CommentItem = ({ comment, pid, isUpdating, setIsUpdating }: CommentItemPro
             />
           )
         ) : (
-          // <CommentPanel
-          //   commenting={false}
-          //   handleUpdateCommentBtnClick={() => handleUpdateCommentBtnClick(comment.cid, comment.body)}
-          //   handleDeleteCommentBtnClick={() => handleDeleteCommentBtnClick(comment.cid)}
-          // />
           <div />
         )}
       </S.Wrapper>

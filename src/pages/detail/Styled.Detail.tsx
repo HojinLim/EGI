@@ -106,6 +106,8 @@ export const Body = styled.div`
   margin-top: 40px;
   white-space: normal;
   height: 180px;
+
+  overflow-y: scroll;
 `;
 
 export const Line = styled.div`

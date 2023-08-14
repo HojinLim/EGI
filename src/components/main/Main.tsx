@@ -58,6 +58,7 @@ export const Main = () => {
     } else {
       const filteredPosts = posts.filter((post) => post.category === category);
       setFilteredPosts(filteredPosts);
+      setCurrentPage(1);
     }
   };
 
@@ -72,6 +73,7 @@ export const Main = () => {
             post.title.toLowerCase().includes(keywordLower) || post.location.toLowerCase().includes(keywordLower)
         );
         setFilteredPosts(filtered);
+        setCurrentPage(1);
       }
     };
 

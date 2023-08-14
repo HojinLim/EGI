@@ -65,6 +65,11 @@ const Post = () => {
       imageUrls.push(data.path);
     }
 
+    if (imageUrls.length === 0) {
+      alert('이미지를 업로드해주세요');
+      return;
+    }
+
     const { error: insertError } = await supabase.from('posts').insert([
       {
         title: newTitle,
