@@ -50,7 +50,8 @@ const UserPosts = () => {
             const { data: jjimPostsData, error: jjimPostsError } = await supabase
               .from('posts')
               .select('*')
-              .in('pid', jjimPosts);
+              .in('pid', jjimPosts)
+              .order('pid', { ascending: false });
 
             if (jjimPostsError) {
               console.error('Error fetching jjim posts:', jjimPostsError);
@@ -64,7 +65,11 @@ const UserPosts = () => {
             }
           }
         } else if (postMode == '내가 쓴 글' || !postMode) {
-          const { data: myPostsData, error: myPostsError } = await supabase.from('posts').select('*').eq('uid', uid);
+          const { data: myPostsData, error: myPostsError } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('uid', uid)
+            .order('pid', { ascending: false });
 
           if (myPostsError) {
             console.error('Error fetching my posts:', myPostsError);
