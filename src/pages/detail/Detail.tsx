@@ -220,8 +220,8 @@ const Detail = () => {
             <S.Btn onClick={handleJjim}>
               <LikeFilled /> {jjimData?.length}
             </S.Btn>
-            {post.iscompleted == '판매완료' ? (
-              <S.Btn>판매완료</S.Btn>
+            {post.iscompleted == '판매 완료' ? (
+              <S.Btn>판매 완료</S.Btn>
             ) : (
               <S.Btn onClick={openPaymentModal}>결제하기</S.Btn>
             )}
