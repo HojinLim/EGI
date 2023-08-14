@@ -34,7 +34,7 @@ export const Main = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const { data, error } = await supabase.from('posts').select('*');
+      const { data, error } = await supabase.from('posts').select('*').order('pid', { ascending: false });
 
       if (error) {
         console.error('Error fetching posts:', error);

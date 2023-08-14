@@ -49,6 +49,9 @@ export const ButtonBox = styled.div`
   position: relative;
 
   margin: 2px 0 0 15px;
+  &:hover {
+    background-color: #0a3a8d1f;
+  }
 `;
 
 export const ToggleButton = styled.button`
