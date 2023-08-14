@@ -185,7 +185,10 @@ const Detail = () => {
             <S.Category>{post.category}</S.Category>
             <S.Time> ∙ {timeAgo}</S.Time>
           </S.CategoryBox>
-          <S.Body dangerouslySetInnerHTML={{ __html: post.body }} />
+          <S.BodyBox>
+            <S.Body dangerouslySetInnerHTML={{ __html: post.body }} />
+          </S.BodyBox>
+
           <S.Line></S.Line>
           <S.ShareBox>
             <Share />
