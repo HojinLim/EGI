@@ -43,7 +43,8 @@
 
 
 ##  -Detail Page
-![image](https://github.com/HojinLim/EGI/assets/69897998/989305f8-3cde-42ae-9e3f-b0b18c1b698f)
+![image](https://github.com/HojinLim/EGI/assets/69897998/24f1c58a-6804-4fd4-9214-1a3ee87907f0)
+
 
 
 <br/>
